@@ -252,7 +252,7 @@
                   <?php if($applicant["current_status"] == "APPLICANT - APPLIED"): ?>
                 <div class="row">
                   <div class="col-md-6">
-                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Accept</b></a>
+                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Verify</b></a>
                   </div>
                   <div class="col-md-6">
                     <a href="#" data-toggle="modal" data-target="#deny_modal" class="btn btn-danger  btn-block"><b>Deny</b></a>
@@ -264,7 +264,7 @@
                 <?php if($applicant["current_status"] == "APPLICANT - VERIFIED"): ?>
                 <div class="row">
                   <div class="col-md-6">
-                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Accept</b></a>
+                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Interviewed</b></a>
                   </div>
                   <div class="col-md-6">
                     <a href="#" data-toggle="modal" data-target="#deny_modal" class="btn btn-danger  btn-block"><b>Deny</b></a>
