@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>HoMeS</title>
+  <title>MARIPHIL</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -93,7 +93,7 @@ background-image: url('resources/background.jpg');
 
    <br>
    <br>
-    <a href="register" class="text-center">Register here</a>
+    <a href="register" class="text-center">Don't have an account? Sign up here.</a>
 
   </div>
   <!-- /.login-box-body -->

@@ -133,7 +133,7 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Zip Code</label>
-                              <input name="zipcode" required type="text" class="form-control" placeholder="Zip Code">
+                              <input name="zipcode" required type="number" class="form-control" placeholder="Zip Code">
                             </div>
                           </div>
                       </div>
@@ -227,7 +227,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="father_contact" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="father_contact" type="number" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -244,8 +244,8 @@
                           </div>
 
                           <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Estimated Income. *</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
+                            <div class="col-sm-7">
                               <input name="father_income" type="number" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
@@ -304,7 +304,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="mother_contact" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="mother_contact" type="number" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">

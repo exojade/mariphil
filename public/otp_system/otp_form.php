@@ -42,7 +42,7 @@ background-image: url('resources/background.jpg');
   <div class="lockscreen-item">
     <!-- lockscreen image -->
     <div class="lockscreen-image">
-      <img src="AdminLTE_new/dist/img/user1-128x128.jpg" alt="User Image">
+      <img src="resources/default.jpg" alt="User Image">
     </div>
 
     <form class="lockscreen-credentials generic_form_trigger" data-url="otp">
