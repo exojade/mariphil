@@ -42,7 +42,7 @@
                     <th>Address</th>
                     <th>Gender</th>
                     <th>Sponsor</th>
-                    <th>Responsible</th>
+                    <th>Facilitator</th>
                     <th>Status</th>
                   </tr>
                   </thead>
