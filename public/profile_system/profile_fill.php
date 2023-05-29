@@ -133,7 +133,9 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Zip Code</label>
-                              <input name="zipcode" required type="number" class="form-control" placeholder="Zip Code">
+                              <input name="zipcode" required type="number"
+ 
+ onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" placeholder="Zip Code">
                             </div>
                           </div>
                       </div>
@@ -227,7 +229,9 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="father_contact" type="number" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="father_contact" type="number"
+ 
+ onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -246,7 +250,9 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
                             <div class="col-sm-7">
-                              <input name="father_income" type="number" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="father_income" type="number"
+ 
+ onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
 
@@ -304,7 +310,9 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="mother_contact" type="number" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="mother_contact" type="number"
+ 
+ onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -323,7 +331,9 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
                             <div class="col-sm-7">
-                              <input name="mother_income" type="number" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="mother_income" type="number"
+ 
+    onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
 
