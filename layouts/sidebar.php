@@ -118,7 +118,7 @@
   </li>
 <?php endif; ?>
 
-<?php if($role=="RESPONSIBLE PERSON"): ?>
+<?php if($role=="FACILITATOR"): ?>
   <li class="nav-item">
       <a href="index" class="nav-link">
         <i class="nav-icon fas fa-th"></i>

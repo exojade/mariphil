@@ -19,7 +19,7 @@
 		if($role == "SPONSOR"){
 			render("public/dashboard_system/dashboard_sponsor.php",[]);
 		}
-		if($role == "RESPONSIBLE PERSON"){
+		if($role == "FACILITATOR"){
 			render("public/dashboard_system/dashboard_responsible.php",[]);
 		}
 		if($role == "VALIDATOR"){

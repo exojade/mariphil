@@ -62,7 +62,7 @@
                   <option value="ADMIN">ADMIN</option>
                   <option value="SPONSOR">SPONSOR</option>
                   <option value="VALIDATOR">VALIDATOR</option>
-                  <option value="RESPONSIBLE PERSON">RESPONSIBLE PERSON</option>
+                  <option value="FACILITATOR">FACILITATOR</option>
                 </select>
               </div>
 

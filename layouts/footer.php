@@ -11,7 +11,7 @@ $('.generic_form_trigger').submit(function(e) {
   console.log(url);
 
   Swal.fire({
-  title: 'Do you want to save the changes?',
+  title: 'Do you want to submit the changes?',
   showCancelButton: true,
   confirmButtonText: 'Save',
   }).then((result) => {

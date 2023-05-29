@@ -158,7 +158,7 @@
      <?php endforeach; ?>
 
 
-     <?php if($_SESSION["mariphil"]["role"] == "RESPONSIBLE PERSON"): 
+     <?php if($_SESSION["mariphil"]["role"] == "FACILITATOR"): 
       $mychecks = query("select * from forms f
                         left join renewal r
                         on r.form_id = f.form_id
@@ -274,7 +274,7 @@
                 <?php endif; ?>
 
 
-                <?php if($_SESSION["mariphil"]["role"] == "RESPONSIBLE PERSON"): ?>
+                <?php if($_SESSION["mariphil"]["role"] == "FACILITATOR"): ?>
                   <?php if($applicant["responsible"] == ""): ?>
                 <div class="row">
                   <div class="col-md-12">
@@ -304,7 +304,7 @@
                   <?php echo($applicant["sponsor"]); ?>
                 </p>
                 <hr>
-                <strong><i class="fas fa-map-marker-alt mr-1"></i> Responsible Person</strong>
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> Facilitator</strong>
                 <p class="text-muted"><?php echo($applicant["responsible_name"]); ?></p>
               </div>
               <!-- /.card-body -->
@@ -515,7 +515,7 @@
                     // dump($applicant);
                   foreach($forms as $f):?>
                     <tr>
-                    <?php if($_SESSION["mariphil"]["role"] == "RESPONSIBLE PERSON"): ?>
+                    <?php if($_SESSION["mariphil"]["role"] == "FACILITATOR"): ?>
                         <?php if($applicant["responsible"] == $_SESSION["mariphil"]["userid"]): ?>
                         <td>
                           <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#viewRenewal_<?php echo($f["form_id"]); ?>">View</a>
