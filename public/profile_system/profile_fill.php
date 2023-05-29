@@ -321,8 +321,8 @@
                           </div>
                           
                           <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Estimated Income. *</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
+                            <div class="col-sm-7">
                               <input name="mother_income" type="number" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
