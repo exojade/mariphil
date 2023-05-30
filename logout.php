@@ -2,13 +2,13 @@
 
 
 	if(!isset($_SESSION["mariphil"])) {
-		redirect("login");
+		redirect("role");
 	}
 	
 	// log out current user, if any
 	logout();
 	
 	// redirect user
-	redirect("login");
+	redirect("role");
 
 ?>

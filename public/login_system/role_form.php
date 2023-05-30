@@ -72,30 +72,22 @@ background-image: url('resources/background.jpg');
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <h2 class="login-box-msg text-center">LOGIN</h2>
+    <h2 class="login-box-msg text-center">SELECT ROLE</h2>
 
-    <form id="login_form" autocomplete="off">
+    <form method="post" action="role" autocomplete="off">
+      <input type="hidden" name="action" value="go_role">
       <div class="form-group has-feedback">
-      <?php $users = query("select * from users where role = ?", $_GET["role"]); ?>  
-      <select name="username" class="form-control">
-        <option value="" disabled selected>Please select user</option>
-        <?php foreach($users as $u): ?>
-          <option value="<?php echo($u["user_id"]); ?>"><?php echo($u["username"]); ?></option>
-        <?php endforeach; ?>
-      </select>
+        <select required class="form-control" name="role">
+          <option value="" selected disabled>Please select role</option>
+          <option value="admin">ADMIN</option>
+          <option value="APPLICANT">APPLICANT</option>
+          <option value="VALIDATOR">VALIDATOR</option>
+          <option value="FACILITATOR">FACILITATOR</option>
+          <option value="SPONSOR">SPONSOR</option>
+        </select>
       </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password" name="password" required="required">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-   
-        <!-- /.col -->
           <button type="submit" class="btn btn-success btn-block btn-flat">Sign In</button>
-        <!-- /.col -->
     </form>
-
-    <!-- /.social-auth-links -->
-
    <br>
    <br>
     <a href="register" class="text-center">Don't have an account? Sign up here.</a>
@@ -105,17 +97,10 @@ background-image: url('resources/background.jpg');
   <Br>
   <p style="color:#fff;" class="text-center">Copyright @ <?php echo(date("Y")); ?> Project Mariphil Foundation INC.</p>
 </div>
-
 </div>
-<!-- /.login-box -->
-
-<!-- jQuery 3 -->
 <script src="AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
 <script src="AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- iCheck -->
 <script src="AdminLTE/plugins/iCheck/icheck.min.js"></script>
-<!-- SweetAlert -->
 <script src="AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
 <script src="public/login_system/login.js"></script>
 <script>
@@ -123,7 +108,7 @@ background-image: url('resources/background.jpg');
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
+      increaseArea: '20%'
     });
   });
 </script>

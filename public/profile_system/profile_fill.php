@@ -156,9 +156,9 @@
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label>Gender</label>
+                              <label>Sex</label>
                               <select name="gender" class="form-control select2" >
-                                <option selected disabled value="">Please select Gender</option>
+                                <option selected disabled value="">Please select Sex</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                               </select>
@@ -170,7 +170,7 @@
                       <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label>Educational Attainment</label>
+                              <label>Highest Educational Attainment</label>
                               <input name="educational_attainment" required type="text" class="form-control"  placeholder="Educational Attainment">
                             </div>
                           </div>
@@ -257,8 +257,8 @@
                           </div>
 
                           <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Educational Attainment. *</label>
-                            <div class="col-sm-7">
+                            <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
+                            <div class="col-sm-6">
                             <select name="father_educational" class="form-control select2" >
                                 <option selected disabled value="">Please select Educational Attainment</option>
                                 <option value="College Graduate">College Graduate</option>
@@ -338,8 +338,8 @@
                           </div>
 
                           <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Educational Attainment. *</label>
-                            <div class="col-sm-7">
+                            <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
+                            <div class="col-sm-6">
                             <select name="mother_educational" class="form-control select2" >
                                 <option selected disabled value="">Please select Educational Attainment</option>
                                 <option value="College Graduate">College Graduate</option>

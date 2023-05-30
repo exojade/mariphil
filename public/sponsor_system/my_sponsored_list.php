@@ -33,13 +33,18 @@
                     <th>Action</th>
                     <th>Fullname</th>
                     <th>Address</th>
+                    <th>Facilitator</th>
                     <th>Status</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
-                  $list = query("select * from scholars where current_status = 'SCHOLAR' and sponsor_id = ?", 
-				  $_SESSION["mariphil"]["userid"]);
+                  $list = query("select * from scholars s
+                  left join users u
+                  on s.responsible = u.user_id
+                  where current_status = 'SCHOLAR'
+                  and sponsor_id = ?", 
+				                          $_SESSION["mariphil"]["userid"]);
                   foreach($list as $l):  ?>
                     <tr>
                       <td>
@@ -50,6 +55,7 @@
                         $l["address_home"] . ", " . $l["address_barangay"] . ", " . $l["address_city"].
                         ", " . $l["address_province"] . ", " . $l["address_zipcode"]
                         )); ?></td>
+                      <td><?php echo(strtoupper($l["fullname"])); ?></td>
                       <td><?php echo(strtoupper($l["current_status"])); ?></td>
 
                     </tr>

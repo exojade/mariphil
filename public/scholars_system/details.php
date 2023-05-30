@@ -346,10 +346,10 @@
                   <dt class="col-sm-4">Place of Birth</dt>
                   <dd class="col-sm-8"><?php echo($applicant["birthplace"]); ?></dd>
 
-                  <dt class="col-sm-4">Gender</dt>
+                  <dt class="col-sm-4">Sex</dt>
                   <dd class="col-sm-8"><?php echo($applicant["sex"]); ?></dd>
 
-                  <dt class="col-sm-4">Educational Attainment</dt>
+                  <dt class="col-sm-4">Highest Educational Attainment</dt>
                   <dd class="col-sm-8"><?php echo($applicant["education_attainment"]); ?></dd>
 
                   <dt class="col-sm-4">School</dt>
@@ -376,7 +376,7 @@
                   <dt class="col-sm-4">Work Place</dt>
                   <dd class="col-sm-8"><?php echo($applicant["father_occupation_address"]); ?></dd>
 
-                  <dt class="col-sm-4">Educational Attainment</dt>
+                  <dt class="col-sm-4">Highest Educational Attainment</dt>
                   <dd class="col-sm-8"><?php echo($applicant["father_education_attainment"]); ?></dd>
 
                   <dt class="col-sm-4">School</dt>
@@ -403,7 +403,7 @@
                   <dt class="col-sm-4">Work Place</dt>
                   <dd class="col-sm-8"><?php echo($applicant["mother_occupation_address"]); ?></dd>
 
-                  <dt class="col-sm-4">Educational Attainment</dt>
+                  <dt class="col-sm-4">Highest Educational Attainment</dt>
                   <dd class="col-sm-8"><?php echo($applicant["mother_education_attainment"]); ?></dd>
 
                   <dt class="col-sm-4">School</dt>

@@ -91,7 +91,7 @@
       <a href="sponsor?action=my_sponsored" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-          My Sponsored
+          My Scholars
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -151,7 +151,7 @@
       <a href="scholars?action=vacant_applicants" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-          Vacant Applicants
+        List of No Facilitator
           <span class="right badge badge-danger"></span>
         </p>
       </a>

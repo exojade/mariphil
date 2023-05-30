@@ -20,7 +20,7 @@
                     "result" => "success",
                     "title" => "Success",
                     "message" => "Success",
-                    "link" => "login",
+                    "link" => "role",
                     ];
                     echo json_encode($res_arr); exit();
 

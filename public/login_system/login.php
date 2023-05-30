@@ -1,7 +1,8 @@
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $rows = query("SELECT * FROM users WHERE username = ? and status = 'active'", $_POST["username"]);
+		// dump($_POST);
+        $rows = query("SELECT * FROM users WHERE user_id = ? and status = 'active'", $_POST["username"]);
         if (count($rows) == 1)
         {
             $row = $rows[0];

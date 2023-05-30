@@ -14,10 +14,10 @@
 		$request = explode('/',$request);
 		$request = $request[1];
 		
-		$countering = array("login", "register", "print", "otp");
+		$countering = array("login", "register", "print", "otp", "role");
 		if (!in_array($request, $countering)){
 			if(empty($_SESSION["mariphil"]["userid"]) && empty($_SESSION["mariphil"]["application"])){
-				require 'public/login_system/login.php';
+				require 'public/login_system/role.php';
 			}
 			else{
 
@@ -59,6 +59,9 @@
 
 			else if ($request == 'otp')
 				require 'public/otp_system/otp.php';
+
+			else if ($request == 'role')
+				require 'public/login_system/role.php';
 
 			else if ($request == 'print')
 					require 'public/print_system/print.php';
