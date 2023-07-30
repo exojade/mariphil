@@ -67,22 +67,28 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Remarks</th>
+                    <th>Responsible</th>
                   </thead>
-                  <?php $scholar_tracker = query("select * from scholar_tracker where scholar_id = ? order by timestamp desc", $_SESSION["mariphil"]["userid"]); ?>
-                  <?php foreach($scholar_tracker as $st): ?>
+                  <?php $scholar_tracker = query("select s.*, u.fullname as responsible from scholar_tracker s
+                                                    left join users u
+                                                    on u.user_id = s.user_id
+                                                    where scholar_id = ? order by timestamp desc", $_SESSION["mariphil"]["userid"]); ?>
+                  <?php foreach($scholar_tracker as $st):
+                    if($st["status"] == "APPLICANT - IN REVIEW")
+                    $st["responsible"] = "";
+                    ?>
                     <tr>
                         <td><?php echo($st["status"]); ?></td>
                         <td><?php echo($st["date_created"]); ?></td>
                         <td><?php echo($st["time_created"]); ?></td>
                         <td><?php echo($st["remarks"]); ?></td>
+                        <td><?php echo($st["responsible"]); ?></td>
                     </tr>
                   <?php endforeach; ?>
                 </table>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer">
-                Footer
-              </div>
+            
               <!-- /.card-footer-->
             </div>
             <!-- /.card -->

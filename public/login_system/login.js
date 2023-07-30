@@ -13,7 +13,7 @@ $(function () {
 					else if(results == 'wrong_password'){
 						swal({
 							title: 'Information',
-							text: 'Wrong Credentials',
+							text: 'Wrong Credentials or Wrong Role',
 							type: "error"
 						}).then(function() {
 							swal.close();

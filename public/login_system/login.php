@@ -2,8 +2,9 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
 		// dump($_POST);
-        $rows = query("SELECT * FROM users WHERE user_id = ? and status = 'active'", $_POST["username"]);
-        if (count($rows) == 1)
+        $rows = query("select * FROM users WHERE username = ? and status = 'active' and role = ?", $_POST["username"], $_POST["role"]);
+        // dump($rows);
+		if (count($rows) == 1)
         {
             $row = $rows[0];
 			if (crypt($_POST["password"], $row["password"]) == $row["password"]){

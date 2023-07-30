@@ -91,7 +91,7 @@
 				mother_income = '".strtoupper($_POST["mother_income"])."',
 				mother_education_attainment = '".strtoupper($_POST["mother_educational"])."',
 				mother_school = '".strtoupper($_POST["mother_school"])."',
-				current_status = 'APPLICANT - APPLIED'
+				current_status = 'APPLICANT - IN REVIEW'
 				where scholar_id = '".$prof_id."'
 			");
 			//dump($string_query);
@@ -190,7 +190,7 @@
 			if (query("insert INTO scholar_tracker (track_id, scholar_id, status, user_id, 
 				date_created,time_created, timestamp) 
                   VALUES(?,?,?,?,?,?,?)", 
-              $track_id, $prof_id, "APPLICANT - APPLIED", $prof_id, date("Y-m-d"),
+              $track_id, $prof_id, "APPLICANT - IN REVIEW", $prof_id, date("Y-m-d"),
 			   date("H:i:s"), time()) === false)
               {
                   echo("not_success");

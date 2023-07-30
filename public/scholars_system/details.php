@@ -227,11 +227,11 @@
                   <?php if($applicant["profile_image"] == ""): ?>
                     <img class="profile-user-img img-fluid img-circle"
                        src="resources/default.jpg"
-                       alt="User profile picture">
+                       alt="User profile picture" style="height:150px; width: 150px;">
                   <?php else: ?>
                     <img class="profile-user-img img-fluid img-circle"
                        src="<?php echo($applicant["profile_image"]); ?>"
-                       alt="User profile picture">
+                       alt="User profile picture" style="height:150px; width: 150px;">
 
                   <?php endif; ?>
               
@@ -249,7 +249,7 @@
                 
                 <Br> 
                 <?php if($_SESSION["mariphil"]["role"] == "VALIDATOR"): ?>
-                  <?php if($applicant["current_status"] == "APPLICANT - APPLIED"): ?>
+                  <?php if($applicant["current_status"] == "APPLICANT - IN REVIEW"): ?>
                 <div class="row">
                   <div class="col-md-6">
                     <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Verify</b></a>
@@ -261,7 +261,7 @@
                 <?php endif; ?>
 
 
-                <?php if($applicant["current_status"] == "APPLICANT - VERIFIED"): ?>
+                <?php if($applicant["current_status"] == "APPLICANT - TO BE INTERVIEWED"): ?>
                 <div class="row">
                   <div class="col-md-6">
                     <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Interviewed</b></a>
@@ -281,7 +281,7 @@
                     <form class="generic_form_trigger" data-url="scholars">
                     <input type="hidden" name="action" value="addResponsible">
                     <input type="hidden" name="scholar_id" value="<?php echo($_GET["id"]); ?>">
-                    <button type="submit" class="btn btn-success btn-block"><b>ADD TO MY RESPONSIBILITY</b></button>
+                    <button type="submit" class="btn btn-success btn-block"><b>ADD TO MY SCHOLARS</b></button>
                     </form>
                   </div>
                 </div>

@@ -10,9 +10,9 @@
       <div class="user-panel mt-3 pb-3 mb-3 text-center">
         <div class="image" style="display:block;">
           <?php if($_SESSION["mariphil"]["profile_image"] == ""): ?>
-            <img style="width: 6rem;" src="resources/default.jpg" class="img-circle elevation-2" alt="User Image">
+            <img style="width: 6rem;height:6rem;" src="resources/default.jpg" class="img-circle elevation-2" alt="User Image">
           <?php else: ?>
-            <img style="width: 6rem;" src="<?php echo($_SESSION["mariphil"]["profile_image"]); ?>" class="img-circle elevation-2" alt="User Image">
+            <img style="width: 6rem;height:6rem;" src="<?php echo($_SESSION["mariphil"]["profile_image"]); ?>" class="img-circle elevation-2" alt="User Image">
           <?php endif; ?>
           
         </div>
@@ -34,7 +34,7 @@
 // dump($role);
 ?>
 
-<?php if($role=="APPLICANT"): ?>
+<?php if($role=="APPLICANT" || $role == "SCHOLAR"): ?>
   <li class="nav-item">
       <a href="index" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
@@ -82,7 +82,7 @@
       <a href="sponsor?action=no_sponsor" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-          List of No Sponsor
+          Unsponsored
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -151,7 +151,7 @@
       <a href="scholars?action=vacant_applicants" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-        List of No Facilitator
+        List of Unassigned
           <span class="right badge badge-danger"></span>
         </p>
       </a>

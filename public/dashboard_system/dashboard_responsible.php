@@ -101,7 +101,7 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Vacant Applicants</span>
+                <span class="info-box-text">Unassigned Scholars</span>
                 <span class="info-box-number"><?php echo($vacant); ?></span>
               </div>
               <!-- /.info-box-content -->

@@ -118,7 +118,7 @@
             <div class="info-box mb-3">
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">No Sponsors</span>
+                <span class="info-box-text">Unsponsored</span>
                 <span class="info-box-number"><?php echo($no_sponsor); ?></span>
               </div>
             </div>

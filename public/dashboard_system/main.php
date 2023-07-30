@@ -5,7 +5,7 @@
     }
 	else {
 		$role = $_SESSION["mariphil"]["role"];
-		if($role == "APPLICANT"){
+		if($role == "APPLICANT" || $role == "SCHOLAR"){
 			$scholar = query("select * from scholars where scholar_id = ?",
 				$_SESSION["mariphil"]["userid"]);
 

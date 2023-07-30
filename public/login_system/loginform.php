@@ -76,14 +76,22 @@ background-image: url('resources/background.jpg');
 
     <form id="login_form" autocomplete="off">
       <div class="form-group has-feedback">
-      <?php $users = query("select * from users where role = ?", $_GET["role"]); ?>  
+      <!-- <?php $users = query("select * from users where role = ?", $_GET["role"]); ?>  
       <select name="username" class="form-control">
         <option value="" disabled selected>Please select user</option>
         <?php foreach($users as $u): ?>
           <option value="<?php echo($u["user_id"]); ?>"><?php echo($u["username"]); ?></option>
         <?php endforeach; ?>
       </select>
+      </div> -->
+
+      <input type="hidden" name="role" value="<?php echo($_GET["role"]); ?>">
+      <div class="form-group has-feedback">
+        <input type="username" class="form-control" placeholder="Username" name="username" required="required">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
+
+
       <div class="form-group has-feedback">
         <input type="password" class="form-control" placeholder="Password" name="password" required="required">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>

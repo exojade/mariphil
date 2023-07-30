@@ -5,15 +5,15 @@
 			// dump($_POST);
 			$status = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
 			$current_status = $status[0]["current_status"];
-			if($current_status == 'APPLICANT - APPLIED'){
-				query("update scholars set current_status = 'APPLICANT - VERIFIED'
+			if($current_status == 'APPLICANT - IN REVIEW'){
+				query("update scholars set current_status = 'APPLICANT - TO BE INTERVIEWED'
 						where scholar_id = ?", $_POST["scholar_id"]);
 				$track_id = create_uuid("TR");
 				if (query("insert INTO scholar_tracker (
 							track_id, scholar_id, status, user_id, 
 							date_created,time_created,timestamp,remarks) 
 					VALUES(?,?,?,?,?,?,?,?)",
-					$track_id, $_POST["scholar_id"], 'APPLICANT - VERIFIED', $_SESSION["mariphil"]["userid"], 
+					$track_id, $_POST["scholar_id"], 'APPLICANT - TO BE INTERVIEWED', $_SESSION["mariphil"]["userid"], 
 					date("Y-m-d"), date("H:i:s"),time(), $_POST["remarks"]) === false)
 					{
 						$res_arr = [
@@ -71,6 +71,13 @@
 						current_status = 'SCHOLAR'
 						where scholar_id = '".$_POST["scholar_id"]."'
 					");
+
+			query("update users set 
+					role = 'SCHOLAR',
+					where scholar_id = '".$_POST["scholar_id"]."'
+				");
+
+
 					$res_arr = [
 						"result" => "success",
 						"title" => "Success",

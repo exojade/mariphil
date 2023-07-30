@@ -386,35 +386,35 @@
                     <div class="form-group">
                       <label for="customFile">Family picture and picture of the applicant</label>
                       <div class="custom-file">
-                        <input name="family_pic" type="file" class="custom-file-input" id="family_pic">
+                        <input name="family_pic" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="family_pic">
                         <label class="custom-file-label" for="family_pic">Choose file</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Barangay clearance as proof of residence (must be at least 3 years)</label>
                       <div class="custom-file">
-                        <input name="barangay_clearance" type="file" class="custom-file-input" id="barangay_clearance">
+                        <input name="barangay_clearance" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="barangay_clearance">
                         <label class="custom-file-label" for="barangay_clearance">Choose file</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Certificate of Low-Income Bracket</label>
                       <div class="custom-file">
-                        <input name="low_income" type="file" class="custom-file-input" id="low_income">
+                        <input name="low_income" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="low_income">
                         <label class="custom-file-label" for="low_income">Choose file</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Photocopy of Birth Certificate</label>
                       <div class="custom-file">
-                        <input name="birth_certificate" type="file" class="custom-file-input" id="birth_certificate">
+                        <input name="birth_certificate" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="birth_certificate">
                         <label class="custom-file-label" for="birth_certificate">Choose file</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Photocopy of Grade Card</label>
                       <div class="custom-file">
-                        <input name="grade_card" type="file" class="custom-file-input" id="grade_card">
+                        <input name="grade_card" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="grade_card">
                         <label class="custom-file-label" for="grade_card">Choose file</label>
                       </div>
                     </div>  

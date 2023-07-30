@@ -24,11 +24,11 @@
 
 
       $verified = query("select count(*) as count from scholars where current_status 
-      in ('APPLICANT - VERIFIED')");
+      in ('APPLICANT - TO BE INTERVIEWED')");
       $verified = $verified[0]["count"];
 
       $applied = query("select count(*) as count from scholars where current_status 
-      in ('APPLICANT - APPLIED')");
+      in ('APPLICANT - IN REVIEW')");
       $applied = $applied[0]["count"];
 
       $interview = query("select count(*) as count from scholars where current_status 
@@ -101,7 +101,7 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-briefcase"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Applied Applicants</span>
+                <span class="info-box-text">In Review</span>
                 <span class="info-box-number"><?php echo($applied); ?></span>
               </div>
               <!-- /.info-box-content -->
@@ -117,7 +117,7 @@
             <div class="info-box mb-3">
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-graduation-cap"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">For Verification</span>
+                <span class="info-box-text">To be Interviewed</span>
                 <span class="info-box-number"><?php echo($verified); ?></span>
               </div>
             </div>
@@ -127,7 +127,7 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">For Interview</span>
+                <span class="info-box-text">Interviewed</span>
                 <span class="info-box-number"><?php echo($interview); ?></span>
               </div>
             </div>

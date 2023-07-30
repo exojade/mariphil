@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>List of Applicants with No Sponsor</h1>
+            <h1>List of Unsponsored Scholars</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
