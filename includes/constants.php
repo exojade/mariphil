@@ -2,7 +2,7 @@
     define("DATABASE", "mariphil");
     define("USERNAME", "root");
     define("PASSWORD", "");
-    define("PORT", "3308");
+    define("PORT", "3306");
     define("HOST", "localhost");
-    define("SERVER", "localhost:3308");
+    define("SERVER", "localhost:3306");
 ?>
