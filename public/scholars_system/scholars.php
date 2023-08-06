@@ -73,8 +73,8 @@
 					");
 
 			query("update users set 
-					role = 'SCHOLAR',
-					where scholar_id = '".$_POST["scholar_id"]."'
+					role = 'SCHOLAR'
+					where user_id = '".$_POST["scholar_id"]."'
 				");
 
 
