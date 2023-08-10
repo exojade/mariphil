@@ -72,7 +72,7 @@ background-image: url('resources/background.jpg');
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <h2 class="login-box-msg text-center">SELECT ROLE</h2>
+    <h2 class="login-box-msg text-center">WELCOME</h2>
 
     <form method="post" action="role" autocomplete="off">
       <input type="hidden" name="action" value="go_role">
