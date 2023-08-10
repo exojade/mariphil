@@ -130,18 +130,7 @@
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Form</th>
-                    <th>Year</th>
-                    <th>Month</th>
-                    <th>Date Created</th>
-                    <th>Time Created</th>
-                    <th>Passed</th>
-                    <th>Not Yet Passed</th>
-                  </tr>
-                  </tfoot>
+               
                 </table>
               </div>
               <!-- /.card-body -->

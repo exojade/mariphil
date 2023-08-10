@@ -217,7 +217,7 @@
                           
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
                             <div class="col-sm-9">
-                              <input name="father_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input name="father_dob" max="<?php echo date("Y-m-d"); ?>" type="date" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -298,7 +298,7 @@
                             
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
                             <div class="col-sm-9">
-                              <input name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input max="<?php echo date("Y-m-d"); ?>" name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">

@@ -63,16 +63,6 @@
                   <?php endforeach; ?>
                  
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Fullname</th>
-                    <th>Address</th>
-                    <th>Gender</th>
-                    <th>Sponsor</th>
-                    <th>Application Status</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

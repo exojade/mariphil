@@ -233,17 +233,7 @@
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Scholar</th>
-                    <th>Status</th>
-                    <th>Date Submitted</th>
-                    <th>Time Submitted</th>
-                    <th>Date Checked</th>
-                    <th>Time Checked</th>
-                  </tr>
-                  </tfoot>
+                  
                 </table>
               </div>
               <!-- /.card-body -->

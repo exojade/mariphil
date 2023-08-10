@@ -75,7 +75,7 @@ background-image: url('resources/background.jpg');
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="text" placeholder="Birthdate"
+          <input max="<?php echo date("Y-m-d"); ?>" type="text" placeholder="Birthdate"
                     onfocus="(this.type='date')" required type="text" name="birthdate" class="form-control" placeholder="Birthdate">
           <div class="input-group-append">
             <div class="input-group-text">

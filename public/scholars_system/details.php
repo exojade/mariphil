@@ -440,12 +440,7 @@
                       <td><a target="_blank" class="btn btn-primary" href="<?php echo($applicant["grade_card"]); ?>">Open</a></td>
                     </tr>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Document</th>
-                    <th>Link</th>
-                  </tr>
-                  </tfoot>
+                 
                 </table>
                   </div>
                   <!-- /.tab-pane -->
@@ -477,15 +472,7 @@
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Username / Email</th>
-                    <th>Role</th>
-                    <th>Fullname</th>
-                    <th>Status</th>
-                  </tr>
-                  </tfoot>
+         
                 </table>
 
                   </div>
@@ -544,17 +531,6 @@
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                  <th width="25%">Action</th>
-                    <th>Form</th>
-                    <th>Year</th>
-                    <th>Month</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                    <th>Check By</th>
-                  </tr>
-                  </tfoot>
                 </table>
 
                   </div>
