@@ -45,6 +45,13 @@
       </a>
   </li>
 
+  <li class="nav-item">
+    <a href="forms?action=my_list" class="nav-link">
+      <i class="far fa-file nav-icon"></i>
+      <p>Quarterly Monitoring</p>
+    </a>
+  </li>
+
   <?php $scholar = query("select * from scholars where scholar_id = ?", $_SESSION["mariphil"]["userid"]); ?>
   <?php if($scholar[0]["current_status"] == "APPLICANT"): ?>
     <li class="nav-item">
@@ -160,7 +167,16 @@
       <a href="forms?action=list" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
         <p>
-          Forms
+          Quarterly Monitoring
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+  <li class="nav-item">
+      <a href="forms?action=list" class="nav-link">
+        <i class="nav-icon fas fa-file"></i>
+        <p>
+          Renewal Monitoring
           <span class="right badge badge-danger"></span>
         </p>
       </a>

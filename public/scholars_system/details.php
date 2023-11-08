@@ -322,7 +322,9 @@
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal Info</a></li>
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Documents</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Application Status</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Forms</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Monthly Monitoring</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Renewal</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Allowance</a></li>
                 </ul>
               </div>
               <div class="card-body">

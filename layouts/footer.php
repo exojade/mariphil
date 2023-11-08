@@ -7,8 +7,7 @@ $('.generic_form_trigger').submit(function(e) {
   e.preventDefault();
   var url = $(this).data('url');
 
-
-  console.log(url);
+// alert("uawa");
 
   Swal.fire({
   title: 'Do you want to submit the changes?',
@@ -31,7 +30,13 @@ $('.generic_form_trigger').submit(function(e) {
                     text: o.message,
                     type:"success"})
                     .then(function () {
-                    window.location.replace(o.link);
+                      // alert(o.link);
+                      if(o.link == "refresh"){
+                        location.reload();
+                      }
+                      else{
+                        window.location.replace(o.link);
+                      }
                     });
                 }
                 else {

@@ -40,15 +40,42 @@
 
 
     ?>
-
       <div class="container-fluid">
-
       <div class="row">
         <div class="col-md-6">
+        <?php $current_sy = query("select * from school_year"); ?>
+        <?php $applicant_sy = query("select * from school_year"); ?>
+        <form class="generic_form_trigger" data-url="index">
+        <input type="hidden" value="change_sy" name="action">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+                <label>Current School Year</label>
+                  <select name="current_sy" class="form-control">
+                    <?php foreach($current_sy as $row): ?>
+                      <option <?php if($row["current_status"] == "active"): echo("selected"); endif; ?> value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                    <?php endforeach; ?>
+                  </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+                <label>Accept Applicant School Year</label>
+                  <select name="applicant_sy" class="form-control">
+                    <?php foreach($applicant_sy as $row): ?>
+                      <option <?php if($row["applicant_status"] == "active"): echo("selected"); endif; ?> value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                    <?php endforeach; ?>
+                  </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-block btn-primary">Submit</button>
+          </div>
+        </div>
+        </form>
+        <br>
         <div class="card card-widget widget-user-2 shadow-sm">
-              <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header bg-warning">
-
                 <?php $user = query("select * from users where user_id = ?", $_SESSION["mariphil"]["userid"]); 
                     $user = $user[0];
                 ?>

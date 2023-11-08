@@ -1,6 +1,23 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] === "POST") {
+		if($_POST["action"] == "change_sy"):
+			// dump($_POST);
+			query("update school_year set current_status = 'inactive', applicant_status = 'inactive'");
+			query("update school_year set current_status = 'active' where school_year_id = ?", $_POST["current_sy"]);
+			query("update school_year set applicant_status = 'active' where school_year_id = ?", $_POST["applicant_sy"]);
 
+
+			
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+
+		endif;
 		
     }
 	else {

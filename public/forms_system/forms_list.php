@@ -30,41 +30,39 @@
             </div>
             <div class="modal-body">
               <form class="generic_form_trigger" data-url="forms">
-              <input type="hidden" name="action" value="addForm">
+              <input type="hidden" name="action" value="addQuarterlyMonitoring">
               <div class="form-group">
                 <label for="exampleInputEmail1">Form Type</label>
-                <select required name="form_type" class="form-control select2" >
+                <select disabled required name="form_type" class="form-control select2" >
                   <option selected disabled value="">Please select Form Type</option>
                   <option value="RENEWAL">RENEWAL</option>
                   <option value="MONTHLY">MONTHLY</option>
-                  <option value="QUARTERLY">QUARTERLY</option>
+                  <option selected value="QUARTERLY">QUARTERLY</option>
                 </select>
               </div>
 
-              <div class="form-group">
-                <label for="exampleInputEmail1">Year</label>
-                <input required type="number" value="<?php echo(date("Y")); ?>" name="year" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
+              <?php $sy = query("select * from school_year where current_status = 'active'"); ?>
 
               <div class="form-group">
-                <label for="exampleInputEmail1">Month</label>
-                <select required name="month" class="form-control select2" >
-                  <option selected disabled value="">Please select Month</option>
-                  <option value="01">JANUARY</option>
-                  <option value="02">FEBRUARY</option>
-                  <option value="03">MARCH</option>
-                  <option value="04">APRIL</option>
-                  <option value="05">MAY</option>
-                  <option value="06">JUNE</option>
-                  <option value="07">JULY</option>
-                  <option value="08">AUGUST</option>
-                  <option value="09">SEPTEMBER</option>
-                  <option value="10">OCTOBER</option>
-                  <option value="11">NOVEMBER</option>
-                  <option value="12">DECEMBER</option>
-                
+                <label for="exampleInputEmail1">School Year</label>
+                <select readonly required name="sy" class="form-control select2" >
+                  <option selected  value="<?php echo($sy[0]["school_year_id"]); ?>"><?php echo($sy[0]["school_year"]); ?></option>
                 </select>
               </div>
+
+
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Quarter</label>
+                <select required name="form_kind" class="form-control select2" >
+                  <option selected disabled value="">Please select Type of Quarter Report</option>
+                  <option value="FIRST QUARTER">FIRST QUARTER</option>
+                  <option value="SECOND QUARTER">SECOND QUARTER</option>
+                  <option value="THIRD QUARTER">THIRD QUARTER</option>
+                  <option value="FOURTH QUARTER">FOURTH QUARTER</option>
+                </select>
+              </div>
+
 
              
             </div>
@@ -94,8 +92,8 @@
                   <tr>
                     <th>Action</th>
                     <th>Form</th>
-                    <th>Year</th>
-                    <th>Month</th>
+                    <th>School Year</th>
+                    <th>Type</th>
                     <th>Date Created</th>
                     <th>Time Created</th>
                     <th>Passed</th>
@@ -105,14 +103,7 @@
                   <tbody>
                   <?php
                   foreach($forms as $f):
-                  if($f["form_type"] == "RENEWAL"):
-                    $not_passed=query("select count(*) as count from renewal where form_id = ?
-                    and status='FOR CHECKING'", $f["form_id"]);
-                    $not_passed = $not_passed[0]["count"];
-                    $passed=query("select count(*) as count from renewal where form_id = ?
-                    and status='VALIDATED'", $f["form_id"]);
-                    $passed = $passed[0]["count"];
-                  endif;
+     
                   
                   ?>
                     <tr>
@@ -120,8 +111,8 @@
                         <a href="forms?action=details&id=<?php echo($f["form_id"]); ?>" class="btn btn-warning">Details</a>
                       </td>
                       <td><?php echo($f["form_type"]); ?></td>
-                      <td><?php echo($f["year"]); ?></td>
-                      <td><?php echo($f["month"]); ?></td>
+                      <td><?php echo($f["school_year"]); ?></td>
+                      <td><?php echo($f["form_kind"]); ?></td>
                       <td><?php echo($f["date_created"]); ?></td>
                       <td><?php echo($f["time_created"]); ?></td>
                       <td><?php echo($passed); ?></td>

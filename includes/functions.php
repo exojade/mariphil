@@ -5,6 +5,20 @@
 
 
 
+    function generate_otp($length = 10) {
+        $characters = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding O, 0, 1, l, I
+        $charLength = strlen($characters);
+        $randomString = '';
+    
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charLength - 1)];
+        }
+    
+        return $randomString;
+    }
+    
+
+
      function to_peso($number){
         if($number != ""){
             return(number_format($number, 2, '.', ','));

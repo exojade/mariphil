@@ -174,10 +174,10 @@
                 <h3 class="profile-username text-center"><?php echo($forms["form_type"]); ?></h3>
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>Month</b> <a class="float-right"><?php echo($forms["month"]); ?></a>
+                    <b>Type</b> <a class="float-right"><?php echo($forms["form_kind"]); ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>Year</b> <a class="float-right"><?php echo($forms["year"]); ?></a>
+                    <b>School Year</b> <a class="float-right"><?php echo($forms["school_year_id"]); ?></a>
                   </li>
                 </ul>
               </div>
@@ -189,6 +189,7 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+                <h3>List of Scholars</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -198,38 +199,26 @@
                     <th width="16%">Action</th>
                     <th>Scholar</th>
                     <th>Status</th>
-                    <th>Date Submitted</th>
-                    <th>Time Submitted</th>
+                    <th>Grade</th>
                     <th>Remarks</th>
-                    <th>Date Checked</th>
-                    <th>Time Checked</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
-                  foreach($docs as $row):
+                  foreach($scholars as $row):
                   ?>
                     <tr>
                       <td>
-                        <?php if($row["status"] == "FOR CHECKING"): ?>
-                          <a href="#" disabled class="btn btn-primary">NOT SUBMITTED</a>
-                        <?php else: ?>
-                          <a href="#"  data-toggle="modal" data-target="#viewRenewal_<?php echo($row["scholar_id"]); ?>" class="btn btn-primary">View</a>
-                        <?php endif; ?>
-                        <?php if($row["status"] == "SUBMITTED"): ?>
-                          <a href="#"  data-toggle="modal" data-target="#check_<?php echo($row["scholar_id"]); ?>" class="btn btn-warning">Check</a>
-                        <?php else: ?>
-                        <?php endif; ?>
+                   <a class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                   <a class="btn btn-warning"><i class="fa fa-pen"></i></a>
                         
                         
                       </td>
                       <td><?php echo($row["lastname"] . ", " . $row["firstname"]); ?></td>
-                      <td><?php echo($row["status"]); ?></td>
-                      <td><?php echo($row["submitted_date"]); ?></td>
-                      <td><?php echo($row["submitted_time"]); ?></td>
-                      <td><?php echo($row["remarks"]); ?></td>
-                      <td><?php echo($row["check_date"]); ?></td>
-                      <td><?php echo($row["check_time"]); ?></td>
+                      <td><?php echo($row["form_status"]); ?></td>
+                      <td><?php echo($row["grades"]); ?></td>
+                      <td><?php echo($row["grades"]); ?></td>
+                     
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
