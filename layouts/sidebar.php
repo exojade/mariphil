@@ -51,6 +51,12 @@
       <p>Quarterly Monitoring</p>
     </a>
   </li>
+  <li class="nav-item">
+    <a href="renewal?action=my_list" class="nav-link">
+      <i class="far fa-file nav-icon"></i>
+      <p>Renewal Portal</p>
+    </a>
+  </li>
 
   <?php $scholar = query("select * from scholars where scholar_id = ?", $_SESSION["mariphil"]["userid"]); ?>
   <?php if($scholar[0]["current_status"] == "APPLICANT"): ?>

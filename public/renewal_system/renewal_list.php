@@ -29,12 +29,10 @@
               </button>
             </div>
             <div class="modal-body">
-              <form class="generic_form_trigger" data-url="forms">
-              <input type="hidden" name="action" value="addQuarterlyMonitoring">
-         
-
+              <form class="generic_form_trigger" data-url="renewal">
+              <input type="hidden" name="action" value="addRenewalForm">
+              <input type="hidden" name="facilitator" value="<?php echo($_SESSION["mariphil"]["userid"]); ?>">
               <?php $sy = query("select * from school_year where current_status = 'active'"); ?>
-
               <div class="form-group">
                 <label for="exampleInputEmail1">School Year</label>
                 <select readonly required name="sy" class="form-control select2" >
@@ -42,16 +40,14 @@
                 </select>
               </div>
 
-
-
+              <?php $sy = query("select * from school_year where idd > ?", $sy[0]["idd"]); ?>
               <div class="form-group">
-                <label for="exampleInputEmail1">Quarter</label>
-                <select required name="form_kind" class="form-control select2" >
-                  <option selected disabled value="">Please select Type of Quarter Report</option>
-                  <option value="FIRST QUARTER">FIRST QUARTER</option>
-                  <option value="SECOND QUARTER">SECOND QUARTER</option>
-                  <option value="THIRD QUARTER">THIRD QUARTER</option>
-                  <option value="FOURTH QUARTER">FOURTH QUARTER</option>
+                <label for="exampleInputEmail1">Renew for School Year</label>
+                <select required name="renew_sy" class="form-control select2">
+                  <option selected disabled value="">Please select school year to be renewed</option>
+                  <?php foreach($sy as $row): ?>
+                    <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
 
@@ -84,8 +80,8 @@
                   <tr>
                     <th>Action</th>
                     <th>Form</th>
-                    <th>School Year</th>
-                    <th>Type</th>
+                    <th>Current SY</th>
+                    <th>Renew SY</th>
                     <th>Date Created</th>
                     <th>Time Created</th>
                   </tr>
@@ -93,16 +89,14 @@
                   <tbody>
                   <?php
                   foreach($forms as $f):
-     
-                  
                   ?>
                     <tr>
                       <td>
-                        <a href="forms?action=details&id=<?php echo($f["form_id"]); ?>" class="btn btn-warning">Details</a>
+                        <a href="renewal?action=details&id=<?php echo($f["form_id"]); ?>" class="btn btn-warning">Details</a>
                       </td>
-                      <td><?php echo($f["form_type"]); ?></td>
-                      <td><?php echo($f["school_year"]); ?></td>
-                      <td><?php echo($f["form_kind"]); ?></td>
+                      <td>RENEWAL PORTAL</td>
+                      <td><?php echo($f["current_sy"]); ?></td>
+                      <td><?php echo($f["for_sy"]); ?></td>
                       <td><?php echo($f["date_created"]); ?></td>
                       <td><?php echo($f["time_created"]); ?></td>
            
