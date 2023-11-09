@@ -173,7 +173,7 @@
       </a>
   </li>
   <li class="nav-item">
-      <a href="forms?action=list" class="nav-link">
+      <a href="renewal?action=list" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
         <p>
           Renewal Monitoring

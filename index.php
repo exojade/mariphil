@@ -40,6 +40,11 @@
 					require 'public/email_system/email.php';
 				else if ($request == 'forms')
 					require 'public/forms_system/forms.php';
+				else if ($request == 'renewal')
+					require 'public/renewal_system/renewal.php';
+
+
+
 			else if ($request == 'logout'){
 				require 'logout.php';
 			}
