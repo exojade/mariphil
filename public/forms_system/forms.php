@@ -28,22 +28,111 @@
 
 		endif;
 
-		if($_POST["action"] == "add_photo"):
-			dump($_FILES);
-			$achievement_id = create_uuid("ACH");
-			if (query("insert INTO monthly_monitoring_achievements (
-				tbl_id, achievement, achievement_id)
-				VALUES(?,?,?)", 
-				$_POST["tbl_id"], $_POST["achievement"], $achievement_id) === false)
-				{
+		if($_POST["action"] == "returnForm"):
+			// dump($_POST);
+			$comment = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			
+			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
+			// dump($message_comment);
+			query("update monthly_monitoring set form_status = 'RETURNED', return_comments = ? where tbl_id = ?", $message_comment, $_POST["tbl_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+
+		endif;
+
+		if($_POST["action"] == "approveForm"):
+			
+			query("update monthly_monitoring set form_status = 'DONE', remarks = ? where tbl_id = ?", $_POST["remarks"], $_POST["tbl_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+
+		endif;
+
+		if($_POST["action"] == "update_grade"):
+			// dump($_FILES);
+
+			$target_pdf = "resources/scholar_achievements/" . $_POST["form_id"]."/";
+			if (!file_exists($target_pdf )) {
+				mkdir($target_pdf , 0777, true);
+			}
+			$target_pdf = $target_pdf.$_FILES["grade_card"]["name"];
+			if(!move_uploaded_file($_FILES['grade_card']['tmp_name'], $target_pdf)){
+				echo("Do not have upload files");
+				exit();
+			}
+
+			query("update monthly_monitoring set grades = ?, grade_card_upload = ? where
+					tbl_id = ?", $_POST["grade"], $target_pdf, $_POST["form_id"]);
+
 					$res_arr = [
-						"result" => "failed",
-						"title" => "Failed",
-						"message" => "This Type of Form has been already created!",
+						"result" => "success",
+						"title" => "Success",
+						"message" => "Success",
 						"link" => "refresh",
 						];
 						echo json_encode($res_arr); exit();
+		endif;
+
+		if($_POST["action"] == "submitForm"):
+			$form = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			if($form[0]["grades"] == ""):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Success",
+					"message" => "You have not filled out the form yet! Fill at least the grades!",
+					"link" => "refresh",
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+			query("update monthly_monitoring set form_status = 'FOR CHECKING' where tbl_id = ?", $_POST["tbl_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Successfully submitted",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+			// dump($_POST);
+		endif;
+
+		if($_POST["action"] == "add_photo"):
+			// dump($_POST);
+
+			$tbl_id = $_POST["tbl_id"];
+			$i = 0;
+			foreach($_FILES["upload_file"]["name"] as $image):
+				$target_pdf = "resources/scholar_achievements/" . $tbl_id."/";
+				if (!file_exists($target_pdf )) {
+					mkdir($target_pdf , 0777, true);
 				}
+				
+				$target_pdf = $target_pdf.$_FILES["upload_file"]["name"][$i];
+				$image_id = create_uuid("ImgAchv");
+				if(!move_uploaded_file($_FILES['upload_file']['tmp_name'][$i], $target_pdf)){
+					echo("Do not have upload files");
+					exit();
+				}
+				if (query("insert INTO monthly_monitoring_upload (upload_id,upload_file,tbl_id) 
+					VALUES(?,?,?)", 
+					$image_id,$target_pdf,$tbl_id) === false)
+					{
+						apologize("Sorry, that username has already been taken!");
+						
+					}
+				$i++;
+			endforeach;
+
+
 
 		$res_arr = [
 			"result" => "success",
@@ -53,6 +142,28 @@
 			];
 			echo json_encode($res_arr); exit();
 
+		endif;
+
+		if($_POST["action"] == "printForm"):
+			// dump($_POST);
+				$base_url = the_base_url();
+				$options = urlencode(serialize($_POST));
+                $webpath = $base_url . "/mariphil_system/forms?action=printForm&options=".$options;
+                $filename = "QForm";
+				$path = "resources/qforms/".$filename.".pdf";
+				$exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait --image-dpi 300 "'.$webpath.'" '.$path.'';
+				// dump($webpath);
+				exec($exec);
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Success",
+					"link" => $path,
+					"newlink" => "newlink",
+					];
+					echo json_encode($res_arr); exit();
+			
 		endif;
 
 		if($_POST["action"] == "delete_achievement"):
@@ -207,7 +318,7 @@
 						form_status)
 						VALUES(?,?,?,?)", 
 							$quarter_id, $form_id, 
-							$s["scholar_id"], "FOR CHECKING") === false)
+							$s["scholar_id"], "FOR SUBMISSION") === false)
 							{
 								$res_arr = [
 									"result" => "failed",
@@ -261,6 +372,18 @@
 			
 		}
 
+
+		if($_GET["action"] == "printForm"){
+
+
+	
+			renderview("public/forms_system/printQuarterlyForm.php",[
+				// "forms" => $forms,
+			]);
+
+			
+		}
+
 		if($_GET["action"] == "details"){
 			$forms = query("select * from forms where form_id = ?", $_GET["id"]);
 			
@@ -284,8 +407,13 @@
 			on sy.school_year_id = f.school_year_id
 			 where m.tbl_id = ?
 			 order by f.timestamp desc", $_GET["id"]);
+
+			
 // dump($forms);
 			$form = $forms[0];
+			$scholar = query("select * from scholars where scholar_id = ?", $form["scholar_id"]);
+			
+			// dump($scholar);
 
 			$form_achievements = query("select * from monthly_monitoring_achievements where tbl_id = ?", $_GET["id"]);
 			$form_uploads = query("select * from monthly_monitoring_upload where tbl_id = ?", $_GET["id"]);
@@ -293,6 +421,7 @@
 				"form" => $form,
 				"form_achievements" => $form_achievements,
 				"form_uploads" => $form_uploads,
+				"scholar" => $scholar,
 			]);
 		}
 	}

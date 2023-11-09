@@ -96,8 +96,6 @@
                     <th>Type</th>
                     <th>Date Created</th>
                     <th>Time Created</th>
-                    <th>Passed</th>
-                    <th>Not Yet Passed</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -115,8 +113,7 @@
                       <td><?php echo($f["form_kind"]); ?></td>
                       <td><?php echo($f["date_created"]); ?></td>
                       <td><?php echo($f["time_created"]); ?></td>
-                      <td><?php echo($passed); ?></td>
-                      <td><?php echo($not_passed); ?></td>
+           
                       
                     </tr>
                   <?php endforeach; ?>

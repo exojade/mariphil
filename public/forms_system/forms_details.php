@@ -209,7 +209,7 @@
                   ?>
                     <tr>
                       <td>
-                   <a class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                   <a href="forms?action=scholar_details&id=<?php echo($row["tbl_id"]); ?>" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                    <a class="btn btn-warning"><i class="fa fa-pen"></i></a>
                         
                         

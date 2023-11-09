@@ -138,6 +138,13 @@
         }
     }
 
+    function the_base_url(){
+        $protocol = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on" ? "https" : "http";
+			$host = $_SERVER["HTTP_HOST"];
+			$base_url = $protocol . "://" . $host;
+            return $base_url;
+    }
+
     function query_etracs(/* $sql [, ... ] */)
         {
             // SQL statement

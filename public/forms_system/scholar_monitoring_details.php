@@ -5,8 +5,23 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Form Details</h1>
+          <div class="col-sm-12">
+            <h1>Form Details
+
+            <?php
+            if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+              <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
+              <input type="hidden" name="action" value="submitForm">
+              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                <button class="btn btn-primary" >Submit Quarterly Form</button>
+              </form>
+            <?php endif; ?>
+            <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
+              <input type="hidden" name="action" value="printForm">
+              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                <button class="btn btn-success" ><i class="fa fa-print"></i>  Print Form</button>
+            </form>
+            </h1>
           </div>
        
         </div>
@@ -203,24 +218,70 @@
                   <input type="hidden" name="action" value="add_photo">
                   <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
                   <div class="form-group">
-                    <label for="exampleInputFile">Upload Photo</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input required="" type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                    </div>
-                  </div>
+                  <label for="exampleInputFile">Upload</label>
+                  <input type="file" name="upload_file[]" multiple="multiple" id="exampleInputFile">
+
+                  <p class="help-block">Upload Image Here.</p>
+                </div>
                   <div class="box-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                   </div>
                 </form>
               </div>
-        
+            </div>
+          </div>
+      </div>
+
+
+      <div class="modal fade" id="modal_approveForm">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+              <div class="modal-header bg-primary">
+                <h3 class="modal-title">Approve Quarterly Form</h3>
+              </div>
+              <div class="modal-body">
+                <form role="form" class="generic_form_trigger" data-url="forms">
+                  <input type="hidden" name="action" value="approveForm">
+                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+
+                  <div class="form-group">
+                        <label>Remarks *</label>
+                        <textarea required name="remarks" class="form-control" rows="5" placeholder="Enter ..."></textarea>
+                      </div>
+
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="modal fade" id="modal_returnForm">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+              <div class="modal-header bg-danger">
+                <h3 class="modal-title">Return Quarterly Form</h3>
+              </div>
+              <div class="modal-body">
+                <form role="form" class="generic_form_trigger" data-url="forms">
+                  <input type="hidden" name="action" value="returnForm">
+                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+
+                  <div class="form-group">
+                        <label>Comments why being returned *</label>
+                        <textarea required name="remarks" class="form-control" rows="5" placeholder="Enter ..."></textarea>
+                      </div>
+
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
       </div>
@@ -229,7 +290,42 @@
 
       <div class="container-fluid">
         <div class="row">
-          <div class="col-3">
+          <div class="col-4">
+
+          <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                <div class="text-center">
+                  <?php if($scholar[0]["profile_image"] == ""): ?>
+                    <img class="profile-user-img img-fluid img-circle"
+                       src="resources/default.jpg"
+                       alt="User profile picture" style="height:150px; width: 150px;">
+                  <?php else: ?>
+                    <img class="profile-user-img img-fluid img-circle"
+                       src="<?php echo($scholar[0]["profile_image"]); ?>"
+                       alt="User profile picture" style="height:150px; width: 150px;">
+
+                  <?php endif; ?>
+              
+                </div>
+                <br>
+                <h3 class="profile-username text-center"><?php echo($scholar[0]["firstname"] . " " . $scholar[0]["lastname"]); ?></h3>
+                <br>
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                    <b>School</b> <a class="float-right"><?php echo($scholar[0]["school_name"]); ?></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Level</b> <a class="float-right"><?php echo($scholar[0]["year_type"]); ?></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Year Level</b> <a class="float-right"><?php echo($scholar[0]["year_level"]); ?></a>
+                  </li>
+                </ul>
+             
+              </div>
+            </div>
+
+
           <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <h3 class="profile-username text-center"><?php echo($form["form_type"]); ?></h3>
@@ -238,48 +334,97 @@
                     <b>Type</b> <a class="float-right"><?php echo($form["form_kind"]); ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>School Year</b> <a class="float-right"><?php echo($form["school_year_id"]); ?></a>
+                    <b>School Year</b> <a class="float-right"><?php echo($form["school_year"]); ?></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Form Status</b> <a class="float-right"><?php echo($form["form_status"]); ?></a>
                   </li>
                 </ul>
               </div>
               <!-- /.card-body -->
             </div>
 
+
+
+            <div class="card">
+    
+            <div class="card-header p-2 bg-primary">
+                          <h3 class="card-title">Facilitator's Remarks</h3>
+                        </div>
+                        <div class="card-body">
+                      <div class="form-group">
+                        <textarea readonly class="form-control" rows="5" placeholder="Enter ..."><?php echo($form["remarks"]); ?></textarea>
+                      </div>
+                </div>
+            </div>
+
+
+          <?php if($form["form_status"] != "DONE" && $form["return_comments"] != ""): ?>
+            <div class="card">
+    
+              <div class="card-header p-2 bg-danger">
+                            <h3 class="card-title">RETURNED COMMENTS</h3>
+                          </div>
+                <div class="card-body">
+                      <div class="form-group">
+                        <label>Comments</label>
+                        <textarea readonly class="form-control" rows="5" placeholder="Enter ..."><?php echo($form["return_comments"]); ?></textarea>
+                      </div>
+                </div>
+              </div>
+          <?php endif; ?>
+
+
+
+            <?php
+            // dump($_SESSION);
+            if($_SESSION["mariphil"]["role"] == "FACILITATOR"):
+              if($form["form_status"] == "FOR CHECKING"):
+             ?>
+            <div class="row">
+              <div class="col-md-6">
+                  <a href="#" data-toggle="modal" data-target="#modal_approveForm" class="btn btn-success btn-block">Approve</a>
+              </div>
+              <div class="col-md-6">
+                  <a href="#" data-toggle="modal" data-target="#modal_returnForm" class="btn btn-danger btn-block">Return</a>
+              </div>
+            </div>
+             <?php endif; ?>
+            <?php endif; ?>
+
           </div>
-          <div class="col-9">
+          <div class="col-8">
             <!-- Default box -->
             <div class="card">
-            <form class="generic_form_trigger" id="quarterly_form" data-url="quarterly">
-            <input type="hidden" name="action" value="update_form">
+            <form class="generic_form_trigger" id="grade_form" data-url="forms">
+            <input type="hidden" name="action" value="update_grade">
             <input type="hidden" name="form_id" value="<?php echo($_GET["id"]); ?>">
             <div class="card-header p-2">
                           <h3 class="card-title">Grade Form</h3>
-                          <div class="card-tools" style="margin-right:10px;">
-                          <button class="btn btn-primary btn-update" type="button">Update</button>
-                          <button style="display: none;" class="btn btn-success btn-save" type="submit">Save</button>
-                          <button style="display: none;" class="btn btn-danger btn-cancel" type="button">Cancel</button>
-                          </div>
+                          <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+                            <div class="card-tools" style="margin-right:10px;">
+                              <button class="btn btn-primary btn-update" type="button">Update</button>
+                              <button style="display: none;" class="btn btn-success btn-save" type="submit">Save</button>
+                              <button style="display: none;" class="btn btn-danger btn-cancel" type="button">Cancel</button>
+                            </div>
+                          <?php endif; ?>
+                          
                         </div>
               <div class="card-body">
                   <div class="form-group">
                     <label>Grades</label>
-                    <input readonly required name="awit" type="number" step="0.01" class="form-control form-control-border border-width-2"  placeholder="Enter GPA / GWA here..">
+                    <input readonly value="<?php echo($form["grades"]); ?>" required name="grade" type="number" step="0.01" class="form-control form-control-border border-width-2"  placeholder="Enter GPA / GWA here..">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputFile">Upload Grade Card</label>
-                    <div class="input-group">
+                      <label for="customFile">Upload Grade Card</label>
                       <div class="custom-file">
-                        <input required disabled type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        <input disabled required name="grade_card" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="low_income">
+                        <label class="custom-file-label" for="low_income">Choose file</label>
                       </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                    </div>
-                  </div>
+                    </div>  
                   <?php if($form["grade_card_upload"] != ""): ?>
                     <div class="form-check">
-                    <label class="form-check-label" for="exampleCheck1"><a href="<?php echo($form["grade_card_upload"]); ?>">Grade Card File</a></label>
+                    <label class="form-check-label" for="exampleCheck1"><a target="_blank" href="<?php echo($form["grade_card_upload"]); ?>">Grade Card File</a></label>
                   </div>
                   <?php endif; ?>
           
@@ -295,7 +440,9 @@
             <div class="card-header p-2">
                           <h3 class="card-title">Achievements</h3>
                           <div class="card-tools" style="margin-right:10px;">
+                          <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
                             <button data-toggle="modal" data-target="#modal_add_child" class="btn btn-primary btn-save">Add</button>
+                          <?php endif; ?>
                           </div>
                         </div>
               <div class="card-body">
@@ -311,7 +458,11 @@
                           <form class="generic_form_trigger" data-url="forms">
                           <input type="hidden" name="action" value="delete_achievement">
                           <input type="hidden" name="achievement_id" value="<?php echo($row["achievement_id"]); ?>">
+                          <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
                           <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                          <?php else: ?>
+                            <button disabled type="submit" class="btn btn-danger btn-block">Delete</button>
+                          <?php endif; ?>
                     </form>
                         </td>
                         <td><?php echo($row["achievement"]); ?></td>
@@ -331,7 +482,9 @@
             <div class="card-header p-2">
                           <h3 class="card-title">Photos of Achievements</h3>
                           <div class="card-tools" style="margin-right:10px;">
+                          <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
                             <button data-toggle="modal" data-target="#modal_add_image" class="btn btn-primary btn-save" type="submit">Add</button>
+                          <?php endif; ?>
                           </div>
                         </div>
               <div class="card-body">
@@ -348,11 +501,14 @@
                           <form class="generic_form_trigger" data-url="forms">
                           <input type="hidden" name="action" value="delete_photo">
                           <input type="hidden" name="achievement_id" value="<?php echo($row["upload_id"]); ?>">
+                          <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
                           <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                          <?php else: ?>
+                            <button disabled type="submit" class="btn btn-danger btn-block">Delete</button>
+                          <?php endif; ?>
                     </form>
                         </td>
-                        <td><?php echo($row["achievement"]); ?></td>
-                        <td><img style="border: 2px solid black;" src="<?php echo($row["upload_file"]); ?>" width="50" height="50"></td>
+                        <td><a target="_blank" href="<?php echo($row["upload_file"]); ?>"><img style="border: 2px solid black;" src="<?php echo($row["upload_file"]); ?>" width="50" height="50"></a></td>
                       </tr>
                     <?php endforeach; ?>
                   </tbody>
@@ -370,6 +526,7 @@
   </div>
 
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="AdminLTE_new/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
   <script>
     $(".btn-update").click(function(){
       // alert("awoit");
@@ -392,5 +549,11 @@
       $("#"+form.attr('id')+" .btn-update").show(); //Showing submit_text
     });
 
+
+    $(function () {
+  bsCustomFileInput.init();
+});
     </script>
+
+    
   <?php require("layouts/footer.php") ?>

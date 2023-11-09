@@ -66,6 +66,29 @@
 		if($_POST["action"] == "addResponsible"){
 			// dump($_POST);
 
+			$scholar = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
+			// dump($scholar);
+			$scholar = $scholar[0];
+
+
+			if (query("insert INTO scholar_status (
+				scholar_id, school_year_id, school_name, year_level, 
+				course, year_type) 
+					VALUES(?,?,?,?,?,?)",
+					$scholar["scholar_id"], $scholar["school_year_id"], $scholar["school_name"], $scholar["year_level"], 
+					$scholar["course"], $scholar["year_type"]) === false)
+					{
+						$res_arr = [
+							"result" => "failed",
+							"title" => "Failed",
+							"message" => "User already Registered",
+							// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
+							];
+							echo json_encode($res_arr); exit();
+					}
+
+			
+
 			query("update scholars set 
 						responsible = '".$_SESSION["mariphil"]["userid"]."',
 						current_status = 'SCHOLAR'

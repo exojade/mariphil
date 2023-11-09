@@ -55,7 +55,13 @@
 
 		if($_POST["action"] == "saveProfile"){
 			$prof_id = $_SESSION["mariphil"]["userid"];
-			// dump($_FILES);
+			// dump($_POST);
+
+			$year_status = query("select * from year_level where level_id = ?", $_POST["year_level"]);
+			$year_level = $year_status[0]["year_level"];
+			$year_type = $year_status[0]["type"];
+
+
 			$string_query = ("
 			update scholars set 
 				firstname = '".strtoupper($_POST["firstname"])."',
@@ -81,7 +87,10 @@
 				father_income = '".strtoupper($_POST["father_income"])."',
 				father_education_attainment = '".strtoupper($_POST["father_educational"])."',
 				father_school = '".strtoupper($_POST["father_school"])."',
-
+				school_name = '".strtoupper($_POST["school_name"])."',
+				year_level = '".strtoupper($year_level)."',
+				year_type = '".strtoupper($year_type)."',
+				course = '".strtoupper($_POST["course"])."',
 				mother_name = '".strtoupper($_POST["mother_name"])."',
 				mother_birthdate = '".strtoupper($_POST["mother_dob"])."',
 				mother_address = '".strtoupper($_POST["mother_address"])."',

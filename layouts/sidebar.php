@@ -181,6 +181,18 @@
         </p>
       </a>
   </li>
+
+  <li class="nav-item">
+      <a href="allowance?action=list" class="nav-link">
+        <i class="nav-icon fas fa-money-check"></i>
+        <p>
+          Allowance
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  
 <?php endif; ?>
 
 

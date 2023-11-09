@@ -54,18 +54,25 @@
                         <span class="bs-stepper-label">Children Info</span>
                       </button>
                     </div> -->
+                    <div class="line"></div>
+                    <div class="step" data-target="#scholarship-part">
+                      <button type="button" class="step-trigger" role="tab" aria-controls="requirements-part" id="another_information-part-trigger">
+                        <span class="bs-stepper-circle">3</span>
+                        <span class="bs-stepper-label">Scholarship</span>
+                      </button>
+                    </div>
 
                     <div class="line"></div>
                     <div class="step" data-target="#requirements-part">
                       <button type="button" class="step-trigger" role="tab" aria-controls="requirements-part" id="another_information-part-trigger">
-                        <span class="bs-stepper-circle">3</span>
+                        <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">Requirements</span>
                       </button>
                     </div>
                     <div class="line"></div>
                     <div class="step" data-target="#profile-part">
                       <button type="button" class="step-trigger" role="tab" aria-controls="profile-part" id="information-part-trigger">
-                        <span class="bs-stepper-circle">4</span>
+                        <span class="bs-stepper-circle">5</span>
                         <span class="bs-stepper-label">Profile Image</span>
                       </button>
                     </div>
@@ -183,19 +190,29 @@
                       </div>
                       <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
                     </div>
-                    <div id="education-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                    <div id="scholarship-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+
                       <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <div class="input-group">
-                          <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                          </div>
-                          <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                          </div>
-                        </div>
+                        <label for="exampleInputEmail1">Name of School</label>
+                        <input type="text" required name="school_name" class="form-control" id="exampleInputEmail1" placeholder="Enter ...">
                       </div>
+                     
+                      <div class="form-group">
+                        <label>Year Level</label>
+                        <select id="yearLevelSelect" name="year_level" required class="form-control">
+                        <?php $year_level = query("select * from year_level order by level_id asc"); ?>
+                          <option value="" selected disabled>Please select year level</option>
+                          <?php foreach($year_level as $row): ?>
+                            <option data-type="<?php echo($row["type"]); ?>" value="<?php echo($row["level_id"]); ?>">[<?php echo($row["type"]); ?>] - <?php echo($row["year_level"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <div class="form-group" id="courseInput" style="display: none;">
+                          <label for="course">Enter Course</label>
+                          <input type="text" name="course" class="form-control">
+                      </div>
+
                       <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
                       <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
                     </div>
@@ -549,6 +566,28 @@
   
 
 
+</script>
+
+<script>
+    // Get references to the select and course input elements
+    var yearLevelSelect = document.getElementById("yearLevelSelect");
+    var courseInput = document.getElementById("courseInput");
+
+    // Add an event listener to the select element
+    yearLevelSelect.addEventListener("change", function() {
+        // Get the selected option's data-type attribute
+        var selectedOption = yearLevelSelect.options[yearLevelSelect.selectedIndex];
+        var dataType = selectedOption.getAttribute("data-type");
+
+        // Check if the selected option has data-type "college"
+        if (dataType === "COLLEGE") {
+            // If it's a college, show the course input box
+            courseInput.style.display = "block";
+        } else {
+            // If it's not a college, hide the course input box
+            courseInput.style.display = "none";
+        }
+    });
 </script>
 
 
