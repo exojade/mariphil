@@ -4,11 +4,11 @@
 
 		if($_POST["action"] == "returnForm"):
 			// dump($_POST);
-			$comment = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			$comment = query("select * from renewal where renewal_id = ?", $_POST["renewal_id"]);
 			
 			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
 			// dump($message_comment);
-			query("update monthly_monitoring set form_status = 'RETURNED', return_comments = ? where tbl_id = ?", $message_comment, $_POST["tbl_id"]);
+			query("update renewal set form_status = 'RETURNED', return_comments = ? where renewal_id = ?", $message_comment, $_POST["renewal_id"]);
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -21,7 +21,37 @@
 
 		if($_POST["action"] == "approveForm"):
 			
-			query("update monthly_monitoring set form_status = 'DONE', remarks = ? where tbl_id = ?", $_POST["remarks"], $_POST["tbl_id"]);
+			$renewal = query("select * from renewal where renewal_id = ?", $_POST["renewal_id"]);
+			$form = query("select * from renewal_form where form_id = ?", $renewal[0]["form_id"]);
+			
+
+			$renewal = $renewal[0];
+			$form = $form[0];
+			// dump($renewal);
+			query("update scholars set school_year_id = ?, school_name = ?, year_level = ?, year_type = ?, course = ?, year_level_id = ?
+					where scholar_id = ?",$form["for_school_year_id"],$renewal["school_name"],$renewal["year_level"],$renewal["year_type"],
+					$renewal["course"],$renewal["year_level_id"],$renewal["scholar_id"]
+				);
+				
+
+		if (query("insert INTO scholar_status (
+			scholar_id, school_year_id, school_name, year_level, year_type, course)
+		  VALUES(?,?,?,?,?,?)", 
+		  	$renewal["scholar_id"], $form["for_school_year_id"], $renewal["school_name"], $renewal["year_level"], $renewal["year_type"], $renewal["course"]) === false)
+			{
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "This Type of Form has been already created!",
+					"link" => "refresh",
+					];
+					echo json_encode($res_arr); exit();
+			}
+
+
+
+
+			query("update renewal set form_status = 'DONE' where renewal_id = ?", $_POST["renewal_id"]);
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -112,6 +142,7 @@
 		endif;
 
 		if($_POST["action"] == "submitForm"):
+			// dump($_POST);
 			$form = query("select * from renewal where renewal_id = ?", $_POST["tbl_id"]);
 			if($form[0]["grades"] == "" || $form[0]["tuition_fee_report"] == "" || $form[0]["cor"] == ""
 			|| $form[0]["school_name"] == "" || $form[0]["year_level"] == ""
@@ -124,7 +155,7 @@
 					];
 					echo json_encode($res_arr); exit();
 			endif;
-			query("update monthly_monitoring set form_status = 'FOR CHECKING' where tbl_id = ?", $_POST["tbl_id"]);
+			query("update renewal set form_status = 'FOR CHECKING' where renewal_id = ?", $_POST["tbl_id"]);
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -136,7 +167,18 @@
 		endif;
 
 		if($_POST["action"] == "updateInfo"):
-			dump($_POST);
+			$year_level = query("select * from year_level where level_id = ?", $_POST["year_level"]);
+			$year_level = $year_level[0];
+			query("update renewal set school_name = ?, year_level = ?, year_type= ?, 
+			course = ?, year_level_id = ? where renewal_id = ?", $_POST["school_name"], 
+			$year_level["year_level"], $year_level["type"], $_POST["course"], $year_level["level_id"], $_POST["form_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Successfully submitted",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
 		endif;
 
 		

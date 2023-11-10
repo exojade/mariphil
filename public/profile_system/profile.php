@@ -60,6 +60,7 @@
 			$year_status = query("select * from year_level where level_id = ?", $_POST["year_level"]);
 			$year_level = $year_status[0]["year_level"];
 			$year_type = $year_status[0]["type"];
+			// $year_level_id = $year_status[0]["type"];
 
 
 			$string_query = ("
@@ -90,6 +91,7 @@
 				school_name = '".strtoupper($_POST["school_name"])."',
 				year_level = '".strtoupper($year_level)."',
 				year_type = '".strtoupper($year_type)."',
+				year_level_id = '".strtoupper($_POST["year_level"])."',
 				course = '".strtoupper($_POST["course"])."',
 				mother_name = '".strtoupper($_POST["mother_name"])."',
 				mother_birthdate = '".strtoupper($_POST["mother_dob"])."',

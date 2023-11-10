@@ -214,10 +214,6 @@
      <?php endforeach; ?>
      <?php endif; ?>
 
-      
-
-
-
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
@@ -322,9 +318,10 @@
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal Info</a></li>
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Documents</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Application Status</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Monthly Monitoring</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Renewal</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#forms" data-toggle="tab">Allowance</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#scholarship" data-toggle="tab">Scholarship</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#monitoring" data-toggle="tab">Monthly Monitoring</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#renewal" data-toggle="tab">Renewal</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#allowance" data-toggle="tab">Allowance</a></li>
                 </ul>
               </div>
               <div class="card-body">
@@ -480,62 +477,122 @@
                   </div>
 
 
-                  <div class="tab-pane" id="forms">
+                  <div class="tab-pane" id="monitoring">
                   <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Action</th>
                     <th>Form</th>
-                    <th>Year</th>
-                    <th>Month</th>
+                    <th>Type</th>
+                    <th>Grades</th>
+                    <th>SY</th>
                     <th>Status</th>
-                    <th>Remarks</th>
-                    <th>Check By</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
-                  $forms = query("select *,r.status as the_status from renewal r
-                                  left join forms f
-                                  on r.form_id = f.form_id
-                                  left join users u 
-                                  on u.user_id = r.remarks_by
-                                  where scholar_id = ?", $_GET["id"]);
+                  $forms = query("
+                  
+                  select f.*,m.*, sy.school_year from monthly_monitoring m
+                  left join forms f
+                  on f.form_id = m.form_id
+                  left join school_year sy
+                  on sy.school_year_id = f.school_year_id
+                  where m.scholar_id = ?
+                  ", $_GET["id"]);
                     // dump($applicant);
                   foreach($forms as $f):?>
                     <tr>
-                    <?php if($_SESSION["mariphil"]["role"] == "FACILITATOR"): ?>
-                        <?php if($applicant["responsible"] == $_SESSION["mariphil"]["userid"]): ?>
-                        <td>
-                          <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#viewRenewal_<?php echo($f["form_id"]); ?>">View</a>
-                          <a href="#" data-id="<?php echo($f["form_id"]); ?>" class="btn btn-warning" data-toggle="modal" data-target="#check_<?php echo($f["form_id"]); ?>">Check</a>
-                        </td> 
-                        <?php else: ?>
-                          <td>
-                          <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#viewRenewal_<?php echo($f["form_id"]); ?>">View</a>
-                        </td> 
+                      <td><a target="_blank" href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <td>QUARTERLY</td>
+                      <td><?php echo($f["form_kind"]); ?></td>
+                      <td><?php echo($f["grades"]); ?></td>
+                      <td><?php echo($f["school_year"]); ?></td>
+                      <td><?php echo($f["form_status"]); ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  </tbody>
+                </table>
+                </div>
 
-                        <?php endif; ?>
-                      <?php else: ?>
-                        <td>
-                          <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#viewRenewal_<?php echo($f["form_id"]); ?>">View</a>
-                          <?php if($f["the_status"] != "CHECKED"): ?>
-                          <a href="#" data-id="<?php echo($f["form_id"]); ?>" class="btn btn-warning" data-toggle="modal" data-target="#resubmitRenewal">ReSubmit</a>
-                          <?php endif; ?>
-                        </td> 
-                        <?php endif; ?>
-                      <td><?php echo($f["form_type"]); ?></td>
-                      <td><?php echo($f["year"]); ?></td>
-                      <td><?php echo($f["month"]); ?></td>
-                      <td><?php echo($f["the_status"]); ?></td>
-                      <td><?php echo($f["remarks"]); ?></td>
-                      <td><?php echo($f["fullname"]); ?></td>
+
+
+                <div class="tab-pane" id="scholarship">
+                  <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>School Year</th>
+                    <th>School</th>
+                    <th>Type</th>
+                    <th>Year Level</th>
+                    <th>Course (if any)</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  $forms = query("
+                  select ss.*, sy.school_year from scholar_status ss
+                  left join school_year sy
+                  on sy.school_year_id = ss.school_year_id where scholar_id = ?
+                  order by sy.idd desc
+                  ", $_GET["id"]);
+                    // dump($applicant);
+                  foreach($forms as $f):?>
+                    <tr>
+                      <td><?php echo($f["school_year"]); ?></td>
+                      <td><?php echo($f["school_name"]); ?></td>
+                      <td><?php echo($f["year_type"]); ?></td>
+                      <td><?php echo($f["year_level"]); ?></td>
+                      <td><?php echo($f["course"]); ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  </tbody>
+                </table>
+                </div>
+
+
+
+
+                  <div class="tab-pane" id="renewal">
+                  <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Action</th>
+                    <th>Form</th>
+                    <th>Current SY</th>
+                    <th>Renew SY</th>
+                    <th>Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  $forms = query("
+                  
+                  select f.*,r.*, sy.school_year as current_sy, sy2.school_year as for_sy from renewal r
+                  left join renewal_form f
+                  on f.form_id = r.form_id
+                  left join school_year sy
+                  on sy.school_year_id = f.school_year_id
+                  left join school_year sy2
+                  on sy2.school_year_id = f.for_school_year_id
+                  where r.scholar_id = ?
+                  ", $_GET["id"]);
+                    // dump($applicant);
+                  foreach($forms as $f):?>
+                    <tr>
+                      <td><a target="_blank" href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <td>RENEW</td>
+                      <td><?php echo($f["current_sy"]); ?></td>
+                      <td><?php echo($f["for_sy"]); ?></td>
+                      <td><?php echo($f["form_status"]); ?></td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
                 </table>
 
                   </div>
+
+
                   <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->

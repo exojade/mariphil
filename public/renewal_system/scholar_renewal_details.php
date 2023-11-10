@@ -211,69 +211,22 @@
 
 
 
-     <div class="modal fade" id="modal_add_child">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-primary">
-                <h3 class="modal-title">Add Achievement</h3>
-              </div>
-              <div class="modal-body">
-                <form role="form" class="generic_form_trigger" data-url="forms">
-                  <input type="hidden" name="action" value="add_achievement">
-                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
-                  <div class="form-group">
-                      <label for="exampleInputBorderWidth2">Achievement</label>
-                      <input required name="achievement" type="text" class="form-control form-control-border border-width-2">
-                  </div>
-                  <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                  </div>
-                </form>
-              </div>
-        
-            </div>
-          </div>
-      </div>
+    
 
 
-      <div class="modal fade" id="modal_add_image">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-primary">
-                <h3 class="modal-title">Add Photos for Support</h3>
-              </div>
-              <div class="modal-body">
-                <form role="form" class="generic_form_trigger" data-url="forms">
-                  <input type="hidden" name="action" value="add_photo">
-                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
-                  <div class="form-group">
-                  <label for="exampleInputFile">Upload</label>
-                  <input type="file" name="upload_file[]" multiple="multiple" id="exampleInputFile">
-
-                  <p class="help-block">Upload Image Here.</p>
-                </div>
-                  <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-      </div>
+    
 
 
       <div class="modal fade" id="modal_approveForm">
           <div class="modal-dialog modal-lg">
             <div class="modal-content ">
               <div class="modal-header bg-primary">
-                <h3 class="modal-title">Approve Quarterly Form</h3>
+                <h3 class="modal-title">Approve Renewal</h3>
               </div>
               <div class="modal-body">
-                <form role="form" class="generic_form_trigger" data-url="forms">
+                <form role="form" class="generic_form_trigger" data-url="renewal">
                   <input type="hidden" name="action" value="approveForm">
-                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                  <input type="hidden" name="renewal_id" value="<?php echo($_GET["id"]); ?>">
 
                   <div class="form-group">
                         <label>Remarks *</label>
@@ -297,9 +250,9 @@
                 <h3 class="modal-title">Return Quarterly Form</h3>
               </div>
               <div class="modal-body">
-                <form role="form" class="generic_form_trigger" data-url="forms">
+                <form role="form" class="generic_form_trigger" data-url="renewal">
                   <input type="hidden" name="action" value="returnForm">
-                  <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                  <input type="hidden" name="renewal_id" value="<?php echo($_GET["id"]); ?>">
 
                   <div class="form-group">
                         <label>Comments why being returned *</label>
@@ -429,11 +382,12 @@
                   <div class="form-group">
                     <label>School Name</label>
                     <?php
-                    $school = "";
+                    $school = $form["school_name"];
                     if($form["school_name"] == "")
                     $school = $scholar[0]["school_name"];
+                  
 
-                    $course = "";
+                    $course = $form["course"];
                     if($form["course"] == "")
                     $course = $scholar[0]["course"];
                     ?>
@@ -457,7 +411,7 @@
                         </select>
                       </div>
 
-                      <div class="form-group" id="courseInput" style="display: none;">
+                      <div class="form-group" id="courseInput" <?php if($course == ""): ?>style="display: none;" <?php endif; ?>>
                           <label for="course">Enter Course</label>
                           <input value="<?php echo($course); ?>" type="text" name="course" class="form-control">
                       </div>
@@ -485,17 +439,40 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><a href="#" data-toggle="modal" data-target="#upload_grades" class="btn btn-primary btn-block">Reupload</a></td>
+                      <td>
+                      <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+                        <a href="#" data-toggle="modal" data-target="#upload_grades" class="btn btn-primary btn-block">Reupload</a>
+                      <?php else: ?>
+                        <button disabled class="btn btn-primary btn-block">Reupload</button>
+                      <?php endif; ?>
+                    </td>
                       <td>Grades</td>
-                      <td><a target="_blank" href="<?php echo($form["grades"]); ?>"><?php echo($form["grades"]); ?></a></td>
+                      <td>
+                        <a target="_blank" href="<?php echo($form["grades"]); ?>"><?php echo($form["grades"]); ?></a></td>
                     </tr>
                     <tr>
-                      <td><a href="#" data-toggle="modal" data-target="#upload_cor" class="btn btn-primary btn-block">Reupload</a></td>
+                      <td>
+
+                      <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+                        <a href="#" data-toggle="modal" data-target="#upload_cor" class="btn btn-primary btn-block">Reupload</a>
+                      <?php else: ?>
+                        <button disabled class="btn btn-primary btn-block">Reupload</button>
+                      <?php endif; ?>
+
+                        
+                      </td>
                       <td>Certificate of Registration</td>
                       <td><a target="_blank" href="<?php echo($form["cor"]); ?>"><?php echo($form["cor"]); ?></a></td>
                     </tr>
                     <tr>
-                      <td><a href="#" data-toggle="modal" data-target="#upload_tuition" class="btn btn-primary btn-block">Reupload</a></td>
+                      <td>
+                      <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+                        <a href="#" data-toggle="modal" data-target="#upload_tuition" class="btn btn-primary btn-block">Reupload</a>
+
+                      <?php else: ?>
+                        <button disabled class="btn btn-primary btn-block">Reupload</button>
+                      <?php endif; ?>
+                      </td>
                       <td>Tuition Fee Report</td>
                       <td><a target="_blank" href="<?php echo($form["tuition_fee_report"]); ?>"><?php echo($form["tuition_fee_report"]); ?></a></td>
                     </tr>
