@@ -515,8 +515,6 @@
                 </table>
                 </div>
 
-
-
                 <div class="tab-pane" id="scholarship">
                   <table id="example1" class="table table-bordered table-striped">
                   <thead>

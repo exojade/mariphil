@@ -1,3 +1,5 @@
+<?php  ?>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #244D07">
     <!-- Brand Logo -->
     <a href="#" class="brand-link" class="text-center">
