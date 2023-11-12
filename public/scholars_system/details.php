@@ -475,8 +475,6 @@
                 </table>
 
                   </div>
-
-
                   <div class="tab-pane" id="monitoring">
                   <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -542,6 +540,55 @@
                       <td><?php echo($f["year_type"]); ?></td>
                       <td><?php echo($f["year_level"]); ?></td>
                       <td><?php echo($f["course"]); ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  </tbody>
+                </table>
+                </div>
+
+                <div class="tab-pane" id="allowance">
+                  <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>School Year</th>
+                    <th>Month</th>
+                    <th>Allowance</th>
+                    <th>Status</th>
+                    <th>Date Claimed / Returned</th>
+                    <th>Facilitator</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  $allowance = query("
+                  select aa.month, aas.amount, aas.status, aas.date_claimed, aas.date_returned, u.fullname, sy.school_year  from allowance aa
+                  left join allowance_scholar aas
+                  on aas.allowance_id = aa.allowance_id
+                  left join users u 
+                  on u.user_id = aa.facilitator
+                  left join school_year sy
+                  on sy.school_year_id = aa.school_year_id
+                  where aas.scholar_id = ?
+                  ", $_GET["id"]);
+                    // dump($applicant);
+                  foreach($allowance as $row):?>
+                    <tr>
+                      <td><?php echo($row["school_year"]); ?></td>
+                      <?php $monthName = date("F", mktime(0, 0, 0, $row["month"], 1)); ?>
+                      <td><?php echo($monthName); ?></td>
+                      <td><?php echo($row["amount"]); ?></td>
+                      <td><?php echo($row["status"]); ?></td>
+                      <?php $date = "";
+                      if($row["status"] == "CLAIMED"):
+                        $date  = new DateTime($row["date_claimed"]);
+                        $date = $date->format("F d, Y");
+                      elseif($row["status"] == "RETURNED"):
+                        $date  = new DateTime($row["date_returned"]);
+                        $date = $date->format("F d, Y");
+                      endif;
+                      ?>
+                      <td><?php echo($date); ?></td>
+                      <td><?php echo($row["fullname"]); ?></td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>

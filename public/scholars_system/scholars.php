@@ -182,10 +182,13 @@
 
 
 		if($_GET["action"] == "my_scholars_list"){
-			$scholars = query("select s.*, u.fullname from scholars s
+			$scholars = query("select s.*, u.fullname,sy.school_year from scholars s
 			left join users u
 			on u.user_id = s.sponsor_id
-			where responsible = ?", $_SESSION["mariphil"]["userid"]);
+			left join school_year sy
+			on sy.school_year_id = s.school_year_id
+			where responsible = ?
+			order by s.school_year_id desc, lastname ASC, firstname ASC", $_SESSION["mariphil"]["userid"]);
 			render("public/scholars_system/my_scholars_list.php",[
 				"scholars" => $scholars,
 			]);

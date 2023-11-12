@@ -39,10 +39,13 @@
                   <tr>
                     <th>Action</th>
                     <th>Fullname</th>
-                    <th>Address</th>
+                    <th>Year Level</th>
+                    <th>Type</th>
+                    <th>Course</th>
+                    <th>School</th>
                     <th>Gender</th>
                     <th>Sponsor</th>
-                    <th>Application Status</th>
+                    <th>Current School Year</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -51,14 +54,13 @@
                     <td><a class="btn btn-primary" href="scholars?action=details&id=<?php echo($s["scholar_id"]); ?>"><i class="fa fa-solid fa-eye"></i></a></td>
                     <!-- <td><?php echo($s["lastname"] . ", " . $s["firstname"]); ?></td> -->
                     <td><?php echo($s["lastname"] . ", " . $s["firstname"]); ?></td>
-                    <td><?php 
-                    echo($s["address_home"] . " " . $s["address_barangay"]
-                          . " " . $s["address_city"] . ", " . $s["address_province"]
-                  ); 
-                    ?></td>
+                    <td><?php echo($s["year_level"]); ?></td>
+                    <td><?php echo($s["year_type"]); ?></td>
+                    <td><?php echo($s["course"]); ?></td>
+                    <td><?php echo($s["school_name"]); ?></td>
                     <td><?php echo($s["sex"]); ?></td>
                     <td><?php echo($s["fullname"]); ?></td>
-                    <td><?php echo($s["current_status"]); ?></td>
+                    <td><?php echo($s["school_year"]); ?></td>
                 </tr>
                   <?php endforeach; ?>
                  
