@@ -42,6 +42,8 @@
 					require 'public/forms_system/forms.php';
 				else if ($request == 'renewal')
 					require 'public/renewal_system/renewal.php';
+				else if ($request == 'allowance')
+					require 'public/allowance_system/allowance.php';
 
 
 
