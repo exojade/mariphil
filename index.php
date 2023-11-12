@@ -15,7 +15,7 @@
 		$request = explode('/',$request);
 		$request = $request[1];
 		
-		$countering = array("login", "register", "print", "otp", "role", "forms");
+		$countering = array("login", "register", "print", "otp", "role", "forms", "allowance");
 		if (!in_array($request, $countering)){
 			if(empty($_SESSION["mariphil"]["userid"]) && empty($_SESSION["mariphil"]["application"])){
 				require 'public/login_system/role.php';
@@ -75,6 +75,8 @@
 					require 'public/print_system/print.php';
 			else if ($request == 'forms')
 					require 'public/forms_system/forms.php';
+					else if ($request == 'allowance')
+					require 'public/allowance_system/allowance.php';
 		}
 		
 		

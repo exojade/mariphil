@@ -40,7 +40,7 @@
             <div class="modal-body">
               <form class="generic_form_trigger" data-url="allowance">
               <input type="hidden" name="action" value="claimAllowance">
-              <input type="hidden" name="facilitator" value="<?php echo($_SESSION["mariphil"]["userid"]); ?>">
+              <input type="hidden" name="tbl_id" value="<?php echo($row["tbl_id"]); ?>">
               <?php $sy = query("select * from school_year where current_status = 'active'"); ?>
               <div class="form-group">
                 <label for="exampleInputEmail1">Scholar Full Name</label>
@@ -73,35 +73,32 @@
       <div class="modal fade" id="modalReturn<?php echo($row["scholar_id"]); ?>">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header bg-primary">
-              <h4 class="modal-title">Update Status</h4>
+            <div class="modal-header bg-warning">
+              <h4 class="modal-title">Return Allowance</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <form class="generic_form_trigger" data-url="allowance">
-              <input type="hidden" name="action" value="addAllowance">
-              <input type="hidden" name="facilitator" value="<?php echo($_SESSION["mariphil"]["userid"]); ?>">
-              <?php $sy = query("select * from school_year where current_status = 'active'"); ?>
+              <input type="hidden" name="action" value="returnAllowance">
+              <input type="hidden" name="tbl_id" value="<?php echo($row["tbl_id"]); ?>">
               <div class="form-group">
                 <label for="exampleInputEmail1">Scholar Full Name</label>
                 <input type="text" disabled value="<?php echo($row["fullname"]); ?>" class="form-control">
               </div>
 
-              <?php $sy = query("select * from school_year where idd > ?", $sy[0]["idd"]); ?>
               <div class="form-group">
-                <label for="exampleInputEmail1">Renew for School Year</label>
-                <select id="month" name="month" class="form-control select2">
-                <?php
-                  for ($i = 1; $i <= 12; $i++) {
-                      $monthValue = sprintf("%02d", $i);
-                      $selected = (date("m") == $monthValue) ? 'selected' : '';
-                      echo "<option value=\"$monthValue\" $selected>" . date("F", mktime(0, 0, 0, $i, 1)) . "</option>";
-                  }
-                ?>
-                </select>
+                <label for="exampleInputEmail1">Allowance Amount</label>
+                <input type="text" disabled value="<?php echo(to_peso($row["amount"])); ?>" class="form-control">
               </div>
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Date Returned</label>
+                <input type="date" required name="dateReturned" class="form-control" id="exampleInputEmail1" placeholder="...">
+              </div>
+
+         
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -173,17 +170,15 @@
                         <?php endif; ?>
                         <?php if($row["status"] == "CLAIMED"): ?>
                           <form class="generic_form_trigger" data-url="allowance">
-                            <input type="hidden" name="action" value="reverAllowance">
-                            <input type="hidden" name="scholar_id" value="<?php echo($row["scholar_id"]); ?>">
-                            <input type="hidden" name="allowance_id" value="<?php echo($_GET["id"]); ?>">
+                            <input type="hidden" name="action" value="revertAllowance">
+                            <input type="hidden" name="tbl_id" value="<?php echo($row["tbl_id"]); ?>">
                             <button class="btn btn-danger btn-xs" type="submit">Revert</a>
                           </form>
                           <?php endif; ?>
                         <?php if($row["status"] == "RETURNED"): ?>
                           <form class="generic_form_trigger" data-url="allowance">
-                            <input type="hidden" name="action" value="reverAllowance">
-                            <input type="hidden" name="scholar_id" value="<?php echo($row["scholar_id"]); ?>">
-                            <input type="hidden" name="allowance_id" value="<?php echo($_GET["id"]); ?>">
+                            <input type="hidden" name="action" value="revertAllowance">
+                            <input type="hidden" name="tbl_id" value="<?php echo($row["tbl_id"]); ?>">
                             <button class="btn btn-danger btn-xs" type="submit">Revert</a>
                           </form>
                         <?php endif; ?>

@@ -4,19 +4,55 @@
 
 
 		if($_POST["action"] == "claimAllowance"):
-			dump($_POST);
+			// dump($_POST);
+			query("update allowance_scholar set status = 'CLAIMED', date_claimed = ? where
+					tbl_id = ?", $_POST["dateClaimed"], $_POST["tbl_id"]);
+					$res_arr = [
+						"result" => "success",
+						"title" => "Success",
+						"message" => "Success",
+						"link" => "refresh",
+						];
+						echo json_encode($res_arr); exit();
+		endif;
+
+		if($_POST["action"] == "revertAllowance"):
+			// dump($_POST);
+			query("update allowance_scholar set status = 'FOR RELEASE', date_claimed = '', date_returned = '' where
+					tbl_id = ?", $_POST["tbl_id"]);
+					$res_arr = [
+						"result" => "success",
+						"title" => "Success",
+						"message" => "Success",
+						"link" => "refresh",
+						];
+						echo json_encode($res_arr); exit();
+		endif;
+
+
+		if($_POST["action"] == "returnAllowance"):
+			// dump($_POST);
+			query("update allowance_scholar set status = 'RETURNED', date_returned = ? where
+					tbl_id = ?", $_POST["dateReturned"], $_POST["tbl_id"]);
+					$res_arr = [
+						"result" => "success",
+						"title" => "Success",
+						"message" => "Success",
+						"link" => "refresh",
+						];
+						echo json_encode($res_arr); exit();
 		endif;
 	
 
 		
 
-		if($_POST["action"] == "printForm"):
+		if($_POST["action"] == "printAllowance"):
 			// dump($_POST);
 				$base_url = the_base_url();
 				$options = urlencode(serialize($_POST));
-                $webpath = $base_url . "/mariphil_system/forms?action=printForm&options=".$options;
-                $filename = "QForm";
-				$path = "resources/qforms/".$filename.".pdf";
+                $webpath = $base_url . "/mariphil_system/allowance?action=printAllowance&options=".$options;
+                $filename = "AForm";
+				$path = "resources/aForms/".$filename.".pdf";
 				$exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait --image-dpi 300 "'.$webpath.'" '.$path.'';
 				// dump($webpath);
 				exec($exec);
@@ -133,11 +169,11 @@
 	
 
 
-		if($_GET["action"] == "printForm"){
+		if($_GET["action"] == "printAllowance"){
 
 
 	
-			renderview("public/forms_system/printQuarterlyForm.php",[
+			renderview("public/allowance_system/printAllowanceForm.php",[
 				// "forms" => $forms,
 			]);
 
