@@ -217,6 +217,16 @@
       </a>
   </li>
 
+  <li class="nav-item">
+      <a href="resources/pdf_installer.exe" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          PDF Installer
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
 
   <li class="nav-item">
             <a href="#" class="nav-link">
