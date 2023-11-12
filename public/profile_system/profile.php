@@ -206,6 +206,24 @@
               {
                   echo("not_success");
               }
+			  
+
+			  $message = "I hope this email finds you well. We appreciate your interest in the Mariphil Scholarship Program and would like to inform you that your application is currently under review.
+
+			  Our scholarship committee is diligently evaluating each application to ensure a fair and thorough assessment. This process may take some time, and we kindly ask for your patience during this period.
+			  
+			  We understand the importance of your application and the significance of the scholarship to your academic journey. Rest assured that we are committed to providing a comprehensive review to each applicant.
+			  
+			  Once the review process is complete, you will be notified of the outcome via email. We aim to notify all applicants within 7 days, and we appreciate your understanding in this matter.
+			  
+			  If you have any questions or need further assistance, please feel free to reply to this email or contact our scholarship office at Mariphil Office [mariphil@gmail.com].
+			  
+			  Thank you for your patience and understanding.";
+			  $receipient = [];
+			  $receipient[] = $prof_id;
+			  start_mail("USER0001", "Scholarship Application Under Review", $message, $receipient,"NO");
+
+
 
 
 			

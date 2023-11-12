@@ -51,7 +51,7 @@
                   <tbody>
                   <?php foreach($scholars as $s): ?>
                     <tr>
-                    <td><a class="btn btn-primary" href="scholars?action=details&id=<?php echo($s["scholar_id"]); ?>"><i class="fa fa-solid fa-eye"></i></a></td>
+                    <td><a class="btn btn-block btn-xs btn-primary" href="scholars?action=details&id=<?php echo($s["scholar_id"]); ?>"><i class="fa fa-solid fa-eye"></i></a></td>
                     <!-- <td><?php echo($s["lastname"] . ", " . $s["firstname"]); ?></td> -->
                     <td><?php echo($s["lastname"] . ", " . $s["firstname"]); ?></td>
                     <td><?php echo($s["year_level"]); ?></td>

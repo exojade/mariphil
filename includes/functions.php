@@ -3,7 +3,68 @@
 
     require_once("constants.php");
 
+    function start_mail($sender, $subject, $message, $receipients, $threadbool){
+            $queryFormat = '("%s","%s","%s")';
+            $thread_id = create_uuid("THREAD");
+            $email_id = create_uuid("MAIL");
+            if (query("insert INTO email (
+                email_id, sender_id, subject,
+                message, timestamp,threadbool)
+                VALUES(?,?,?,?,?,?)", 
+                    $email_id, $sender, $subject,$message,time(),$threadbool) === false)
+                    {
+                        $res_arr = [
+                            "result" => "failed",
+                            "title" => "Failed",
+                            "message" => "Form Done",
+                            "link" => "refresh",
+                            ];
+                            echo json_encode($res_arr); exit();
+                    }
+            foreach($receipients as $row):
+                $inserts[] = sprintf( $queryFormat, $email_id, $row,"unread");
+            endforeach;
+            $query = implode( ",", $inserts );
+            query('insert into email_receipients(email_id, receipient_id, isread) VALUES '.$query);
+            if (query("insert INTO email_thread (
+                email_id, thread_id)
+                VALUES(?,?)", 
+                    $email_id, $thread_id) === false)
+                    {
+                        $res_arr = [
+                            "result" => "failed",
+                            "title" => "Failed",
+                            "message" => "Form Done",
+                            "link" => "refresh",
+                            ];
+                            echo json_encode($res_arr); exit();
+                    }
+    }
+    function reply_mail($sender, $subject, $message, $receipients,$thread_id){
 
+    }
+
+
+    function formatTimestamp($timestamp) {
+        $currentTime = time();
+        $timeDifference = $currentTime - $timestamp;
+    
+        if ($timeDifference < 60) {
+            return $timeDifference . " seconds ago";
+        } elseif ($timeDifference < 3600) {
+            $minutes = floor($timeDifference / 60);
+            return $minutes . " minute" . ($minutes > 1 ? "s" : "") . " ago";
+        } elseif ($timeDifference < 86400) {
+            $hours = floor($timeDifference / 3600);
+            return $hours . " hour" . ($hours > 1 ? "s" : "") . " ago";
+        } elseif ($timeDifference < 2592000) { // 30 days
+            $days = floor($timeDifference / 86400);
+            return $days . " day" . ($days > 1 ? "s" : "") . " ago";
+        } else {
+            return date("F j, Y", $timestamp);
+        }
+    }
+    
 
     function generate_otp($length = 10) {
         $characters = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding O, 0, 1, l, I
