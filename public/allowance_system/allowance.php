@@ -81,11 +81,26 @@
 		if($_POST["action"] == "addAllowance"){
 			// dump($_POST);
 
+
+			$queryFormat_email = '("%s","%s","%s","%s","%s","%s","%s")';
+			$queryFormat_receipients = '("%s","%s","%s","%s")';
+			$queryFormat_thread = '("%s","%s")';
+
+			$inserts_email = [];
+			$inserts_receipients = [];
+			$inserts_thread = [];
+
 			$year_level = query("select * from year_level");
 			$YearLevel = [];
 			foreach($year_level as $row):
 				$YearLevel[$row["level_id"]] = $row;
 			endforeach;
+
+			$school_year = query("select * from school_year where school_year_id = ?", $_POST["sy"]);
+			$school_year = $school_year[0];
+
+			$timestamp = mktime(0, 0, 0, $_POST["month"], 1, date("Y"));
+			$monthName = date("F", $timestamp);
 		
 			$allowance = create_uuid("AA");
 			if (query("insert INTO allowance (
@@ -125,7 +140,48 @@
 									];
 									echo json_encode($res_arr); exit();
 							}
+
+
+
+							$thread_id = create_uuid("THREAD");
+							$email_id = create_uuid("MAIL");
+
+							$message = "
+							
+							Dear ".$s["firstname"] . " " . $s["lastname"] .",
+							<br><br>
+							You may claim your allowance for school year: ".$school_year["school_year"]." and month: ".$monthName.". 
+							<br>Kindly visit the office and sign in order to be released.<br><br> 
+							Amount: ".to_peso($amount).". <br><br>
+							".$_SESSION["mariphil"]["fullname"]."<br>
+							Facilitator
+							";
+							
+							$inserts_mail[] = sprintf( $queryFormat_email, 
+													$email_id, $_SESSION["mariphil"]["userid"],
+													"ALLOWANCE RELEASE",$message, time(), "NO",  $_SESSION["mariphil"]["fullname"]
+												);
+							$inserts_receipients[] = sprintf( $queryFormat_receipients, 
+								$email_id, $s["scholar_id"], "unread", $s["firstname"] . " " . $s["lastname"]
+							);
+
+							$inserts_thread[] = sprintf( $queryFormat_thread, 
+								$thread_id, $email_id
+							);
+
+
 				endforeach;
+
+
+				$query = implode( ",", $inserts_mail );
+				query('insert into email(email_id, sender_id, subject, message, timestamp, threadbool, sender_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_receipients );
+				query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_thread );
+				query('insert into email_thread(thread_id, email_id) VALUES '.$query);
+
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",

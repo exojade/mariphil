@@ -10,8 +10,10 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD FORM</button>
-            </ol>
+              <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR"): ?>
+               <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD FORM</button>
+              <?php endif; ?>
+          </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -23,7 +25,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Default Modal</h4>
+              <h4 class="modal-title">Add Form</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

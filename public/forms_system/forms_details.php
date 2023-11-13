@@ -177,7 +177,7 @@
                     <b>Type</b> <a class="float-right"><?php echo($forms["form_kind"]); ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>School Year</b> <a class="float-right"><?php echo($forms["school_year_id"]); ?></a>
+                    <b>School Year</b> <a class="float-right"><?php echo($forms["school_year"]); ?></a>
                   </li>
                 </ul>
               </div>
@@ -217,7 +217,7 @@
                       <td><?php echo($row["lastname"] . ", " . $row["firstname"]); ?></td>
                       <td><?php echo($row["form_status"]); ?></td>
                       <td><?php echo($row["grades"]); ?></td>
-                      <td><?php echo($row["grades"]); ?></td>
+                      <td><?php echo($row["remarks"]); ?></td>
                      
                     </tr>
                   <?php endforeach; ?>

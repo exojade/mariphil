@@ -509,7 +509,10 @@
 		}
 
 		if($_GET["action"] == "details"){
-			$forms = query("select * from forms where form_id = ?", $_GET["id"]);
+			$forms = query("select f.*, sy.school_year from forms f
+							left join school_year sy
+							on sy.school_year_id = f.school_year_id
+							where form_id = ?", $_GET["id"]);
 			
 			$scholars = query("select * from monthly_monitoring m
 								left join scholars s on s.scholar_id = m.scholar_id

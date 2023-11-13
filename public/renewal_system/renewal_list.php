@@ -10,7 +10,10 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD FORM</button>
+              
+            <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR"): ?>
+               <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD FORM</button>
+              <?php endif; ?>
             </ol>
           </div>
         </div>

@@ -32,31 +32,37 @@
                   <tr>
                     <th>Action</th>
                     <th>Fullname</th>
-                    <th>Address</th>
+                    <th>School</th>
+                    <th>Year</th>
+                    <th>Type</th>
+                    <th>Course</th>
+                    <th>SY</th>
                     <th>Facilitator</th>
-                    <th>Status</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
-                  $list = query("select * from scholars s
+                  $list = query("select s.*, u.*, sy.school_year from scholars s
                   left join users u
                   on s.responsible = u.user_id
-                  where current_status = 'SCHOLAR'
-                  and sponsor_id = ?", 
+                  left join school_year sy
+                  on sy.school_year_id = s.school_year_id
+                  where s.current_status = 'SCHOLAR'
+                  and sponsor_id = ?
+                  order by s.school_year_id desc", 
 				                          $_SESSION["mariphil"]["userid"]);
                   foreach($list as $l):  ?>
                     <tr>
                       <td>
-                        <a href="#" class="btn btn-warning">View</a>
+                        <a href="scholars?action=details&id=<?php echo($l["scholar_id"]); ?>" class="btn btn-warning btn-xs">View</a>
                       </td>
                       <td><?php echo(strtoupper($l["lastname"] . ", " . $l["firstname"])); ?></td>
-                      <td><?php echo(strtoupper(
-                        $l["address_home"] . ", " . $l["address_barangay"] . ", " . $l["address_city"].
-                        ", " . $l["address_province"] . ", " . $l["address_zipcode"]
-                        )); ?></td>
+                      <td><?php echo(strtoupper($l["school_name"])); ?></td>
+                      <td><?php echo(strtoupper($l["year_level"])); ?></td>
+                      <td><?php echo(strtoupper($l["year_type"])); ?></td>
+                      <td><?php echo(strtoupper($l["course"])); ?></td>
+                      <td><?php echo(strtoupper($l["school_year"])); ?></td>
                       <td><?php echo(strtoupper($l["fullname"])); ?></td>
-                      <td><?php echo(strtoupper($l["current_status"])); ?></td>
 
                     </tr>
                   <?php endforeach; ?>

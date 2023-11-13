@@ -16,11 +16,15 @@
                 <button class="btn btn-primary" >Submit Quarterly Form</button>
               </form>
             <?php endif; ?>
-            <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
+
+            <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR"): ?>
+              <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
               <input type="hidden" name="action" value="printForm">
               <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
                 <button class="btn btn-success" ><i class="fa fa-print"></i>  Print Form</button>
             </form>
+            <?php endif; ?>
+         
             </h1>
           </div>
        
