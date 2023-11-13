@@ -95,6 +95,24 @@
 					echo json_encode($res_arr); exit();
 			endif;
 			query("update monthly_monitoring set form_status = 'FOR CHECKING' where tbl_id = ?", $_POST["tbl_id"]);
+			
+			// dump($_POST);
+			
+			$qform = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			$qform = $qform[0];
+			$form = query("select * from forms where form_id = ?", $qform["form_id"]);
+			$form = $form[0];
+			$message = "Done Submitted the Quarterly Monitoring Form: " . $form["form_kind"];
+			$message = $message . "
+			<br><br>
+			Link: <a href='forms?action=scholar_details&id=".$_POST["tbl_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			
+			";
+
+			$receipient = [];
+			$receipient[] = $form["created_by"];
+			start_mail($_SESSION["mariphil"]["userid"], "QUARTERLY FORM SUBMITTED", $message,$receipient,"NO");
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -102,7 +120,9 @@
 				"link" => "refresh",
 				];
 				echo json_encode($res_arr); exit();
-			// dump($_POST);
+
+
+
 		endif;
 
 		if($_POST["action"] == "add_photo"):
@@ -297,7 +317,13 @@
 
 
 
+			$queryFormat_email = '("%s","%s","%s","%s","%s","%s","%s")';
+			$queryFormat_receipients = '("%s","%s","%s","%s")';
+			$queryFormat_thread = '("%s","%s")';
 
+			$inserts_email = [];
+			$inserts_receipients = [];
+			$inserts_thread = [];
 
 
 
@@ -340,16 +366,61 @@
 									echo json_encode($res_arr); exit();
 							}
 
-						
+							$thread_id = create_uuid("THREAD");
+							$email_id = create_uuid("MAIL");
+
+							$message = "
 							
+							Dear ".$s["firstname"] . " " . $s["lastname"] .",
+							<br><br>
+							I hope this message finds you well. As part of our ongoing commitment to your academic success, we kindly request your participation in the Scholarship Quarterly Report. Your insights and feedback are invaluable to us as we aim to provide the best support and resources for your educational journey.
+							<br><br>
+							Quarterly Report Details:
+							<br><br>
+							Form Link: <a href='forms?action=scholar_details&id=".$quarter_id."' class='btn btn-primary'>Click Here</a><br>
+							Instructions:
+							<br><br>
+							Complete the form thoughtfully, providing details about your academic progress, challenges faced, and any achievements or milestones.<br>
+							Why Your Input Matters:<br>
+							<br><br>
+							Individual Progress: Your feedback helps us understand your unique experiences and tailor our support accordingly.<br>
+							Program Enhancement: Insights from all scholars contribute to the continuous improvement of our scholarship program.<br>
+							Important Notes:<br>
+							<br><br>
+						
+							If you encounter any issues or have questions, please reach out to me.
+							Thank you for your time and dedication to the scholarship. We appreciate your contribution to the success of the program. Your achievements are important to us, and we look forward to hearing about your progress.
+							<br><br>
+							Best regards,<br>
 
+							".$_SESSION["mariphil"]["fullname"]."<br>
+							Facilitator
+							
+							";
+							
+							$inserts_mail[] = sprintf( $queryFormat_email, 
+													$email_id, $_SESSION["mariphil"]["userid"],
+													"QUARTERLY REPORTS",$message, time(), "NO",  $_SESSION["mariphil"]["fullname"]
+												);
+							$inserts_receipients[] = sprintf( $queryFormat_receipients, 
+								$email_id, $s["scholar_id"], "unread", $s["firstname"] . " " . $s["lastname"]
+							);
 
-
-
-
-
-
+							$inserts_thread[] = sprintf( $queryFormat_thread, 
+								$thread_id, $email_id
+							);
 				endforeach;
+
+				$query = implode( ",", $inserts_mail );
+				query('insert into email(email_id, sender_id, subject, message, timestamp, threadbool, sender_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_receipients );
+				query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_thread );
+				query('insert into email_thread(thread_id, email_id) VALUES '.$query);
+
+
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",
