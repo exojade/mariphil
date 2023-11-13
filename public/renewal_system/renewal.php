@@ -9,6 +9,24 @@
 			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
 			// dump($message_comment);
 			query("update renewal set form_status = 'RETURNED', return_comments = ? where renewal_id = ?", $message_comment, $_POST["renewal_id"]);
+			
+			
+			$rform = query("select * from renewal where renewal_id = ?", $_POST["renewal_id"]);
+			$rform = $rform[0];
+			$form = query("select * from renewal_form where form_id = ?", $rform["form_id"]);
+			$form = $form[0];
+			$message = "Request for Renewal has been returned to you. Visit the link to view the return comments.";
+			$message = $message . "
+			<br><br>
+			Link: <a href='renewal?action=scholar_details&id=".$_POST["renewal_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			
+			";
+
+			$receipient = [];
+			$receipient[] = $rform["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "RETURNED RENEWAL FORM", $message,$receipient,"NO");
+			
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -52,6 +70,26 @@
 
 
 			query("update renewal set form_status = 'DONE' where renewal_id = ?", $_POST["renewal_id"]);
+
+
+
+
+
+			$qform = query("select * from renewal where renewal_id = ?", $_POST["renewal_id"]);
+			$qform = $qform[0];
+			$form = query("select * from renewal_form where form_id = ?", $qform["form_id"]);
+			$form = $form[0];
+			$message = "Your request for Renewal has been approved! Congratulations on your renewal!";
+			$message = $message . "
+			<br><br>
+			Link: <a href='renewal?action=scholar_details&id=".$_POST["renewal_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			";
+			$receipient = [];
+			$receipient[] = $qform["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "REVIEW APPROVED", $message,$receipient,"NO");
+
+
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -156,6 +194,25 @@
 					echo json_encode($res_arr); exit();
 			endif;
 			query("update renewal set form_status = 'FOR CHECKING' where renewal_id = ?", $_POST["tbl_id"]);
+
+
+			$rform = query("select * from renewal where renewal_id = ?", $_POST["tbl_id"]);
+			$rform = $rform[0];
+			$form = query("select * from renewal_form where form_id = ?", $rform["form_id"]);
+			$form = $form[0];
+			$message = "Done Submitted Renewal Form";
+			$message = $message . "
+			<br><br>
+			Link: <a href='renewal?action=scholar_details&id=".$_POST["tbl_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			
+			";
+
+			$receipient = [];
+			$receipient[] = $form["facilitator"];
+			start_mail($_SESSION["mariphil"]["userid"], "RENEWWAL FORM SUBMITTED", $message,$receipient,"NO");
+
+
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -218,6 +275,15 @@
 		if($_POST["action"] == "addRenewalForm"){
 			// dump($_POST);
 		
+
+			$queryFormat_email = '("%s","%s","%s","%s","%s","%s","%s")';
+			$queryFormat_receipients = '("%s","%s","%s","%s")';
+			$queryFormat_thread = '("%s","%s")';
+
+			$inserts_email = [];
+			$inserts_receipients = [];
+			$inserts_thread = [];
+
 			$form_id = create_uuid("RenFORM");
 			if (query("insert INTO renewal_form (
 						form_id, facilitator, 
@@ -255,7 +321,60 @@
 									];
 									echo json_encode($res_arr); exit();
 							}
+
+
+
+							$thread_id = create_uuid("THREAD");
+							$email_id = create_uuid("MAIL");
+
+							$message = "
+							
+							Dear ".$s["firstname"] . " " . $s["lastname"] .",
+							<br><br>
+							We hope this message finds you well. As a valued member of the Mariphil Scholarship program, we are pleased to inform you that the renewal application portal for the upcoming term is now open.
+							<br><br>
+							Form Link: <a href='renewal?action=scholar_details&id=".$quarter_id."' class='btn btn-primary btn-xs'>Click Here</a><br>
+							Why Renew?
+Renewing your scholarship allows you to continue benefiting from the scholarship program and its support for your academic endeavors.
+<br><br>
+We encourage you to take advantage of this opportunity to secure continued assistance in achieving your educational goals.
+<br><br>
+Thank you for your dedication to your studies, and we look forward to supporting your ongoing success through the scholarship program.
+							Best regards,<br>
+
+							".$_SESSION["mariphil"]["fullname"]."<br>
+							Facilitator
+							
+							";
+							
+							$inserts_mail[] = sprintf( $queryFormat_email, 
+													$email_id, $_SESSION["mariphil"]["userid"],
+													"RENEWAL PORTAL",$message, time(), "NO",  $_SESSION["mariphil"]["fullname"]
+												);
+							$inserts_receipients[] = sprintf( $queryFormat_receipients, 
+								$email_id, $s["scholar_id"], "unread", $s["firstname"] . " " . $s["lastname"]
+							);
+
+							$inserts_thread[] = sprintf( $queryFormat_thread, 
+								$thread_id, $email_id
+							);
+
+
+
+
 				endforeach;
+
+
+				$query = implode( ",", $inserts_mail );
+				query('insert into email(email_id, sender_id, subject, message, timestamp, threadbool, sender_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_receipients );
+				query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_thread );
+				query('insert into email_thread(thread_id, email_id) VALUES '.$query);
+
+
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",

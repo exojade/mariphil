@@ -35,6 +35,23 @@
 			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
 			// dump($message_comment);
 			query("update monthly_monitoring set form_status = 'RETURNED', return_comments = ? where tbl_id = ?", $message_comment, $_POST["tbl_id"]);
+			
+			
+			$qform = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			$qform = $qform[0];
+			$form = query("select * from forms where form_id = ?", $qform["form_id"]);
+			$form = $form[0];
+			$message = "Quarterly Report : " . $form["form_kind"] . " has been returned to you. Visit the link to view the return comments.";
+			$message = $message . "
+			<br><br>
+			Link: <a href='forms?action=scholar_details&id=".$_POST["tbl_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			
+			";
+
+			$receipient = [];
+			$receipient[] = $qform["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "RETURNED QUARTERLY FORM", $message,$receipient,"NO");
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -48,6 +65,21 @@
 		if($_POST["action"] == "approveForm"):
 			
 			query("update monthly_monitoring set form_status = 'DONE', remarks = ? where tbl_id = ?", $_POST["remarks"], $_POST["tbl_id"]);
+			
+			$qform = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			$qform = $qform[0];
+			$form = query("select * from forms where form_id = ?", $qform["form_id"]);
+			$form = $form[0];
+			$message = "Quarterly Report : " . $form["form_kind"] . " has been reviewed and marked as DONE! Thank you for submitting your quarterly report to us!";
+			$message = $message . "
+			<br><br>
+			Link: <a href='forms?action=scholar_details&id=".$_POST["tbl_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
+			<br><br>
+			";
+			$receipient = [];
+			$receipient[] = $qform["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "QUARTERLY REPORT REVIEW DONE", $message,$receipient,"NO");
+			
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
