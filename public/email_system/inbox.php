@@ -6,6 +6,10 @@
 .inbox-datatable tbody tr:hover {
     cursor: pointer;
 }
+
+.read-row {
+        background-color: #dee2e6; /* Replace with the desired background color for 'read' */
+    }
 </style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -13,7 +17,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Form Details</h1>
+            <h1>Inbox</h1>
           </div>
        
         </div>
@@ -117,7 +121,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped inbox-datatable">
+                <table class="table table-hover inbox-datatable">
                   <tbody>
                   
                   </tbody>
@@ -173,36 +177,16 @@
                 },
                 'columns': [
                     { data: 'email_id', "visible": false },
-                    { data: 'read', "orderable": false },
+                    { data: 'isread', "visible": false },
                     { data: 'sender', "orderable": false },
-                    { data: 'subject', "orderable": false },
+                    { data: 'excerpt', "orderable": false },
                     { data: 'date', "orderable": false },
                 ],
-                "footerCallback": function (row, data, start, end, display) {
-                    // var api = this.api(), data;
-                    // var intVal = function (i) {
-                    //     return typeof i === 'string' ?
-                    //         i.replace(/[\$,]/g, '') * 1 :
-                    //         typeof i === 'number' ?
-                    //             i : 0;
-                    // };
-                    // // // Total over all pages
-
-                    // console.log(received = api
-                    //     .column(2)
-                    //     .data());
-
-
-                    // received = api
-                    //     .column(2)
-                    //     .data()
-                    //     .reduce(function (a, b) {
-                    //         return intVal(a) + intVal(b);
-                    //     }, 0);
-                    //     console.log(received);
-
-                    // $('#currentTotal').html('' + received.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
+                "createdRow": function(row, data) {
+                if (data.isread === "read") {
+                    $(row).addClass('read-row');
                 }
+            }
             });
 
             $('.inbox-datatable tbody').on('click', 'tr', function () {

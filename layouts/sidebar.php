@@ -295,7 +295,7 @@
 <?php endif; ?>
 
 <li class="nav-item">
-      <a href="email?action=list" class="nav-link">
+      <a href="email?action=inbox" class="nav-link">
         <i class="nav-icon fas fa-key"></i>
         <p>
           Email

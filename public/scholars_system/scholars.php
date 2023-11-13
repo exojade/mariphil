@@ -6,6 +6,8 @@
 			$status = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
 			$current_status = $status[0]["current_status"];
 			if($current_status == 'APPLICANT - IN REVIEW'){
+				$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+				$user = $user[0];
 				query("update scholars set current_status = 'APPLICANT - TO BE INTERVIEWED'
 						where scholar_id = ?", $_POST["scholar_id"]);
 				$track_id = create_uuid("TR");
@@ -24,7 +26,30 @@
 							];
 							echo json_encode($res_arr); exit();
 					}
-			
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					I hope this email finds you well. This is an automated message to inform you about the current status of your scholarship application.
+					<br><br>
+					Application Process Status: To be Interviewed
+					<br><br>
+					Your application has progressed to the next stage, and you are now scheduled for an interview. The interview is a crucial step in our selection process, and it provides us with an opportunity to learn more about you, your aspirations, and your suitability for the scholarship.
+					<br><br>
+					
+					Please make sure to be well-prepared for the interview. Be ready to discuss your academic achievements, extracurricular activities, and your motivation for applying for this scholarship.
+					<br><br>
+					If you have any concerns or conflicts with the provided interview details, please contact our scholarship office at Mariphil Foundation Inc as soon as possible.
+					<br><br>
+					We wish you the best of luck in the interview process. We appreciate your interest in our scholarship program.
+					<br><br>
+					Thank you,<br>
+					Mariphil Foundation Inc.<br>
+					Scholarship Committee<br>
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "Application Process Status: To be Interviewed", $message, $receipient ,"NO");
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",
@@ -52,11 +77,45 @@
 							];
 							echo json_encode($res_arr); exit();
 					}
-				$res_arr = [
+
+					$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+					$user = $user[0];
+
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					I hope this email finds you well. We would like to provide you with an update on the status of your scholarship application.
+					<br><br>
+					After your successful interview, your application has progressed to the next stage. At this point, it is under the responsibility of the designated facilitator who will guide you through the remaining steps of the process.
+					<br><br>
+					Current Status: Under Facilitator and Sponsor Review
+					<br><br>
+					Your application is currently being reviewed by the facilitator assigned to manage the scholarship program. The facilitator will assist you and act as a liaison between you and the sponsoring organization. They will ensure that all necessary documentation is in order and that you are well-prepared for the final steps of the selection process.
+					<br><br>
+					Next Steps: Please Wait for Further Updates
+					<br><br>
+					We kindly request your patience as the facilitator conducts a thorough review. Additionally, your application will be presented to the sponsors who support the scholarship program. They will have the final say in the selection process.
+					<br><br>
+					Please be assured that we understand the importance of timely updates, and we will keep you informed of any developments in your application status. You may expect further communication from the facilitator regarding the next steps and additional requirements.
+					<br><br>
+					If you have any immediate questions or concerns, feel free to reach out to your assigned facilitator.
+					<br><br>
+					We appreciate your continued interest in our scholarship program and thank you for your understanding during this process.
+					<br><br>
+					Best regards,
+					<br><br>
+					Mariphil Foundation Inc.<br>
+					Scholarship Committee<br>
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "Application Process Status: Interviewed", $message, $receipient ,"NO");
+					$res_arr = [
 					"result" => "success",
 					"title" => "Success",
 					"message" => "Success",
-					"link" => "scholars?action=details&id=".$_POST["scholar_id"],
+					"link" => "refresh",
 					];
 					echo json_encode($res_arr); exit();
 			}
@@ -66,7 +125,10 @@
 		if($_POST["action"] == "addResponsible"){
 			// dump($_POST);
 
-			$scholar = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
+			$scholar = query("select s.*, sy.school_year from scholars s
+								left join school_year sy
+								on sy.school_year_id = s.school_year_id
+								 where scholar_id = ?", $_POST["scholar_id"]);
 			// dump($scholar);
 			$scholar = $scholar[0];
 
@@ -99,6 +161,51 @@
 					role = 'SCHOLAR'
 					where user_id = '".$_POST["scholar_id"]."'
 				");
+				$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+				$user = $user[0];
+
+				$faci = query("select * from users where user_id = ?", $_SESSION["mariphil"]["userid"]);
+				$faci = $faci[0];
+		
+
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					We are thrilled to inform you that you have been selected as a recipient of the Mariphil Foundation Scholarship. <br>Congratulations on this significant achievement! Your dedication and accomplishments have truly set you apart, and we are excited to support your academic journey.
+					<br><br>
+					Key Details:
+					<br><br>
+					Facilitator: ".$_SESSION["mariphil"]["fullname"]."<br>
+					School Year: ".$scholar["school_year"]."<br>
+					Duration: 1 Year<br>
+					Next Steps:
+					<br><br>
+					Welcome Package: In the coming days, you will receive a welcome package containing important details about your scholarship, including terms and conditions, expectations, and contact information for your facilitator.
+					<br><br>
+					Facilitator Introduction: Your assigned facilitator, [Facilitator's Name], will reach out to you to provide guidance and support throughout your scholarship journey. They will be your main point of contact for any questions or concerns.
+					<br><br>
+					Confirmation from Sponsor: Before the scholarship is officially finalized, we are awaiting confirmation from our sponsors. Once we receive this confirmation, you will be notified promptly.
+					<br><br>
+					Quarterly Monitoring: As part of the scholarship program, you will be required to complete quarterly monitoring reports. These reports help us ensure that you are progressing well academically and are taking full advantage of the opportunities provided by the scholarship.
+					<br><br>
+					Important Contacts:
+					<br><br>
+					Facilitator: ".$faci["fullname"]."<br>
+					Email: ".$faci["username"]."<br>
+					Please feel free to reach out to your facilitator if you have any immediate questions or require assistance. We are committed to supporting you throughout your academic journey and beyond.
+					<br><br>
+					Once again, congratulations on becoming a Mariphil Scholarship recipient! We appreciate your patience as we await confirmation from our sponsors and look forward to witnessing your continued success.
+					<br><br>
+					Best regards,
+					<br><br>
+					Mariphil Foundation Inc<br>
+					Scholarship Committee<br>
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "You are now a scholar!", $message, $receipient ,"NO");
+				
 
 
 					$res_arr = [
@@ -137,6 +244,37 @@
 							];
 							echo json_encode($res_arr); exit();
 					}
+
+
+					$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+					$user = $user[0];
+
+
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					I trust this email finds you in good health. We appreciate the effort you put into your scholarship application and your interest in our program. This communication is to inform you about the status of your application.
+					<br><br>
+					Application Process Status: Denied
+					<br><br>
+					After careful consideration, we regret to inform you that your application for the Mariphil Scholarship has been denied. We understand that this news may be disappointing, and we want to express our gratitude for the time and dedication you invested in your application.
+					<br><br>
+					Please remember that the selection process is highly competitive, and decisions are made based on various factors. While your application may not have been successful this time, we encourage you to continue pursuing your academic and personal goals.
+					<br><br>
+					If you have any questions or if you would like feedback on your application, please feel free to reach out to our scholarship office at Mariphil Foundation Inc.
+					<br><br>
+					We appreciate your understanding and wish you success in all your future endeavors.
+					Thank you,<br>
+					Mariphil Foundation Inc.<br>
+					Scholarship Committee<br>
+					";
+					start_mail($_SESSION["mariphil"]["user_id"], "Application Process Status: To be Interviewed", $message, $user["user_id"],"NO");
+
+
+
+
+
 			
 				$res_arr = [
 					"result" => "success",

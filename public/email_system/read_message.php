@@ -2,9 +2,15 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/summernote/summernote-bs4.min.css">
 <style>
 .inbox-datatable tbody tr:hover {
     cursor: pointer;
+}
+
+.mailbox-read-info {
+    border-bottom: 0px solid rgba(0,0,0,.125);
+    padding: 10px;
 }
 </style>
 <div class="content-wrapper">
@@ -13,7 +19,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Form Details</h1>
+            <h1>Message</h1>
           </div>
        
         </div>
@@ -25,7 +31,6 @@
       <div class="row">
         <div class="col-md-3">
           <a href="email?action=new" class="btn btn-primary btn-block mb-3">Compose</a>
-
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Folders</h3>
@@ -39,7 +44,7 @@
             <div class="card-body p-0">
               <ul class="nav nav-pills flex-column">
                 <li class="nav-item active">
-                  <a href="#" class="nav-link">
+                  <a href="email?action=inbox" class="nav-link">
                     <i class="fas fa-inbox"></i> Inbox
                     <span class="badge bg-primary float-right">12</span>
                   </a>
@@ -107,27 +112,94 @@
         </div>
         <!-- /.col -->
         <div class="col-md-9">
-          <div class="card card-primary card-outline">
-            <div class="card-header">
-              <h3 class="card-title">Inbox</h3>
 
         
-              <!-- /.card-tools -->
+
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Read Mail</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-              <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped inbox-datatable">
-                  <tbody>
-                  
-                  </tbody>
-                </table>
-                <!-- /.table -->
+            <div class="card-body p-0">
+
+            <?php $sender = ""; foreach($mails as $row): 
+              // dump($mails);
+              if($row["sender_id"] != $_SESSION["mariphil"]["userid"])
+                $sender = $row["sender_id"];
+              ?>
+
+              <div class="mailbox-read-info">
+                <h4><?php echo($Users[$row["sender_id"]]["fullname"]); ?> [<small><?php echo($Users[$row["sender_id"]]["username"]); ?></small>]</h4>
+                <p>To: <?php echo($Users[$row["receipient_id"]]["fullname"]); ?> [<small><?php echo($Users[$row["receipient_id"]]["username"]); ?></small>]
+                  <span class="mailbox-read-time float-right"><?php $formattedDate = date('d M. Y h:i A', $row["timestamp"]);
+                  echo($formattedDate);
+                  ?></span></p>
               </div>
-              <!-- /.mail-box-messages -->
+              <div class="mailbox-read-message">
+                <h6><?php echo($row["subject"]); ?></h6>
+                <?php echo($row["message"]); ?>
+              </div>
+              <hr>
+            <?php endforeach; ?>
             </div>
             <!-- /.card-body -->
+          
+            <!-- /.card-footer -->
+            <!-- <div class="card-footer">
+              <div class="float-right">
+                <button type="button" class="btn btn-default"><i class="fas fa-reply"></i> Reply</button>
+                <button type="button" class="btn btn-default"><i class="fas fa-share"></i> Forward</button>
+              </div>
+              <button type="button" class="btn btn-default"><i class="far fa-trash-alt"></i> Delete</button>
+              <button type="button" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+            </div> -->
+            <!-- /.card-footer -->
           </div>
+
+          <div class="card card-primary card-outline">
+              <div class="card-header">
+                <h3 class="card-title">Reply</h3>
+              </div>
+              <!-- /.card-header -->
+              <form class="generic_form_trigger" data-url="email">
+                <input type="hidden" name="action" value="reply">
+                <input type="hidden" name="thread_id" value="<?php echo($thread_id); ?>">
+                <input type="hidden" name="sender" value="<?php echo($row["receipient_id"]); ?>">
+              <div class="card-body">
+                <div class="form-group">
+                  <label>To: </label>
+                  <input name="receipient" readonly value="<?php echo($Users[$sender]["username"]); ?>" class="form-control"  placeholder="To:">
+                </div>
+                <div class="form-group">
+                    <textarea name="message" id="compose-textarea" class="form-control" style="height: 150px;">
+                     
+                    </textarea>
+                </div>
+                <!-- <div class="form-group">
+                  <div class="btn btn-default btn-file">
+                    <i class="fas fa-paperclip"></i> Attachment
+                    <input type="file" name="attachment">
+                  </div>
+                  <p class="help-block">Max. 32MB</p>
+                </div> -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <div class="float-right">
+                  <button type="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Send</button>
+                </div>
+              </div>
+            </form>
+              <!-- /.card-footer -->
+            </div>
+
+
+
+
+              
+
+
           <!-- /.card -->
         </div>
         <!-- /.col -->
@@ -150,6 +222,14 @@
 <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="AdminLTE_new/plugins/summernote/summernote-bs4.min.js"></script>
+
+<script>
+  $(function () {
+    //Add text editor
+    $('#compose-textarea').summernote()
+  })
+</script>
 
   <script>
   var datatable = 

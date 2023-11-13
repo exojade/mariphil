@@ -4,14 +4,19 @@
     require_once("constants.php");
 
     function start_mail($sender, $subject, $message, $receipients, $threadbool){
-            $queryFormat = '("%s","%s","%s")';
+        $Users = [];
+        $users = query("select * from users");
+        foreach($users as $row):
+            $Users[$row["user_id"]] = $row;
+        endforeach;
+            $queryFormat = '("%s","%s","%s","%s")';
             $thread_id = create_uuid("THREAD");
             $email_id = create_uuid("MAIL");
             if (query("insert INTO email (
                 email_id, sender_id, subject,
-                message, timestamp,threadbool)
-                VALUES(?,?,?,?,?,?)", 
-                    $email_id, $sender, $subject,$message,time(),$threadbool) === false)
+                message, timestamp,threadbool, sender_name)
+                VALUES(?,?,?,?,?,?,?)", 
+                    $email_id, $sender, $subject,$message,time(),$threadbool, $Users[$sender]["fullname"]) === false)
                     {
                         $res_arr = [
                             "result" => "failed",
@@ -22,10 +27,10 @@
                             echo json_encode($res_arr); exit();
                     }
             foreach($receipients as $row):
-                $inserts[] = sprintf( $queryFormat, $email_id, $row,"unread");
+                $inserts[] = sprintf( $queryFormat, $email_id, $row,"unread", $Users[$row]["fullname"]);
             endforeach;
             $query = implode( ",", $inserts );
-            query('insert into email_receipients(email_id, receipient_id, isread) VALUES '.$query);
+            query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
             if (query("insert INTO email_thread (
                 email_id, thread_id)
                 VALUES(?,?)", 
@@ -39,9 +44,45 @@
                             ];
                             echo json_encode($res_arr); exit();
                     }
-    }
-    function reply_mail($sender, $subject, $message, $receipients,$thread_id){
 
+                    
+    }
+    function reply_mail($sender, $subject, $message, $receipient,$thread_id){
+        $email_id = create_uuid("MAIL");
+        $queryFormat = '("%s","%s","%s","%s")';
+        $user = query("select * from users where user_id = ?", $sender);
+        if (query("insert INTO email (
+            email_id, sender_id, subject,
+            message, timestamp,threadbool,sender_name)
+            VALUES(?,?,?,?,?,?,?)", 
+                $email_id, $sender, $subject,$message,time(),"YES", $user[0]["fullname"]) === false)
+                {
+                    $res_arr = [
+                        "result" => "failed",
+                        "title" => "Failed",
+                        "message" => "Form Done",
+                        "link" => "refresh",
+                        ];
+                        echo json_encode($res_arr); exit();
+                }
+                $user = query("select * from users where username = ?", $receipient);
+                // dump($user);
+                $inserts[] = sprintf( $queryFormat, $email_id, $user[0]["user_id"],"unread", $user[0]["fullname"]);
+                $query = implode( ",", $inserts );
+                query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+                if (query("insert INTO email_thread (
+                    email_id, thread_id)
+                    VALUES(?,?)", 
+                        $email_id, $thread_id) === false)
+                        {
+                            $res_arr = [
+                                "result" => "failed",
+                                "title" => "Failed",
+                                "message" => "Form Done",
+                                "link" => "refresh",
+                                ];
+                                echo json_encode($res_arr); exit();
+                        }
     }
 
 

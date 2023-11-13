@@ -26,39 +26,68 @@
 							];
 							echo json_encode($res_arr); exit();
 					}
-				$announcement_id = create_uuid("ANN");
-					if (query("insert INTO announcement (
-								announcement_id, announcement, send_to, user_id, 
-								date_created,time_created,timestamp) 
-						VALUES(?,?,?,?,?,?,?)",
-						$announcement_id, "YOU HAVE BEEN SPONSORED! CONGRATULATIONS!", $_POST["scholar_id"], "", 
-						date("Y-m-d"), date("H:i:s"),time()) === false)
-						{
-							$res_arr = [
-								"result" => "failed",
-								"title" => "Failed",
-								"message" => "User already Registered",
-								// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
-								];
-								echo json_encode($res_arr); exit();
-						}
 
-					$announcement_id = create_uuid("ANN");
-						if (query("insert INTO announcement (
-									announcement_id, announcement, send_to, user_id, 
-									date_created,time_created,timestamp) 
-							VALUES(?,?,?,?,?,?,?)",
-							$announcement_id, "YOU SPONSORED A VERY FORTUNATE STUDENT! THANK YOU FOR THE SPONSORSHIP!", $_SESSION["mariphil"]["userid"], "", 
-							date("Y-m-d"), date("H:i:s"),time()) === false)
-							{
-								$res_arr = [
-									"result" => "failed",
-									"title" => "Failed",
-									"message" => "User already Registered",
-									// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
-									];
-									echo json_encode($res_arr); exit();
-							}
+					$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+					$user = $user[0];
+
+					$sponsor = query("select * from users where user_id = ?", $_SESSION["mariphil"]["userid"]);
+					$sponsor = $sponsor[0];
+
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					On behalf of the ".$sponsor["fullname"].", I extend my heartfelt congratulations on your successful confirmation as a recipient of the scholarship. 
+					<br>We are delighted to welcome you into our esteemed scholarship program.
+					<br><br>
+
+					".$sponsor["fullname"]."
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "You now have a sponsor!", $message, $receipient ,"NO");
+
+
+				// $announcement_id = create_uuid("ANN");
+				// 	if (query("insert INTO announcement (
+				// 				announcement_id, announcement, send_to, user_id, 
+				// 				date_created,time_created,timestamp) 
+				// 		VALUES(?,?,?,?,?,?,?)",
+				// 		$announcement_id, "YOU HAVE BEEN SPONSORED! CONGRATULATIONS!", $_POST["scholar_id"], "", 
+				// 		date("Y-m-d"), date("H:i:s"),time()) === false)
+				// 		{
+				// 			$res_arr = [
+				// 				"result" => "failed",
+				// 				"title" => "Failed",
+				// 				"message" => "User already Registered",
+				// 				// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
+				// 				];
+				// 				echo json_encode($res_arr); exit();
+				// 		}
+
+					// $announcement_id = create_uuid("ANN");
+					// 	if (query("insert INTO announcement (
+					// 				announcement_id, announcement, send_to, user_id, 
+					// 				date_created,time_created,timestamp) 
+					// 		VALUES(?,?,?,?,?,?,?)",
+					// 		$announcement_id, "YOU SPONSORED A VERY FORTUNATE STUDENT! THANK YOU FOR THE SPONSORSHIP!", $_SESSION["mariphil"]["userid"], "", 
+					// 		date("Y-m-d"), date("H:i:s"),time()) === false)
+					// 		{
+					// 			$res_arr = [
+					// 				"result" => "failed",
+					// 				"title" => "Failed",
+					// 				"message" => "User already Registered",
+					// 				// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
+					// 				];
+					// 				echo json_encode($res_arr); exit();
+					// 		}
+
+
+
+
+
+
+
 
 
 				$res_arr = [

@@ -289,7 +289,18 @@
 
 
 		if($_POST["action"] == "addQuarterlyMonitoring"){
-			// dump($_POST);
+			
+
+
+
+
+
+
+
+
+
+
+
 		
 			$form_id = create_uuid("FORM");
 			if (query("insert INTO forms (
@@ -328,6 +339,16 @@
 									];
 									echo json_encode($res_arr); exit();
 							}
+
+						
+							
+
+
+
+
+
+
+
 				endforeach;
 				$res_arr = [
 					"result" => "success",

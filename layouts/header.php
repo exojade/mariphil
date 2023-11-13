@@ -25,6 +25,23 @@ body{
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <li class="nav-item d-none d-sm-inline-block">
+
+        <?php $current_school_year = query("select * from school_year where current_status = 'active'"); ?>
+        <?php $applicant_school_year = query("select * from school_year where applicant_status = 'active'"); 
+        
+        $current_school_year = $current_school_year[0]["school_year"];
+        $applicant_school_year = $applicant_school_year[0]["school_year"];
+        
+        ?>
+
+
+        <a href="#" class="nav-link">Current School Year: <b><?php echo($current_school_year); ?></b></a>
+      </li>
+
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Applicant's School Year: <b><?php echo($applicant_school_year); ?></b></a>
+      </li>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

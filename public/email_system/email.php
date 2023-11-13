@@ -8,79 +8,118 @@
 			$limit = $_POST["length"];
 			$search = $_POST["search"]["value"];
 
-			$search = isset($_POST["search"]["value"]) ? $_POST["search"]["value"] : '';
-$searchSubject = isset($_POST["subject"]) ? $_POST["subject"] : '';
+		
 
 			$Users = [];
 			$users = query("select * from users");
 			foreach($users as $row):
 				$Users[$row["user_id"]] = $row;
 			endforeach;
+
 			
 
-			$where = " where receipient_id = '".$_SESSION["mariphil"]["userid"]."'";
-			$data = query("SELECT r.*, e.*
-			FROM email_receipients r
-			LEFT JOIN email e ON e.email_id = r.email_id
-			INNER JOIN (
-				SELECT thread_id, MAX(email.timestamp) AS latest_timestamp
-				FROM email_thread
-				LEFT JOIN email ON email_thread.email_id = email.email_id
-				GROUP BY thread_id
-			) latest_email ON e.email_id = latest_email.email_id AND e.timestamp = latest_email.latest_timestamp
-			" . $where . "
-			ORDER BY latest_timestamp DESC");
+			$where = " where er.receipient_id = '".$_SESSION["mariphil"]["userid"]."'";
+			$string_query = "WITH RankedEmails AS (
+				SELECT
+					e.*,
+					er.receipient_id,
+					et.thread_id,
+					ROW_NUMBER() OVER (PARTITION BY et.thread_id ORDER BY e.timestamp DESC) AS RowRank
+				FROM
+					email e
+					LEFT JOIN email_receipients er ON e.email_id = er.email_id
+					LEFT JOIN email_thread et ON et.email_id = e.email_id
+				".$where."
+			)
+			SELECT
+				*
+			FROM
+				RankedEmails
+			WHERE
+				RowRank = 1
+				ORDER BY TIMESTAMP DESC  
+				";
+			$data = query($string_query);
 			$all_data = $data;
+			// dump($string_query);
 
 			if($search == ""){
-			$query_string = "SELECT r.*, e.*
-			FROM email_receipients r
-			LEFT JOIN email e ON e.email_id = r.email_id
-			INNER JOIN (
-				SELECT thread_id, MAX(email.timestamp) AS latest_timestamp
-				FROM email_thread
-				LEFT JOIN email ON email_thread.email_id = email.email_id
-				GROUP BY thread_id
-			) latest_email ON e.email_id = latest_email.email_id AND e.timestamp = latest_email.latest_timestamp
-			" . $where . "
-			ORDER BY latest_timestamp DESC
-							limit ".$limit." offset ".$offset." ";
+			$query_string = "WITH RankedEmails AS (
+				SELECT
+					e.*,
+					er.receipient_id,
+					et.thread_id,
+					er.isread,
+					ROW_NUMBER() OVER (PARTITION BY et.thread_id ORDER BY e.timestamp DESC) AS RowRank
+				FROM
+					email e
+					LEFT JOIN email_receipients er ON e.email_id = er.email_id
+					LEFT JOIN email_thread et ON et.email_id = e.email_id
+				".$where."
+			)
+			SELECT
+				*
+			FROM
+				RankedEmails
+			WHERE
+				RowRank = 1
+				ORDER BY TIMESTAMP DESC  
+				limit ".$limit." offset ".$offset." ";
+			// dump($query_string);
+
 			$data = query($query_string);
 			}
 			else{
 			$query_string = "
-			SELECT r.*, e.*
-    FROM email_receipients r
-    LEFT JOIN email e ON e.email_id = r.email_id
-    INNER JOIN (
-        SELECT thread_id, MAX(email.timestamp) AS latest_timestamp
-        FROM email_thread
-        LEFT JOIN email ON email_thread.email_id = email.email_id
-        GROUP BY thread_id
-    ) latest_email ON e.email_id = latest_email.email_id AND e.timestamp = latest_email.latest_timestamp
-    " . $where . "
-    AND (e.subject LIKE '%" . $searchSubject . "%' OR e.message LIKE '%" . $search . "%')
-    ORDER BY latest_timestamp DESC
+			WITH RankedEmails AS (
+				SELECT
+					e.*,
+					er.receipient_id,
+					et.thread_id,
+					er.isread,
+					ROW_NUMBER() OVER (PARTITION BY et.thread_id ORDER BY e.timestamp DESC) AS RowRank
+				FROM
+					email e
+					LEFT JOIN email_receipients er ON e.email_id = er.email_id
+					LEFT JOIN email_thread et ON et.email_id = e.email_id
+				".$where." AND (e.subject LIKE '%" . $search . "%' OR e.message LIKE '%" . $search . "%')
+			)
+			SELECT
+				*
+			FROM
+				RankedEmails
+			WHERE
+				RowRank = 1
+				ORDER BY TIMESTAMP DESC  
 			limit ".$limit." offset ".$offset."
 			";
 			$data = query($query_string);
 			$query_string = "
-			SELECT r.*, e.*
-			FROM email_receipients r
-			LEFT JOIN email e ON e.email_id = r.email_id
-			INNER JOIN (
-				SELECT thread_id, MAX(email.timestamp) AS latest_timestamp
-				FROM email_thread
-				LEFT JOIN email ON email_thread.email_id = email.email_id
-				GROUP BY thread_id
-			) latest_email ON e.email_id = latest_email.email_id AND e.timestamp = latest_email.latest_timestamp
-			" . $where . "
-			AND (e.subject LIKE '%" . $searchSubject . "%' OR e.message LIKE '%" . $search . "%')
-			ORDER BY latest_timestamp DESC
+			WITH RankedEmails AS (
+				SELECT
+					e.*,
+					er.receipient_id,
+					et.thread_id,
+					er.isread,
+					ROW_NUMBER() OVER (PARTITION BY et.thread_id ORDER BY e.timestamp DESC) AS RowRank
+				FROM
+					email e
+					LEFT JOIN email_receipients er ON e.email_id = er.email_id
+					LEFT JOIN email_thread et ON et.email_id = e.email_id
+				".$where." AND (e.subject LIKE '%" . $search . "%' OR e.message LIKE '%" . $search . "%')
+			)
+			SELECT
+				*
+			FROM
+				RankedEmails
+			WHERE
+				RowRank = 1
+				ORDER BY TIMESTAMP DESC  
 			";
 			$all_data = query($query_string);
 			}
 			$i=0;
+			
 			foreach($data as $row):
 				if($row["isread"] == "unread"):
 					$data[$i]["read"] = "🔵";
@@ -89,6 +128,12 @@ $searchSubject = isset($_POST["subject"]) ? $_POST["subject"] : '';
 				endif;
 				$data[$i]["sender"] = $Users[$row["sender_id"]]["fullname"];
 				$data[$i]["date"] = formatTimestamp($row["timestamp"]);
+				$data[$i]["excerpt"] = "<b>".$row["subject"]."</b> - " . strip_tags($row["message"]);
+				$data[$i]["excerpt"] = mb_strimwidth($data[$i]["excerpt"], 0, 100, '...');
+				// $excerpt = strip_tags($row["message"]);
+				// $excerpt = mb_strimwidth($excerpt, 0, 100, '...');
+
+
 				// dump();	
 				$i++;
 			endforeach;
@@ -99,6 +144,18 @@ $searchSubject = isset($_POST["subject"]) ? $_POST["subject"] : '';
 				"aaData" => $data
 			);
 			echo json_encode($json_data);
+		endif;
+
+		if($_POST["action"] == "reply"):
+			// dump($_POST);
+			reply_mail($_POST["sender"], "REPLY SUBJECT", $_POST["message"], $_POST["receipient"], $_POST["thread_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
 		endif;
 
 		
@@ -119,13 +176,34 @@ $searchSubject = isset($_POST["subject"]) ? $_POST["subject"] : '';
 
 		if($_GET["action"] == "read_message"){
 			query("update email_receipients set isread = 'read' where email_id = ? and receipient_id = ?",
-						$_POST["id"], $_SESSION["mariphil"]["userid"]);
-			$mail = query("select * from email_receipients r left join 
-							email e
-							on e.email_id = r.email_id where receipient_id = ? order by timestamp desc");
+						$_GET["id"], $_SESSION["mariphil"]["userid"]);
+			$thread = query("select * from email_thread where email_id = ?", $_GET["id"]);
+			$thread = query("select * from email_thread where thread_id = ?", $thread[0]["thread_id"]);
+			$Emails = [];
+			foreach($thread as $row):
+				$Emails[] = '"' . $row["email_id"] . '"';
+			endforeach;
+			$inemail = implode(", ", $Emails);
+			// dump($inemail);
 
-			render("public/email_system/inbox.php",[
-				"inbox" => $inbox,
+
+			$mails = query("select * from email e
+							left join email_receipients er
+							on er.email_id = e.email_id
+							where e.email_id in (" . $inemail . ")
+							order by timestamp desc");
+			$Users = [];
+			$users = query("select * from users");
+			foreach($users as $row):
+				$Users[$row["user_id"]] = $row;
+			endforeach;
+
+
+			// dump($mails);
+			render("public/email_system/read_message.php",[
+				"mails" => $mails,
+				"Users" => $Users,
+				"thread_id" => $thread[0]["thread_id"],
 			]);
 		}
 
