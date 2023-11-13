@@ -146,6 +146,93 @@
 			echo json_encode($json_data);
 		endif;
 
+
+
+
+		if($_POST["action"] == "sent-datatable"):
+			
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+			$offset = $_POST["start"];
+			$limit = $_POST["length"];
+			$search = $_POST["search"]["value"];
+
+		
+
+			$Users = [];
+			$users = query("select * from users");
+			foreach($users as $row):
+				$Users[$row["user_id"]] = $row;
+			endforeach;
+
+			
+
+			$where = " where e.sender_id = '".$_SESSION["mariphil"]["userid"]."'";
+			$string_query = "
+				select * from email e
+				left join email_receipients er
+				on er.email_id = e.email_id ".$where."
+				order by timestamp desc
+				";
+			$data = query($string_query);
+			$all_data = $data;
+			// dump($string_query);
+
+			if($search == ""){
+			$query_string = "
+
+			select * from email e
+				left join email_receipients er
+				on er.email_id = e.email_id ".$where."
+				order by timestamp desc
+				limit ".$limit." offset ".$offset." ";
+			// dump($query_string);
+
+			$data = query($query_string);
+			}
+			else{
+			$query_string = "
+
+			select * from email e
+				left join email_receipients er
+				on er.email_id = e.email_id ".$where." and message like '%".$search."%'
+				order by timestamp desc
+
+			limit ".$limit." offset ".$offset."
+			";
+			$data = query($query_string);
+			$query_string = "
+			select * from email e
+				left join email_receipients er
+				on er.email_id = e.email_id ".$where." and message like '%".$search."%'
+				order by timestamp desc
+			";
+			$all_data = query($query_string);
+			}
+			$i=0;
+			
+			foreach($data as $row):
+		
+			
+				$data[$i]["receipient"] = "To: " .$Users[$row["receipient_id"]]["fullname"];
+				$data[$i]["date"] = formatTimestamp($row["timestamp"]);
+				$data[$i]["excerpt"] = "<b>".$row["subject"]."</b> - " . strip_tags($row["message"]);
+				$data[$i]["excerpt"] = mb_strimwidth($data[$i]["excerpt"], 0, 100, '...');
+				// $excerpt = strip_tags($row["message"]);
+				// $excerpt = mb_strimwidth($excerpt, 0, 100, '...');
+
+
+				// dump();	
+				$i++;
+			endforeach;
+			$json_data = array(
+				"draw" => $draw + 1,
+				"iTotalRecords" => count($all_data),
+				"iTotalDisplayRecords" => count($all_data),
+				"aaData" => $data
+			);
+			echo json_encode($json_data);
+		endif;
+
 		if($_POST["action"] == "reply"):
 			// dump($_POST);
 			reply_mail($_POST["sender"], "REPLY SUBJECT", $_POST["message"], $_POST["receipient"], $_POST["thread_id"]);
@@ -171,6 +258,14 @@
 
 			render("public/email_system/inbox.php",[
 				"inbox" => $inbox,
+			]);
+		}
+
+
+		if($_GET["action"] == "sent"){
+
+
+			render("public/email_system/sent.php",[
 			]);
 		}
 

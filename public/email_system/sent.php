@@ -3,13 +3,11 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <style>
-.inbox-datatable tbody tr:hover {
+.sent-datatable tbody tr:hover {
     cursor: pointer;
 }
 
-.read-row {
-        background-color: #dee2e6; /* Replace with the desired background color for 'read' */
-    }
+
 </style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -17,7 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Inbox</h1>
+            <h1>Sent</h1>
           </div>
        
         </div>
@@ -43,7 +41,7 @@
             <div class="card-body p-0">
               <ul class="nav nav-pills flex-column">
                 <li class="nav-item active">
-                  <a href="#" class="nav-link">
+                  <a href="email?action=inbox" class="nav-link">
                     <i class="fas fa-inbox"></i> Inbox
                     <span class="badge bg-primary float-right">12</span>
                   </a>
@@ -64,7 +62,7 @@
         <div class="col-md-9">
           <div class="card card-primary card-outline">
             <div class="card-header">
-              <h3 class="card-title">Inbox</h3>
+              <h3 class="card-title">Sent</h3>
 
         
               <!-- /.card-tools -->
@@ -72,7 +70,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <div class="table-responsive mailbox-messages">
-                <table class="table table-hover inbox-datatable">
+                <table class="table table-hover sent-datatable">
                   <tbody>
                   
                   </tbody>
@@ -108,7 +106,7 @@
 
   <script>
   var datatable = 
-            $('.inbox-datatable').DataTable({
+            $('.sent-datatable').DataTable({
                 "pageLength": 50,
                 language: {
                     searchPlaceholder: "Enter Filter"
@@ -123,25 +121,21 @@
                     'url':'email',
                      'type': "POST",
                      "data": function (data){
-                        data.action = "inbox-datatable";
+                        data.action = "sent-datatable";
                      }
                 },
                 'columns': [
                     { data: 'email_id', "visible": false },
                     { data: 'isread', "visible": false },
-                    { data: 'sender', "orderable": false },
+                    { data: 'receipient', "orderable": false },
                     { data: 'excerpt', "orderable": false },
                     { data: 'date', "orderable": false },
                 ],
-                "createdRow": function(row, data) {
-                if (data.isread === "read") {
-                    $(row).addClass('read-row');
-                }
-            }
+           
             });
 
-            $('.inbox-datatable tbody').on('click', 'tr', function () {
-                var data = $('.inbox-datatable').DataTable().row(this).data();
+            $('.sent-datatable tbody').on('click', 'tr', function () {
+                var data = $('.sent-datatable').DataTable().row(this).data();
                 if (data) {
                     // Redirect to a URL with the ID parameter
                     window.location.href = 'email?action=read_message&id=' + data.email_id;

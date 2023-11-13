@@ -50,24 +50,8 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="email?action=sent" class="nav-link">
                     <i class="far fa-envelope"></i> Sent
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-file-alt"></i> Drafts
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="fas fa-filter"></i> Junk
-                    <span class="badge bg-warning float-right">65</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-trash-alt"></i> Trash
                   </a>
                 </li>
               </ul>
@@ -75,39 +59,6 @@
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Labels</h3>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body p-0">
-              <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle text-danger"></i>
-                    Important
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle text-warning"></i> Promotions
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle text-primary"></i>
-                    Social
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <!-- /.card-body -->
-          </div>
           <!-- /.card -->
         </div>
         <!-- /.col -->
@@ -127,6 +78,11 @@
               // dump($mails);
               if($row["sender_id"] != $_SESSION["mariphil"]["userid"])
                 $sender = $row["sender_id"];
+
+              if($sender == ""):
+                $sender = $row["receipient_id"];
+              endif;
+
               ?>
 
               <div class="mailbox-read-info">
@@ -165,7 +121,7 @@
               <form class="generic_form_trigger" data-url="email">
                 <input type="hidden" name="action" value="reply">
                 <input type="hidden" name="thread_id" value="<?php echo($thread_id); ?>">
-                <input type="hidden" name="sender" value="<?php echo($row["receipient_id"]); ?>">
+                <input type="hidden" name="sender" value="<?php echo($_SESSION["mariphil"]["userid"]); ?>">
               <div class="card-body">
                 <div class="form-group">
                   <label>To: </label>
