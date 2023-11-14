@@ -1,6 +1,6 @@
 /*
-SQLyog Community v13.1.6 (64 bit)
-MySQL - 10.3.16-MariaDB : Database - mariphil
+SQLyog Community v13.1.7 (64 bit)
+MySQL - 10.4.20-MariaDB : Database - mariphil
 *********************************************************************
 */
 
@@ -12,7 +12,7 @@ MySQL - 10.3.16-MariaDB : Database - mariphil
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`mariphil` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`mariphil` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
 USE `mariphil`;
 
@@ -157,7 +157,12 @@ insert  into `email`(`email_id`,`sender_id`,`subject`,`message`,`timestamp`,`thr
 ('MAIL-acef942db53c9-231114','USR-76eae08224ae2-231112','REPLY SUBJECT','tara sis!!','1699892752','YES','NATASHA ROMANOV'),
 ('MAIL-7d6b5f22d80a4-231114','USR-76eae08224ae2-231112','REPLY SUBJECT','tara sizt','1699892876','YES','NATASHA ROMANOV'),
 ('MAIL-f769dd65f8190-231114','USR-37512177654f4-230523','REPLY SUBJECT','lezzgooo','1699893118','YES','VALIDATOR'),
-('MAIL-f9d07aa923932-231114','USR-3f92b0d251264-230523','REPLY SUBJECT','kana humana jud na ha','1699893241','YES','MR. RENDON LABADOR');
+('MAIL-f9d07aa923932-231114','USR-3f92b0d251264-230523','REPLY SUBJECT','kana humana jud na ha','1699893241','YES','MR. RENDON LABADOR'),
+('MAIL-74a4449312d2a-231114','USR-5361ad50f3799-231110','REPLY SUBJECT','ui thank you part','1699933645','YES','TONY STARK'),
+('MAIL-460b6151f2162-231114','USR-5361ad50f3799-231110','REPLY SUBJECT','payts kaayo part','1699933657','YES','TONY STARK'),
+('MAIL-e588ff80d4cd0-231114','USR-3f92b0d251264-230523','REPLY SUBJECT','kuhaa na ni diri kay ako nig panginom ron','1699933812','YES','MR. RENDON LABADOR'),
+('MAIL-39b165ff416f5-231114','USR-3f92b0d251264-230523','REPLY SUBJECT','oi ha ugma','1699933819','YES','MR. RENDON LABADOR'),
+('MAIL-71b4373a2753f-231114','USR-3f92b0d251264-230523','QUARTERLY REPORTS','\r\n							\r\n							Dear TONY STARK,\r\n							<br><br>\r\n							I hope this message finds you well. As part of our ongoing commitment to your academic success, we kindly request your participation in the Scholarship Quarterly Report. Your insights and feedback are invaluable to us as we aim to provide the best support and resources for your educational journey.\r\n							<br><br>\r\n							Quarterly Report Details:\r\n							<br><br>\r\n							Form Link: <a href=\'forms?action=scholar_details&id=QUARTERLY-65fb590f61433-231114\' class=\'btn btn-primary\'>Click Here</a><br>\r\n							Instructions:\r\n							<br><br>\r\n							Complete the form thoughtfully, providing details about your academic progress, challenges faced, and any achievements or milestones.<br>\r\n							Why Your Input Matters:<br>\r\n							<br><br>\r\n							Individual Progress: Your feedback helps us understand your unique experiences and tailor our support accordingly.<br>\r\n							Program Enhancement: Insights from all scholars contribute to the continuous improvement of our scholarship program.<br>\r\n							Important Notes:<br>\r\n							<br><br>\r\n						\r\n							If you encounter any issues or have questions, please reach out to me.\r\n							Thank you for your time and dedication to the scholarship. We appreciate your contribution to the success of the program. Your achievements are important to us, and we look forward to hearing about your progress.\r\n							<br><br>\r\n							Best regards,<br>\r\n\r\n							MR. RENDON LABADOR<br>\r\n							Facilitator\r\n							\r\n							','1699933900','NO','MR. RENDON LABADOR');
 
 /*Table structure for table `email_attachments` */
 
@@ -186,12 +191,12 @@ CREATE TABLE `email_receipients` (
 
 insert  into `email_receipients`(`email_id`,`receipient_id`,`isread`,`receipient_name`) values 
 ('MAIL-2b26b0704f9be-231112','USR-76eae08224ae2-231112','read',NULL),
-('MAIL-081f4feadd70e-231113','USER0001','unread',NULL),
-('MAIL-83c30231b64d4-231113','USER0001','unread',NULL),
-('MAIL-4f3c41430c101-231113','USER0001','unread',NULL),
+('MAIL-081f4feadd70e-231113','USER0001','read',NULL),
+('MAIL-83c30231b64d4-231113','USER0001','read',NULL),
+('MAIL-4f3c41430c101-231113','USER0001','read',NULL),
 ('MAIL-54e7d4e665afa-231113','USR-a0fbf0079cc1f-231113','read',NULL),
-('MAIL-33e26d8423580-231113','USER0001','unread',NULL),
-('MAIL-f8a1ba4db3a63-231113','USER0001','unread',NULL),
+('MAIL-33e26d8423580-231113','USER0001','read',NULL),
+('MAIL-f8a1ba4db3a63-231113','USER0001','read',NULL),
 ('MAIL-ef4838b6ca71d-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
 ('MAIL-f161dee0aec3c-231113','USR-37512177654f4-230523','read','VALIDATOR'),
 ('MAIL-1af05870d8000-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
@@ -200,18 +205,18 @@ insert  into `email_receipients`(`email_id`,`receipient_id`,`isread`,`receipient
 ('MAIL-acdbfad056884-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
 ('MAIL-84b00c4fa25f0-231113','USR-37512177654f4-230523','read','VALIDATOR'),
 ('MAIL-722485aae2801-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
-('MAIL-2cadd8d62d1f0-231113','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-ee515a03ddd93-231113','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
+('MAIL-2cadd8d62d1f0-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-ee515a03ddd93-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
 ('MAIL-e078c123bbb78-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
 ('MAIL-72f207ce49a88-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
 ('MAIL-1e23c5eae282c-231113','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
 ('MAIL-1c1c6e0dd2ba7-231113','USR-ad02710943659-230523','read','SPONSOR'),
-('MAIL-850ed15e0746f-231113','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS'),
-('MAIL-021295a43a9c3-231113','USR-5361ad50f3799-231110','unread','TONY STARK'),
-('MAIL-ef1a4aab40c48-231113','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS'),
-('MAIL-cdec2f587aa6f-231113','USR-5361ad50f3799-231110','unread','TONY STARK'),
-('MAIL-79eac90488eff-231113','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS'),
-('MAIL-775670f16bb34-231113','USR-5361ad50f3799-231110','unread','TONY STARK'),
+('MAIL-850ed15e0746f-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
+('MAIL-021295a43a9c3-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
+('MAIL-ef1a4aab40c48-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
+('MAIL-cdec2f587aa6f-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
+('MAIL-79eac90488eff-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
+('MAIL-775670f16bb34-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
 ('MAIL-c7f81ed3905d7-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-f2f786eae0d0e-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
 ('MAIL-93965a5b4b1fd-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
@@ -221,22 +226,27 @@ insert  into `email_receipients`(`email_id`,`receipient_id`,`isread`,`receipient
 ('MAIL-cbbcdfb2c0fd5-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-1803b575d3a08-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-511dc639deb56-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
-('MAIL-3d7807232f436-231113','USR-3f92b0d251264-230523','unread','MR. RENDON LABADOR'),
+('MAIL-3d7807232f436-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
 ('MAIL-8229b0031d50a-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
 ('MAIL-7b19d13b680ca-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
 ('MAIL-a53205268482b-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-218f7ce4a3abb-231113','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
-('MAIL-ea0dfd251bf88-231113','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS'),
-('MAIL-014054e3bda2f-231113','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS'),
+('MAIL-ea0dfd251bf88-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
+('MAIL-014054e3bda2f-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-72fdd147092fc-231113','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
 ('MAIL-cd76102f47b0c-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
 ('MAIL-fef2c000d5b72-231113','USR-5361ad50f3799-231110','read','TONY STARK'),
-('MAIL-acef942db53c9-231114','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-7d6b5f22d80a4-231114','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-0e4f618938297-231114','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-d7a5c2264c069-231114','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-f769dd65f8190-231114','USR-76eae08224ae2-231112','unread','NATASHA ROMANOV'),
-('MAIL-f9d07aa923932-231114','USR-60b9c1e44fed9-231110','unread','STEVE ROGERS');
+('MAIL-acef942db53c9-231114','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-7d6b5f22d80a4-231114','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-0e4f618938297-231114','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-d7a5c2264c069-231114','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-f769dd65f8190-231114','USR-76eae08224ae2-231112','read','NATASHA ROMANOV'),
+('MAIL-f9d07aa923932-231114','USR-60b9c1e44fed9-231110','read','STEVE ROGERS'),
+('MAIL-74a4449312d2a-231114','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
+('MAIL-460b6151f2162-231114','USR-3f92b0d251264-230523','read','MR. RENDON LABADOR'),
+('MAIL-e588ff80d4cd0-231114','USR-5361ad50f3799-231110','read','TONY STARK'),
+('MAIL-39b165ff416f5-231114','USR-5361ad50f3799-231110','read','TONY STARK'),
+('MAIL-71b4373a2753f-231114','USR-5361ad50f3799-231110','read','TONY STARK');
 
 /*Table structure for table `email_thread` */
 
@@ -301,7 +311,12 @@ insert  into `email_thread`(`thread_id`,`email_id`) values
 ('THREAD-9e8a74e296233-231113','MAIL-0e4f618938297-231114'),
 ('THREAD-9e8a74e296233-231113','MAIL-d7a5c2264c069-231114'),
 ('THREAD-9e8a74e296233-231113','MAIL-f769dd65f8190-231114'),
-('THREAD-041daf89eb22f-231113','MAIL-f9d07aa923932-231114');
+('THREAD-041daf89eb22f-231113','MAIL-f9d07aa923932-231114'),
+('THREAD-8b0aec818379b-231113','MAIL-74a4449312d2a-231114'),
+('THREAD-8b0aec818379b-231113','MAIL-460b6151f2162-231114'),
+('THREAD-8b0aec818379b-231113','MAIL-e588ff80d4cd0-231114'),
+('THREAD-8b0aec818379b-231113','MAIL-39b165ff416f5-231114'),
+('THREAD-ed136cb6e5367-231114','MAIL-71b4373a2753f-231114');
 
 /*Table structure for table `forms` */
 
@@ -326,7 +341,8 @@ insert  into `forms`(`form_id`,`form_type`,`date_created`,`timestamp`,`time_crea
 ('FORM-f1b99411e7038-231110','QUARTERLY','2023-11-10','1699586599','11:23:19','USR-3f92b0d251264-230523','FIRST QUARTER','sy0002',NULL,NULL),
 ('FORM-ec6b74ef0eb42-231110','QUARTERLY','2023-11-10','1699586603','11:23:23','USR-3f92b0d251264-230523','SECOND QUARTER','sy0002',NULL,NULL),
 ('FORM-9cc27181b97c3-231113','QUARTERLY','2023-11-13','1699861501','15:45:01','USR-3f92b0d251264-230523','THIRD QUARTER','sy0003',NULL,NULL),
-('FORM-024d20643ba0a-231113','QUARTERLY','2023-11-13','1699864309','16:31:49','USR-3f92b0d251264-230523','FOURTH QUARTER','sy0003',NULL,NULL);
+('FORM-024d20643ba0a-231113','QUARTERLY','2023-11-13','1699864309','16:31:49','USR-3f92b0d251264-230523','FOURTH QUARTER','sy0003',NULL,NULL),
+('FORM-1a442869694eb-231114','QUARTERLY','2023-11-14','1699933900','11:51:40','USR-3f92b0d251264-230523','SECOND QUARTER','sy0003',NULL,NULL);
 
 /*Table structure for table `monthly_monitoring` */
 
@@ -360,7 +376,8 @@ insert  into `monthly_monitoring`(`tbl_id`,`form_id`,`scholar_id`,`grades`,`grad
 ('QUARTERLY-1df97d064cc19-231113','FORM-2fa832021de88-231113','USR-60b9c1e44fed9-231110',NULL,NULL,NULL,NULL,'FOR SUBMISSION',NULL),
 ('QUARTERLY-4cee98fce4f83-231113','FORM-2fa832021de88-231113','USR-5361ad50f3799-231110',NULL,NULL,NULL,NULL,'FOR SUBMISSION',NULL),
 ('QUARTERLY-cd6fdf71857aa-231113','FORM-024d20643ba0a-231113','USR-60b9c1e44fed9-231110',NULL,NULL,NULL,NULL,'FOR SUBMISSION',NULL),
-('QUARTERLY-06cda175d9a6c-231113','FORM-024d20643ba0a-231113','USR-5361ad50f3799-231110','99','resources/scholar_achievements/QUARTERLY-06cda175d9a6c-231113/Report Sample.pdf',NULL,NULL,'FOR SUBMISSION',NULL);
+('QUARTERLY-06cda175d9a6c-231113','FORM-024d20643ba0a-231113','USR-5361ad50f3799-231110','99','resources/scholar_achievements/QUARTERLY-06cda175d9a6c-231113/Report Sample.pdf',NULL,NULL,'FOR SUBMISSION',NULL),
+('QUARTERLY-65fb590f61433-231114','FORM-1a442869694eb-231114','USR-5361ad50f3799-231110',NULL,NULL,NULL,NULL,'FOR SUBMISSION',NULL);
 
 /*Table structure for table `monthly_monitoring_achievements` */
 
