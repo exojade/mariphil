@@ -297,6 +297,19 @@
   </li>
 <?php endif; ?>
 
+<?php
+$count = query("SELECT COUNT(*) AS inbox, receipient_name, receipient_id
+FROM ( 
+    SELECT er.*, et.thread_id 
+    FROM email_receipients er
+    LEFT JOIN email_thread et ON er.email_id = et.email_id
+    WHERE isread = 'unread' and receipient_id = ?
+    GROUP BY thread_id
+) AS Subquery
+GROUP BY receipient_id, receipient_name;", $_SESSION["mariphil"]["userid"]);
+
+?>
+
 <li class="nav-item">
       <a href="email?action=inbox" class="nav-link">
         <i class="nav-icon fas fa-key"></i>
@@ -304,7 +317,11 @@
           Email
           <span class="right badge badge-danger"></span>
         </p>
-        <span class="badge badge-danger right">2</span>
+        <?php if(!empty($count)): ?>
+        <span class="badge badge-danger right">
+        <?php echo($count[0]["inbox"]);  ?>
+        </span>
+        <?php endif; ?>
       </a>
   </li>
 

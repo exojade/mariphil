@@ -39,6 +39,7 @@
 				RowRank = 1
 				ORDER BY TIMESTAMP DESC  
 				";
+				// dump($string_query);
 			$data = query($string_query);
 			$all_data = $data;
 			// dump($string_query);
@@ -270,8 +271,22 @@
 		}
 
 		if($_GET["action"] == "read_message"){
-			query("update email_receipients set isread = 'read' where email_id = ? and receipient_id = ?",
-						$_GET["id"], $_SESSION["mariphil"]["userid"]);
+
+			$email_ids = [];
+			$thread = query("select * from email_thread et
+								left join email e
+								on e.email_id = et.email_id
+								where e.email_id = ?", $_GET["id"]);
+			$thread_id = $thread[0]["thread_id"];
+			$emails = query("select * from email_thread where thread_id = ?", $thread_id);
+			
+			foreach($emails as $row):
+				query("update email_receipients set isread = 'read' where email_id = ? and receipient_id = ?",
+						$row["email_id"], $_SESSION["mariphil"]["userid"]);
+			endforeach;
+			// dump($email_ids);
+
+			
 			$thread = query("select * from email_thread where email_id = ?", $_GET["id"]);
 			$thread = query("select * from email_thread where thread_id = ?", $thread[0]["thread_id"]);
 			$Emails = [];

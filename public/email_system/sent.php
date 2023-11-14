@@ -43,7 +43,6 @@
                 <li class="nav-item active">
                   <a href="email?action=inbox" class="nav-link">
                     <i class="fas fa-inbox"></i> Inbox
-                    <span class="badge bg-primary float-right">12</span>
                   </a>
                 </li>
                 <li class="nav-item">
