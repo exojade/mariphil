@@ -1,3 +1,12 @@
+<?php
+
+$receiver = [];
+
+if($_SESSION["mariphil"]["role"] == "FACILITATOR"):
+  // $scholars = query("select * from ");
+endif;
+?>
+
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/summernote/summernote-bs4.min.css">
 <div class="content-wrapper">
@@ -10,20 +19,16 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD FORM</button>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-    <!-- Main content -->
     <sectiion class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
-            <a href="email?action=list" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
-
+            <a href="email?action=inbox" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Folders</h3>

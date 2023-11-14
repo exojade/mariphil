@@ -127,9 +127,6 @@
 					echo json_encode($res_arr); exit();
 			endif;
 			query("update monthly_monitoring set form_status = 'FOR CHECKING' where tbl_id = ?", $_POST["tbl_id"]);
-			
-			// dump($_POST);
-			
 			$qform = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
 			$qform = $qform[0];
 			$form = query("select * from forms where form_id = ?", $qform["form_id"]);
@@ -139,7 +136,6 @@
 			<br><br>
 			Link: <a href='forms?action=scholar_details&id=".$_POST["tbl_id"]."' class='btn btn-primary btn-sm'>Link Here</a>
 			<br><br>
-			
 			";
 
 			$receipient = [];
