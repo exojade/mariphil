@@ -47,7 +47,7 @@
                           <input type="hidden" name="scholar_id" value="<?php echo($l["scholar_id"]); ?>">
                           <button class="btn btn-success" type="submit" href="#" >Sponsor</button>
                         </form>
-                        <a href="#" class="btn btn-warning">View</a>
+                        <a href="scholars?action=details&id=<?php echo($l["scholar_id"]); ?>" class="btn btn-warning">View</a>
                       </td>
                       <td><?php echo(strtoupper($l["lastname"] . ", " . $l["firstname"])); ?></td>
                       <td><?php echo(strtoupper(

@@ -6,7 +6,7 @@
 			// dump($_POST);
 			$comment = query("select * from renewal where renewal_id = ?", $_POST["renewal_id"]);
 			
-			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
+			$message_comment = $_POST["remarks"] . $comment[0]["return_comments"];
 			// dump($message_comment);
 			query("update renewal set form_status = 'RETURNED', return_comments = ? where renewal_id = ?", $message_comment, $_POST["renewal_id"]);
 			
@@ -210,7 +210,7 @@
 
 			$receipient = [];
 			$receipient[] = $form["facilitator"];
-			start_mail($_SESSION["mariphil"]["userid"], "RENEWAL FORM SUBMITTED", $message,$receipient,"NO");
+			start_mail($_SESSION["mariphil"]["userid"], "RENEWWAL FORM SUBMITTED", $message,$receipient,"NO");
 
 
 			$res_arr = [

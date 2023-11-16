@@ -398,7 +398,7 @@
                     $year_level = query("select * from year_level where level_id > ?", $scholar[0]["year_level_id"]); 
                   ?>
                     <div class="form-group">
-                        <label>Select</label>
+                        <label>Select Year Level</label>
                         <select id="yearLevelSelect" disabled name="year_level" class="form-control select">
                           <?php $i=0; foreach($year_level as $row):
                             if($i == 0):

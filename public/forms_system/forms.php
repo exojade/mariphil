@@ -32,7 +32,7 @@
 			// dump($_POST);
 			$comment = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
 			
-			$message_comment = $_POST["remarks"] . "<br><br>" . $comment[0]["return_comments"];
+			$message_comment = $_POST["remarks"] . $comment[0]["return_comments"];
 			// dump($message_comment);
 			query("update monthly_monitoring set form_status = 'RETURNED', return_comments = ? where tbl_id = ?", $message_comment, $_POST["tbl_id"]);
 			
