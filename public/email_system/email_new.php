@@ -3,19 +3,119 @@
 $receiver = [];
 
 if($_SESSION["mariphil"]["role"] == "FACILITATOR"):
-  // $scholars = query("select * from ");
+  $scholars = query("select * from scholars s left join school_year sy
+                      on sy.school_year_id = s.school_year_id
+                      left join users u
+                      on u.user_id = s.scholar_id
+                      where
+                      responsible = ?
+                      order by s.school_year_id desc
+                       ", $_SESSION["mariphil"]["userid"]);
+                      //  dump($scholars);
+  $i=0;
+  foreach($scholars as $row):
+    $receiver[$i]["email"] = $row["user_id"];
+    $receiver[$i]["name"] = $row["fullname"] . "(" .  $row["username"].  ")" . "[SY: " . $row["school_year"] . "]";
+    $i++;
+  endforeach;
+  // dump($receiver);
 endif;
+
+
+if($_SESSION["mariphil"]["role"] == "SCHOLAR"):
+  $data = query("select * from scholars s
+                  left join users u
+                  on u.user_id = s.responsible
+                  where scholar_id = ?
+                       ", $_SESSION["mariphil"]["userid"]);
+                      //  dump($data);
+  $i=0;
+  foreach($data as $row):
+    $receiver[$i]["email"] = $row["user_id"];
+    $receiver[$i]["name"] = $row["fullname"] . "(" .  $row["username"].  ") - FACILITATOR" ;
+    $i++;
+  endforeach;
+
+  $data = query("select * from scholars s
+                  left join users u
+                  on u.user_id = s.sponsor_id
+                  where scholar_id = ?
+                       ", $_SESSION["mariphil"]["userid"]);
+                      //  dump($data);
+ 
+  foreach($data as $row):
+    $receiver[$i]["email"] = $row["user_id"];
+    $receiver[$i]["name"] = $row["fullname"] . "(" .  $row["username"].  ") - SPONSOR";
+    $i++;
+  endforeach;
+
+  // dump($receiver);
+endif;
+
+
+
+if($_SESSION["mariphil"]["role"] == "APPLICANT"):
+  $data = query("select * from scholar_tracker st
+                  left join users u 
+                  on u.user_id = st.user_id
+                  where scholar_id = ?
+                  and st.status in ('APPLICANT - TO BE INTERVIEWED', 'APPLICANT - INTERVIEWED')
+                  group by st.user_id
+                       ", $_SESSION["mariphil"]["userid"]);
+                      //  dump($data);
+  $i=0;
+  foreach($data as $row):
+    $receiver[$i]["email"] = $row["user_id"];
+    $receiver[$i]["name"] = $row["fullname"] . "(" .  $row["username"].  ") - VALIDATOR" ;
+    $i++;
+  endforeach;
+  // dump($receiver);
+endif;
+
+
+
+if($_SESSION["mariphil"]["role"] == "VALIDATOR"):
+
+  $StatusScholar = [];
+  $scholars = query("select * from scholar_tracker where status = 'SCHOLAR'");
+  foreach($scholars as $row):
+    $StatusScholar[$row["scholar_id"]] = $row;
+  endforeach;
+
+
+  $data = query("select * from scholar_tracker st
+                  left join users u 
+                  on u.user_id = st.scholar_id
+                  where st.user_id = ?
+                  and st.status in ('APPLICANT - TO BE INTERVIEWED', 'APPLICANT - INTERVIEWED')
+                  group by st.scholar_id
+                       ", $_SESSION["mariphil"]["userid"]);
+                      //  dump($data);
+  $i=0;
+  foreach($data as $row):
+    if(!isset($StatusScholar[$row["scholar_id"]])):
+      // $receiver[$i]["row"] = $row;
+      $receiver[$i]["email"] = $row["user_id"];
+      $receiver[$i]["name"] = $row["fullname"] . "(" .  $row["username"].  ") - VALIDATOR" ;
+      $i++;
+    endif;
+  endforeach;
+  // dump($receiver);
+endif;
+
+
 ?>
 
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/summernote/summernote-bs4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/select2/css/select2.min.css">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Forms</h1>
+            <h1>COMPOSE</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -30,76 +130,30 @@ endif;
           <div class="col-md-3">
             <a href="email?action=inbox" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Folders</h3>
+            <div class="card-header">
+              <h3 class="card-title">Folders</h3>
 
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
               </div>
-              <div class="card-body p-0">
-                <ul class="nav nav-pills flex-column">
-                  <li class="nav-item active">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-inbox"></i> Inbox
-                      <span class="badge bg-primary float-right">12</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-envelope"></i> Sent
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-file-alt"></i> Drafts
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-filter"></i> Junk
-                      <span class="badge bg-warning float-right">65</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-trash-alt"></i> Trash
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Labels</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <ul class="nav nav-pills flex-column">
-                  <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="far fa-circle text-danger"></i> Important</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="far fa-circle text-warning"></i> Promotions</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="far fa-circle text-primary"></i> Social</a>
-                  </li>
-                </ul>
-              </div>
-              <!-- /.card-body -->
+            <div class="card-body p-0">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item active">
+                  <a href="email?action=inbox" class="nav-link">
+                    <i class="fas fa-inbox"></i> Inbox
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="email?action=sent" class="nav-link">
+                    <i class="far fa-envelope"></i> Sent
+                  </a>
+                </li>
+              </ul>
             </div>
-            <!-- /.card -->
+          </div>
           </div>
           <!-- /.col -->
           <div class="col-md-9">
@@ -109,55 +163,36 @@ endif;
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="form-group">
-                  <input class="form-control" placeholder="To:">
+                <form class="generic_form_trigger" data-url="email">
+                <input type="hidden" name="action" value="compose">
+                <input type="hidden" name="sender" value="<?php echo($_SESSION["mariphil"]["userid"]); ?>">
+                <input type="hidden" name="sender_fullname" value="<?php echo($_SESSION["mariphil"]["fullname"]); ?>">
+              <div class="form-group">
+                  <select class="select2" multiple="multiple" name="receipient[]" data-placeholder="To: " style="width: 100%;">
+                  <!-- <option >Please select email</option> -->
+                    <?php foreach($receiver as $row): ?>
+                      <option value="<?php echo($row["email"]); ?>"  ><?php echo($row["name"]); ?></option>
+
+                    <?php endforeach; ?>
+                  </select>
                 </div>
                 <div class="form-group">
-                  <input class="form-control" placeholder="Subject:">
+                  <input class="form-control" name="subject" required placeholder="Subject:">
                 </div>
                 <div class="form-group">
-                    <textarea id="compose-textarea" class="form-control" style="height: 300px">
-                      <h1><u>Heading Of Message</u></h1>
-                      <h4>Subheading</h4>
-                      <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-                        was born and I will give you a complete account of the system, and expound the actual teachings
-                        of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-                        dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-                        how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-                        is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-                        but because occasionally circumstances occur in which toil and pain can procure him some great
-                        pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-                        except to obtain some advantage from it? But who has any right to find fault with a man who
-                        chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-                        produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-                        dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-                        blinded by desire, that they cannot foresee</p>
-                      <ul>
-                        <li>List item one</li>
-                        <li>List item two</li>
-                        <li>List item three</li>
-                        <li>List item four</li>
-                      </ul>
-                      <p>Thank you,</p>
-                      <p>John Doe</p>
+                    <textarea id="compose-textarea" name="message" required class="form-control" style="height: 300px">
+                   
                     </textarea>
                 </div>
-                <div class="form-group">
-                  <div class="btn btn-default btn-file">
-                    <i class="fas fa-paperclip"></i> Attachment
-                    <input type="file" name="attachment">
-                  </div>
-                  <p class="help-block">Max. 32MB</p>
-                </div>
+  
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
                 <div class="float-right">
-                  <button type="button" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Draft</button>
                   <button type="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Send</button>
                 </div>
-                <button type="reset" class="btn btn-default"><i class="fas fa-times"></i> Discard</button>
               </div>
+              </form>
               <!-- /.card-footer -->
             </div>
             <!-- /.card -->
@@ -172,10 +207,13 @@ endif;
 
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script src="AdminLTE_new/plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="AdminLTE_new/plugins/select2/js/select2.full.min.js"></script>
   <script>
  $(function () {
     //Add text editor
     $('#compose-textarea').summernote()
   })
+
+  $('.select2').select2()
   </script>
   <?php require("layouts/footer.php") ?>

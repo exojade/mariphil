@@ -343,11 +343,13 @@
 		}
 
 		if($_GET["action"] == "details"){
-			$applicant = query("select s.*, u.fullname as sponsor, uu.fullname as responsible_name  from scholars s
+			$applicant = query("select s.*, u.fullname as sponsor, uu.fullname as responsible_name, sy.school_year  from scholars s
 			left join users u
 			on u.user_id = s.sponsor_id
 			left join users uu
 			on uu.user_id = s.responsible
+			left join school_year sy
+			on sy.school_year_id = s.school_year_id
 			where s.scholar_id = ?", $_GET["id"]);
 			$applicant = $applicant[0];
 			render("public/scholars_system/details.php",[

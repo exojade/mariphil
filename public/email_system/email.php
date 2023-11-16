@@ -147,6 +147,7 @@
 			echo json_encode($json_data);
 		endif;
 
+	
 
 
 
@@ -233,6 +234,62 @@
 			);
 			echo json_encode($json_data);
 		endif;
+
+		if($_POST["action"] == "compose"):
+			// dump($_POST);
+
+
+			$queryFormat_email = '("%s","%s","%s","%s","%s","%s","%s")';
+			$queryFormat_receipients = '("%s","%s","%s","%s")';
+			$queryFormat_thread = '("%s","%s")';
+
+			$inserts_email = [];
+			$inserts_receipients = [];
+			$inserts_thread = [];
+
+			foreach($_POST["receipient"] as $row):
+
+				$user = query("select * from users where user_id = ?", $row);
+
+				$thread_id = create_uuid("THREAD");
+				$email_id = create_uuid("MAIL");
+
+				$_POST["message"] = str_replace('"', "'", $_POST["message"]);
+				$message = $_POST["message"];
+				$inserts_mail[] = sprintf( $queryFormat_email, 
+										$email_id, $_POST["sender"],
+										$_POST["subject"],$message, time(), "NO",  $_POST["sender_fullname"]
+									);
+				$inserts_receipients[] = sprintf( $queryFormat_receipients, 
+					$email_id, $row, "unread", $user[0]["fullname"]
+				);
+
+				$inserts_thread[] = sprintf( $queryFormat_thread, 
+					$thread_id, $email_id
+				);
+			endforeach;
+
+
+			$query = implode( ",", $inserts_mail );
+				query('insert into email(email_id, sender_id, subject, message, timestamp, threadbool, sender_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_receipients );
+				query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+
+				$query = implode( ",", $inserts_thread );
+				query('insert into email_thread(thread_id, email_id) VALUES '.$query);
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+		endif;
+
+
 
 		if($_POST["action"] == "reply"):
 			// dump($_POST);

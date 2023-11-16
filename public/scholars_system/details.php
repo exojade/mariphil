@@ -235,6 +235,10 @@
                 <br>
                 <h3 class="profile-username text-center"><?php echo($applicant["firstname"] . " " . $applicant["lastname"]); ?></h3>
                 <br>
+                <h5 class="text-center"><?php echo($applicant["school_year"]); ?></h5>
+                <h6 class="text-center"><?php echo($applicant["school_name"]); ?></h6>
+                <h6 class="text-center"><?php echo($applicant["year_level"]); ?></h6>
+                <h6 class="text-center"><?php echo($applicant["year_type"]); ?></h6>
                 <?php if($applicant["current_status"] == "APPLICANT - DENIED"): ?>
                   <button class="btn btn-danger btn-block"><?php echo($applicant["current_status"]); ?></button>
                 <?php elseif($applicant["current_status"] == "SCHOLAR"): ?>
