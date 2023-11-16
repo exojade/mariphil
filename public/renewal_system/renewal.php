@@ -210,7 +210,7 @@
 
 			$receipient = [];
 			$receipient[] = $form["facilitator"];
-			start_mail($_SESSION["mariphil"]["userid"], "RENEWWAL FORM SUBMITTED", $message,$receipient,"NO");
+			start_mail($_SESSION["mariphil"]["userid"], "RENEWAL FORM SUBMITTED", $message,$receipient,"NO");
 
 
 			$res_arr = [

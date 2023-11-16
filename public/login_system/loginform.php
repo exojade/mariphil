@@ -63,15 +63,16 @@ background-image: url('resources/background.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
+
 ">
 
-<div class="layer">
+<div class="layer" >
 <div class="login-box">
   <div class="login-logo">
     <img src="resources/mariphil.png" width="200" height="200">
   </div>
   <!-- /.login-logo -->
-  <div class="login-box-body">
+  <div class="login-box-body" style="margin-bottom: 150px;">
     <h2 class="login-box-msg text-center">LOGIN</h2>
 
     <form id="login_form" autocomplete="off">
@@ -109,12 +110,15 @@ background-image: url('resources/background.jpg');
     <a href="register" class="text-center">Don't have an account? Sign up here.</a>
 
   </div>
+  
   <!-- /.login-box-body -->
   <Br>
   <p style="color:#fff;" class="text-center">Copyright @ <?php echo(date("Y")); ?> Project Mariphil Foundation INC.</p>
 </div>
 
+
 </div>
+
 <!-- /.login-box -->
 
 <!-- jQuery 3 -->
