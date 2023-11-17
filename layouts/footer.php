@@ -1,6 +1,22 @@
 <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
 
+
+
 <script>
+
+<?php if($_SESSION["mariphil"]["temp_password"] == "YES"): ?>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get the modal element
+    var myModal = new bootstrap.Modal(document.getElementById('changePassword'), {
+      backdrop: 'static'
+    });
+
+    // Show the modal when the page loads
+    myModal.show();
+  });
+<?php endif; ?>
+
+
 $('.generic_form_trigger').submit(function(e) {
 
 

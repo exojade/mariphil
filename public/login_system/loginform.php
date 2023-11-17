@@ -76,6 +76,7 @@ background-image: url('resources/background.jpg');
     <h2 class="login-box-msg text-center">LOGIN</h2>
 
     <form id="login_form" autocomplete="off">
+      <input type="hidden" name="action" value="login">
       <div class="form-group has-feedback">
       <!-- <?php $users = query("select * from users where role = ?", $_GET["role"]); ?>  
       <select name="username" class="form-control">
@@ -97,11 +98,10 @@ background-image: url('resources/background.jpg');
         <input type="password" class="form-control" placeholder="Password" name="password" required="required">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-   
-        <!-- /.col -->
           <button type="submit" class="btn btn-success btn-block btn-flat">Sign In</button>
-        <!-- /.col -->
     </form>
+    
+    <a href="login?action=forgot_password" class="btn btn-warning btn-block btn-flat">Forgot Password?</a>
 
     <!-- /.social-auth-links -->
 
@@ -139,5 +139,7 @@ background-image: url('resources/background.jpg');
     });
   });
 </script>
+
+
 </body>
 </html>

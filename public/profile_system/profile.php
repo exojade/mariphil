@@ -9,10 +9,12 @@
 				
 				if($_POST["new_password"] == $_POST["repeat_password"]){
 
-					query("update users set password = ? where user_id = ?",
+					query("update users set password = ?, temp_password = '' where user_id = ?",
 							crypt($_POST["new_password"], ""),
 							$_POST["user_id"]
 					);
+
+					$_SESSION["mariphil"]["temp_password"] = "";
 
 					$res_arr = [
 						"result" => "success",

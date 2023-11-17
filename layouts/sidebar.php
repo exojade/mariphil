@@ -357,14 +357,12 @@ GROUP BY receipient_id, receipient_name;", $_SESSION["mariphil"]["userid"]);
   </aside>
 
 
-  <div class="modal fade" id="changePassword">
+  <div class="modal fade" id="changePassword" data-backdrop="static">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Change Password</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+          
             </div>
             <div class="modal-body">
             <form class="generic_form_trigger" data-url="profile">
@@ -386,10 +384,14 @@ GROUP BY receipient_id, receipient_name;", $_SESSION["mariphil"]["userid"]);
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
+              <?php if($_SESSION["mariphil"]["temp_password"] != "YES"): ?>
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <?php endif; ?>
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </form>
           </div>
         </div>
       </div>
+
+ 

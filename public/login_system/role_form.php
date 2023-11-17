@@ -89,7 +89,9 @@ background-image: url('resources/background.jpg');
       </div>
           <button type="submit" class="btn btn-success btn-block btn-flat">Sign In</button>
     </form>
+    
    <br>
+   <a href="login?action=forgot_password" class="btn btn-warning btn-block btn-flat">Forgot Password?</a>
    <br>
     <a href="register" class="text-center">Don't have an account? Sign up here.</a>
 

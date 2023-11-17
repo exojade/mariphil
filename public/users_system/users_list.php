@@ -152,7 +152,7 @@
                         <div class="col-12">
                         <div class="form-group">
                           <label for="Image" class="form-label">Profile Image</label>
-                          <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview2()">
+                          <input required accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview2()">
                       </div>
                         </div>
                         <div class="col-12">
