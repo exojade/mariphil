@@ -442,7 +442,12 @@ Thank you for your dedication to your studies, and we look forward to supporting
 		}
 
 		if($_GET["action"] == "details"){
-			$forms = query("select * from renewal_form where form_id = ?", $_GET["id"]);
+			$forms = query("select r.*, sy.school_year as current_sy, sy2.school_year as target_sy from renewal_form r
+							left join school_year sy
+							on sy.school_year_id = r.school_year_id
+							left join school_year sy2
+							on sy2.school_year_id = r.for_school_year_id
+							where form_id = ?", $_GET["id"]);
 			// dump($forms);
 			$scholars = query("select * from renewal r
 								left join scholars s on s.scholar_id = r.scholar_id

@@ -210,7 +210,12 @@
                     <tr>
                       <td>
                    <a href="forms?action=scholar_details&id=<?php echo($row["tbl_id"]); ?>" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                   <a class="btn btn-warning"><i class="fa fa-pen"></i></a>
+                   <form class="generic_form_trigger" data-url="forms" style="display:inline;">
+                      <input type="hidden" name="action" value="printForm">
+                      <input type="hidden" name="tbl_id" value="<?php echo($row["tbl_id"]); ?>">
+                        <button class="btn btn-success"><i class="fa fa-print"></i></button>
+                   </form>
+
                         
                         
                       </td>

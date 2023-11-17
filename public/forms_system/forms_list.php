@@ -108,7 +108,7 @@
                   ?>
                     <tr>
                       <td>
-                        <a href="forms?action=details&id=<?php echo($f["form_id"]); ?>" class="btn btn-warning">Details</a>
+                        <a href="forms?action=details&id=<?php echo($f["form_id"]); ?>" class="btn btn-primary btn-sm btn-block">View Submission</a>
                       </td>
                       <td><?php echo($f["form_type"]); ?></td>
                       <td><?php echo($f["school_year"]); ?></td>

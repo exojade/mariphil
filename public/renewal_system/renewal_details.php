@@ -174,10 +174,10 @@
                 <h3 class="profile-username text-center">RENEWAL PORTAL</h3>
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>Current School Year</b> <a class="float-right"><?php echo($forms["school_year_id"]); ?></a>
+                    <b>Current School Year</b> <a class="float-right"><?php echo($forms["current_sy"]); ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>Target Renewal</b> <a class="float-right"><?php echo($forms["for_school_year_id"]); ?></a>
+                    <b>Target Renewal</b> <a class="float-right"><?php echo($forms["target_sy"]); ?></a>
                   </li>
                 </ul>
               </div>
@@ -207,8 +207,7 @@
                   ?>
                     <tr>
                       <td>
-                   <a href="renewal?action=scholar_details&id=<?php echo($row["renewal_id"]); ?>" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                   <a class="btn btn-warning"><i class="fa fa-pen"></i></a>
+                   <a href="renewal?action=scholar_details&id=<?php echo($row["renewal_id"]); ?>" class="btn btn-primary btn-block btn-xs">View Submission</a>
                         
                         
                       </td>

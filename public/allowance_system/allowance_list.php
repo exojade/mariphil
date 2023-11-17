@@ -97,11 +97,11 @@
                   ?>
                     <tr>
                       <td>
-                        <a href="allowance?action=details&id=<?php echo($row["allowance_id"]); ?>" class="btn btn-warning">Details</a>
+                        <a href="allowance?action=details&id=<?php echo($row["allowance_id"]); ?>" class="btn btn-primary btn-sm">Update</a>
                         <form class="generic_form_trigger" data-url="allowance" style="display:inline;">
                           <input type="hidden" name="action" value="printAllowance">
                           <input type="hidden" value="<?php echo($row["allowance_id"]); ?>" name="allowance_id">
-                          <button class="btn btn-primary">Print</a>
+                          <button class="btn btn-warning btn-sm">Print</a>
                         </form>
                       </td>
                       <td><?php echo($row["school_year"]); ?></td>

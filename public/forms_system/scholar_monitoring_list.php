@@ -103,7 +103,7 @@
                   ?>
                     <tr>
                       <td>
-                        <a href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-warning">Details</a>
+                        <a href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-block btn-primary btn-sm">Update</a>
                       </td>
                       <td><?php echo($f["form_type"]); ?></td>
                       <td><?php echo($f["school_year"]); ?></td>

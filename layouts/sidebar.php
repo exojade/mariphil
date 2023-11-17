@@ -209,7 +209,7 @@
 
 
 
-<?php if($role=="admin"): ?>
+<?php if($role=="ADMIN"): ?>
   <li class="nav-item">
       <a href="index" class="nav-link">
         <i class="nav-icon fas fa-th"></i>

@@ -42,7 +42,7 @@
 		if($role == "VALIDATOR"){
 			render("public/dashboard_system/dashboard_validator.php",[]);
 		}
-		else if($role == "admin"){
+		else if($role == "ADMIN"){
 			render("public/dashboard_system/dashboard_admin.php",[]);
 		}
 	}

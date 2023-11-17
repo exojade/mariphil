@@ -86,12 +86,94 @@
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
+</form>
             </div>
           </div>
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+
+
+
+
+
+
+
+      <?php foreach($users as $u):  ?>
+      <div class="modal fade" id="updateUser<?php echo($u["user_id"]); ?>">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><?php echo($u["username"]); ?></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-url="users">
+              <input type="hidden" name="action" value="updateUSer">
+              <input type="hidden" name="user_id" value="<?php echo($u["user_id"]); ?>">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address / Username</label>
+                <input required type="text" value="<?php echo($u["username"]); ?>" name="username" class="form-control" placeholder="---">
+              </div>
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Fullname</label>
+                <input required type="text" value="<?php echo($u["fullname"]); ?>" name="fullname" class="form-control" id="exampleInputEmail1" placeholder="---">
+              </div>
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Gender</label>
+                <select required name="gender" class="form-control select2">
+                  <option selected value="<?php echo($u["gender"]); ?>"><?php echo($u["gender"]); ?></option>
+                  <option value="MALE">MALE</option>
+                  <option value="FEMALE">FEMALE</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Role</label>
+                <select required name="role" class="form-control select2">
+                  <option selected disabled value="<?php echo($u["role"]); ?>"><?php echo($u["role"]); ?></option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="SPONSOR">SPONSOR</option>
+                  <option value="VALIDATOR">VALIDATOR</option>
+                  <option value="FACILITATOR">FACILITATOR</option>
+                  <option value="SCHOLAR">FACILITATOR</option>
+                  <option value="APPLICANT">APPLICANT</option>
+                </select>
+              </div>
+
+
+              <div class="row">
+                        <div class="col-12">
+                        <div class="form-group">
+                          <label for="Image" class="form-label">Profile Image</label>
+                          <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview2()">
+                      </div>
+                        </div>
+                        <div class="col-12">
+                        <img id="frame2" src="<?php echo($u["profile_image"]); ?>" class="img-fluid" width="200" height="200" />
+
+                        </div>
+                      </div>
+
+             
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+      </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <?php endforeach; ?>
 
 
 
@@ -118,7 +200,7 @@
                   <?php foreach($users as $u):  ?>
                     <tr>
                       <td>
-                        <a href="#" class="btn btn-warning">Update</a>
+                        <a href="#" title="Update User" data-toggle="modal" data-target="#updateUser<?php echo($u["user_id"]); ?>" class="btn btn-warning">Update</a>
                       </td>
                       <td><?php echo($u["username"]); ?></td>
                       <td><?php echo(strtoupper($u["role"])); ?></td>
@@ -143,6 +225,10 @@
 
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
+            function preview2() {
+              frame = document.getElementById('frame2');
+                frame.src = URL.createObjectURL(event.target.files[0]);
+            }
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }

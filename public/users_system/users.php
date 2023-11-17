@@ -51,6 +51,37 @@
 
 			
 		}
+
+		else if($_POST["action"] == "updateUSer"){
+			// dump($_FILES);
+
+
+			$fullname = $_POST["fullname"];
+			$fullname = str_replace(' ', '_', $fullname);
+			$target_pdf = "uploads/users/";
+
+			if($_FILES["profile_image"]["size"] != 0){
+				$path_parts = pathinfo($_FILES["profile_image"]["name"]);
+				$extension = $path_parts['extension'];
+				$target = $target_pdf . "fullname" . "." . $extension;
+                    if(!move_uploaded_file($_FILES['profile_image']['tmp_name'], $target)){
+                        echo("FAMILY Do not have upload files");
+                        exit();
+                    }
+			}
+
+			query("update users set profile_image = '".$target."', username = '".$_POST["username"]."',
+					role = '".$_POST["role"]."', fullname = '".$_POST["fullname"]."',gender = '".$_POST["gender"]."'
+				where user_id = '".$_POST["user_id"]."'");	
+
+		$res_arr = [
+			"result" => "success",
+			"title" => "Success",
+			"message" => "Success",
+			"link" => "refresh",
+			];
+			echo json_encode($res_arr); exit();
+		}
 		
     }
 	else {

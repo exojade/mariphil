@@ -323,7 +323,7 @@
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Documents</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Application Status</a></li>
                   <li class="nav-item"><a class="nav-link" href="#scholarship" data-toggle="tab">Scholarship</a></li>
-                  <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR" && $_SESSION["mariphil"]["role"] != "APPLICANT"): ?>
+                  <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR" && $_SESSION["mariphil"]["role"] != "APPLICANT" && $_SESSION["mariphil"]["role"] != "VALIDATOR"): ?>
                   <li class="nav-item"><a class="nav-link" href="#monitoring" data-toggle="tab">Monthly Monitoring</a></li>
                   <li class="nav-item"><a class="nav-link" href="#renewal" data-toggle="tab">Renewal</a></li>
                   <li class="nav-item"><a class="nav-link" href="#allowance" data-toggle="tab">Allowance</a></li>
