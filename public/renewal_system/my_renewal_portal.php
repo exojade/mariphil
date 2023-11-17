@@ -47,7 +47,7 @@
                   ?>
                     <tr>
                       <td>
-                        <a href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-warning">Details</a>
+                        <a href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-warning">Update</a>
                       </td>
                       <td>Renewal Portal</td>
                       <td><?php echo($f["current_sy"]); ?></td>
