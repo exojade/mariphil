@@ -94,7 +94,7 @@ $faci = $faci[0];
     <th>Scholar's Name</th>
     <th>Status</th>
     <th>Amount</th>
-    <th>Date Received / Returned</th>
+    <th>Date CLAIMED / RETURNED</th>
   </thead>
   <tbody>
     <?php $i=1; foreach($scholars as $row): ?>

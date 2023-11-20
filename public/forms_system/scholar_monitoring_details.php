@@ -8,14 +8,7 @@
           <div class="col-sm-12">
             <h1>Form Details
 
-            <?php
-            if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
-              <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
-              <input type="hidden" name="action" value="submitForm">
-              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
-                <button class="btn btn-primary" >Submit Quarterly Form</button>
-              </form>
-            <?php endif; ?>
+           
 
             <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR"): ?>
               <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
@@ -521,6 +514,15 @@
       
                 </div>
             </div>
+                            <br>
+            <?php
+            if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+              <form class="generic_form_trigger" data-url="forms" style="display:inline; float:right;">
+              <input type="hidden" name="action" value="submitForm">
+              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                <button class="btn btn-primary" >Submit Quarterly Form</button>
+              </form>
+            <?php endif; ?>
             <!-- /.card -->
           </div>
         </div>

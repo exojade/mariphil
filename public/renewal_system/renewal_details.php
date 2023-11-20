@@ -212,7 +212,15 @@
                         
                       </td>
                       <td><?php echo($row["lastname"] . ", " . $row["firstname"]); ?></td>
-                      <td><?php echo($row["form_status"]); ?></td>
+                      <td><?php
+                      if($row["form_status"] == "DONE"):
+                        echo("RENEWED");
+
+                      else:
+                      echo($row["form_status"]);
+                      endif;
+                      
+                      ?></td>
                      
                     </tr>
                   <?php endforeach; ?>

@@ -103,7 +103,11 @@
                   ?>
                     <tr>
                       <td>
+                        <?php if($f["form_status"] != "DONE"): ?>
                         <a href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-block btn-primary btn-sm">Update</a>
+                        <?php else: ?>
+                        <a href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-block btn-primary btn-sm">View</a>
+                        <?php endif; ?>
                       </td>
                       <td><?php echo($f["form_type"]); ?></td>
                       <td><?php echo($f["school_year"]); ?></td>

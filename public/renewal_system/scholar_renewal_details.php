@@ -7,14 +7,7 @@
         <div class="row mb-2">
           <div class="col-sm-12">
             <h1>Renewal Portal
-            <?php
-            if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
-              <form class="generic_form_trigger" data-url="renewal" style="display:inline; float:right;">
-              <input type="hidden" name="action" value="submitForm">
-              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
-                <button class="btn btn-primary" >Submit Renewal Form</button>
-              </form>
-            <?php endif; ?>
+       
 
             </h1>
           </div>
@@ -320,7 +313,15 @@
                     <b>For Renewal SY</b> <a class="float-right"><?php echo($form["for_sy"]); ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>Status</b> <a class="float-right"><?php echo($form["form_status"]); ?></a>
+                    <b>Status</b> <a class="float-right"><?php
+
+                    if($form["form_status"] == "DONE"):
+                      echo("RENEWED");
+                    else:
+                      echo($form["form_status"]); 
+                    endif;
+
+                     ?></a>
                   </li>
                 </ul>
               </div>
@@ -480,6 +481,16 @@
                 </table>
                 </div>
             </div>
+
+
+            <?php
+            if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
+              <form class="generic_form_trigger" data-url="renewal" style="display:inline; float:right;">
+              <input type="hidden" name="action" value="submitForm">
+              <input type="hidden" name="tbl_id" value="<?php echo($_GET["id"]); ?>">
+                <button class="btn btn-primary" >Submit Renewal Form</button>
+              </form>
+            <?php endif; ?>
           </div>
         </div>
       </div>

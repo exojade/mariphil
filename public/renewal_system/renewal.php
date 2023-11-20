@@ -193,6 +193,9 @@
 					];
 					echo json_encode($res_arr); exit();
 			endif;
+			
+			$statuss = query("select * from renewal where renewal_id = ?", $_POST["tbl_id"]);
+			$statuss = $statuss[0];
 			query("update renewal set form_status = 'FOR CHECKING' where renewal_id = ?", $_POST["tbl_id"]);
 
 
@@ -210,7 +213,12 @@
 
 			$receipient = [];
 			$receipient[] = $form["facilitator"];
-			start_mail($_SESSION["mariphil"]["userid"], "RENEWWAL FORM SUBMITTED", $message,$receipient,"NO");
+			if($statuss["form_status"] == "RETURNED"):
+			start_mail($_SESSION["mariphil"]["userid"], "RENEWAL FORM RESUBMITTED", $message,$receipient,"NO");
+			else:
+				start_mail($_SESSION["mariphil"]["userid"], "RENEWAL FORM SUBMITTED", $message,$receipient,"NO");
+
+			endif;
 
 
 			$res_arr = [

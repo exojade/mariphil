@@ -36,18 +36,30 @@
             <?php endif; ?>
 
 
+         
+
+
+           
+            <!-- /.card -->
+          </div>
+
+
+          <div class="col-8">
+            <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Pending Reports needed to submit</h3>
+                <h3 class="card-title">Pending Quarterly Form needed to submit</h3>
               </div>
               <div class="card-body">
-                <?php $forms = query("select * from renewal r
+                <?php $forms = query("select * from monthly_monitoring m
                               left join forms f
-                              on f.form_id = r.form_id
-                where r.scholar_id = ? and status in ('SUBMITTED', 'FOR CHECKING')", $_SESSION["mariphil"]["userid"]); ?>
-                <table class="table table-striped">
+                              on f.form_id = m.form_id
+                where m.scholar_id = ? and m.form_status in ('FOR SUBMISSION', 'RETURNED')", $_SESSION["mariphil"]["userid"]); ?>
+                <table class="table table-striped table-bordered">
                   <thead>
+                    <th>Action</th>
                     <th>Form</th>
+                    <th>Type</th>
                     <th>Status</th>
                   </thead>
                   <tbody>
@@ -55,8 +67,10 @@
                     // dump($forms);
                     foreach($forms as $row): ?>
                       <tr>
+                        <td><a class="btn btn-xs btn-primary btn-block" href="forms?action=scholar_details&id=<?php echo($row["tbl_id"]); ?>">Update</a></td>
                         <td><?php echo($row["form_type"]); ?></td>
-                        <td><?php echo($row["status"]); ?></td>
+                        <td><?php echo($row["form_kind"]); ?></td>
+                        <td><?php echo($row["form_status"]); ?></td>
                       </tr>
                     <?php endforeach; ?>
 
@@ -71,38 +85,40 @@
             </div>
 
 
-           
-            <!-- /.card -->
-          </div>
-
-
-          <div class="col-8">
-            <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Announcements</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
+                <h3 class="card-title">Pending Renewal Form needed to submit</h3>
               </div>
               <div class="card-body">
+              <?php $forms = query("select r.*,f.*,sy.school_year from renewal r
+                              left join renewal_form f
+                              on f.form_id = r.form_id
+                              left join school_year sy
+                              on sy.school_year_id = f.for_school_year_id
+                where r.scholar_id = ? and r.form_status in ('FOR SUBMISSION', 'RETURNED')", $_SESSION["mariphil"]["userid"]); ?>
                 <table class="table table-striped">
                   <thead>
-                    <th>Announcement</th>
-                    <th>Date</th>
-                    <th>Time</th>
+                    <th></th>
+                    <th>Target SY</th>
+                    <th>Status</th>
                   </thead>
-             
+                  <tbody>
+                    <?php 
+                    // dump($forms);
+                    foreach($forms as $row): ?>
+                      <tr>
+                        <td><a class="btn btn-xs btn-primary btn-block" href="renewal?action=scholar_details&id=<?php echo($row["renewal_id"]); ?>">Update</a></td>
+                        <td><?php echo($row["school_year"]); ?></td>
+                        <td><?php echo($row["form_status"]); ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+
+                  </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
+              
               </div>
               <!-- /.card-footer-->
             </div>

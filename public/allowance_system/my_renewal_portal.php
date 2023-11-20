@@ -37,7 +37,7 @@
                     <th>Action</th>
                     <th>Form</th>
                     <th>Current SY</th>
-                    <th>Target Renew SY</th>
+                    <th>Target SY Renewal</th>
                     <th>Date Created</th>
                     <th>Time Created</th>
                     <th>Status</th>

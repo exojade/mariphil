@@ -5,8 +5,38 @@
 
 		if($_POST["action"] == "claimAllowance"):
 			// dump($_POST);
+			$allowance = query("select aas.*,a.*,sy.school_year from allowance_scholar aas 
+									left join allowance a
+									on a.allowance_id = aas.allowance_id
+									left join school_year sy
+									on sy.school_year_id = a.school_year_id
+									where aas.tbl_id = ?", $_POST["tbl_id"]);
+			// dump($allowance);
+			$allowance = $allowance[0];
+
+			$fullMonthName = date("F", mktime(0, 0, 0, $allowance["month"], 1, date("Y")));
 			query("update allowance_scholar set status = 'CLAIMED', date_claimed = ? where
 					tbl_id = ?", $_POST["dateClaimed"], $_POST["tbl_id"]);
+
+			$message = "CLAIMED ALLOWANCE";
+			$message = $message . "
+			<br><br>
+			Your allowance for the month of ".$fullMonthName." this school year: ".$allowance["school_year"]." 
+			with an amount of ".to_peso($allowance["amount"])."
+			has been recorded as claimed on ".$_POST["dateClaimed"].". <br><br>
+			If you did not claim this allowance, you may reply to this email.
+			<br><br>
+			Regards,<br>
+			Mariphil Inc.
+			";
+			$receipient = [];
+			$receipient[] = $allowance["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "CLAIMED ALLOWANCE", $message,$receipient,"NO");
+
+
+
+
+
 					$res_arr = [
 						"result" => "success",
 						"title" => "Success",
@@ -18,8 +48,33 @@
 
 		if($_POST["action"] == "revertAllowance"):
 			// dump($_POST);
+
+			
+
+			$allowance = query("select aas.*,a.*,sy.school_year from allowance_scholar aas 
+									left join allowance a
+									on a.allowance_id = aas.allowance_id
+									left join school_year sy
+									on sy.school_year_id = a.school_year_id
+									where aas.tbl_id = ?", $_POST["tbl_id"]);
+			$allowance = $allowance[0];
+			$fullMonthName = date("F", mktime(0, 0, 0, $allowance["month"], 1, date("Y")));
+
 			query("update allowance_scholar set status = 'FOR RELEASE', date_claimed = '', date_returned = '' where
 					tbl_id = ?", $_POST["tbl_id"]);
+
+			$message = "REVERT ALLOWANCE";
+			$message = $message . "
+			<br><br>
+			We would like to inform you that the allowance for ".$fullMonthName." for school year: ".$allowance["school_year"]."
+			has been reverted in the system. It may cause of system error. If you have concerns, please reply to this email.
+			<br><br>
+			Regards,<br>
+			Mariphil Inc.
+			";
+			$receipient = [];
+			$receipient[] = $allowance["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "REVERT ALLOWANCE", $message,$receipient,"NO");
 					$res_arr = [
 						"result" => "success",
 						"title" => "Success",
@@ -32,8 +87,36 @@
 
 		if($_POST["action"] == "returnAllowance"):
 			// dump($_POST);
+			$allowance = query("select aas.*,a.*,sy.school_year from allowance_scholar aas 
+									left join allowance a
+									on a.allowance_id = aas.allowance_id
+									left join school_year sy
+									on sy.school_year_id = a.school_year_id
+									where aas.tbl_id = ?", $_POST["tbl_id"]);
+		
+			// dump($allowance);
+			$allowance = $allowance[0];
+			$fullMonthName = date("F", mktime(0, 0, 0, $allowance["month"], 1, date("Y")));
+
+
+			
+
 			query("update allowance_scholar set status = 'RETURNED', date_returned = ? where
 					tbl_id = ?", $_POST["dateReturned"], $_POST["tbl_id"]);
+
+			$message = "RETURNED ALLOWANCE";
+			$message = $message . "
+			<br><br>
+			We would like to inform you that your allowance for the month of ".$fullMonthName." for the current school year, amounting to ".to_peso($allowance["amount"]).", has been returned to the designated IN-CHARGE.
+			<br><br>
+			Regrettably, it appears that you did not claim your allowance and its being returned to the management last ".$_POST["dateReturned"].". If there were any unforeseen circumstances or if you have concerns regarding this matter, we kindly request you to reply to this email at your earliest convenience.
+			<br><br>
+			Regards,<br>
+			Mariphil Inc.
+			";
+			$receipient = [];
+			$receipient[] = $allowance["scholar_id"];
+			start_mail($_SESSION["mariphil"]["userid"], "RETURNED ALLOWANCE", $message,$receipient,"NO");
 					$res_arr = [
 						"result" => "success",
 						"title" => "Success",

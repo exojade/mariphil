@@ -42,7 +42,7 @@
 
               <?php $sy = query("select * from school_year where idd > ?", $sy[0]["idd"]); ?>
               <div class="form-group">
-                <label for="exampleInputEmail1">Renew for School Year</label>
+                <label for="exampleInputEmail1">Month Allowance Released</label>
                 <select id="month" name="month" class="form-control select2">
                 <?php
                   for ($i = 1; $i <= 12; $i++) {

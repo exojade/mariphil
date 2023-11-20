@@ -33,7 +33,7 @@
                     <th>Action</th>
                     <th>Form</th>
                     <th>Current SY</th>
-                    <th>Target Renew SY</th>
+                    <th>Target SY Renewal</th>
                     <th>Date Created</th>
                     <th>Time Created</th>
                     <th>Status</th>
@@ -54,7 +54,14 @@
                       <td><?php echo($f["renew_sy"]); ?></td>
                       <td><?php echo($f["date_created"]); ?></td>
                       <td><?php echo($f["time_created"]); ?></td>
-                      <td><?php echo($f["form_status"]); ?></td>
+                      <td><?php
+                      if($f["form_status"] == "DONE"):
+                        echo("RENEWED");
+                      else:
+                      echo($f["form_status"]); 
+                      endif;
+                      
+                      ?></td>
                       
                     </tr>
                   <?php endforeach; ?>

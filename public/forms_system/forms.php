@@ -126,6 +126,10 @@
 					];
 					echo json_encode($res_arr); exit();
 			endif;
+
+			$statuss = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
+			$statuss = $statuss[0];
+
 			query("update monthly_monitoring set form_status = 'FOR CHECKING' where tbl_id = ?", $_POST["tbl_id"]);
 			$qform = query("select * from monthly_monitoring where tbl_id = ?", $_POST["tbl_id"]);
 			$qform = $qform[0];
@@ -140,7 +144,11 @@
 
 			$receipient = [];
 			$receipient[] = $form["created_by"];
-			start_mail($_SESSION["mariphil"]["userid"], "QUARTERLY FORM SUBMITTED", $message,$receipient,"NO");
+			if($statuss["form_status"] == "RETURNED"):
+				start_mail($_SESSION["mariphil"]["userid"], "QUARTERLY FORM RESUBMITTED", $message,$receipient,"NO");
+			else:
+				start_mail($_SESSION["mariphil"]["userid"], "QUARTERLY FORM SUBMITTED", $message,$receipient,"NO");
+			endif;
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -376,6 +384,16 @@
 
 				$scholars = query("select * from scholars where current_status = 'SCHOLAR'
 				and responsible = ? and school_year_id = ?", $_SESSION["mariphil"]["userid"], $_POST["sy"]);
+				if(empty($scholars)):
+					query("delete from forms where form_id = ?", $form_id);
+					$res_arr = [
+						"result" => "failed",
+						"title" => "Failed",
+						"message" => "NO SCHOLARS ENROLLED IN THIS SCHOOL YEAR",
+						"link" => "refresh",
+						];
+						echo json_encode($res_arr); exit();
+				endif;
 				foreach($scholars as $s):
 					$quarter_id = create_uuid("QUARTERLY");
 					if (query("insert INTO monthly_monitoring (
