@@ -152,7 +152,7 @@
                         <div class="col-12">
                         <div class="form-group">
                           <label for="Image" class="form-label">Profile Image</label>
-                          <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview2()">
+                          <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview2(event)">
                       </div>
                         </div>
                         <div class="col-12">
@@ -225,10 +225,16 @@
 
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
-            function preview2() {
-              frame = document.getElementById('frame2');
-                frame.src = URL.createObjectURL(event.target.files[0]);
-            }
+            function preview2(event) {
+    // Get the parent modal of the clicked file input
+    var parentModal = $(event.target).closest('.modal');
+
+    // Find the img element with id="frame2" within the parent modal
+    var frame = parentModal.find('#frame2')[0];
+
+    // Set the src attribute of the found img element
+    frame.src = URL.createObjectURL(event.target.files[0]);
+}
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }
