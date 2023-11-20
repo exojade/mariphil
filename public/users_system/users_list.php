@@ -137,7 +137,7 @@
               <div class="form-group">
                 <label for="exampleInputEmail1">Role</label>
                 <select required name="role" class="form-control select2">
-                  <option selected disabled value="<?php echo($u["role"]); ?>"><?php echo($u["role"]); ?></option>
+                  <option value="<?php echo($u["role"]); ?>"><?php echo($u["role"]); ?></option>
                   <option value="ADMIN">ADMIN</option>
                   <option value="SPONSOR">SPONSOR</option>
                   <option value="VALIDATOR">VALIDATOR</option>
