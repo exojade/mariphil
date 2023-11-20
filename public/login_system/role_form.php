@@ -91,7 +91,7 @@ background-image: url('resources/background.jpg');
     </form>
     
    <br>
-   <a href="login?action=forgot_password" class="btn btn-warning btn-block btn-flat">Forgot Password?</a>
+   <!-- <a href="login?action=forgot_password" class="btn btn-warning btn-block btn-flat">Forgot Password?</a> -->
    <br>
     <a href="register" class="text-center">Don't have an account? Sign up here.</a>
 
