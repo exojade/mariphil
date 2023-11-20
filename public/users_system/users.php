@@ -58,7 +58,7 @@
 
 			$fullname = $_POST["fullname"];
 			$fullname = str_replace(' ', '_', $fullname);
-			$target_pdf = "uploads/users/";
+			$target = "uploads/users/";
 
 			if($_FILES["profile_image"]["size"] != 0){
 				$path_parts = pathinfo($_FILES["profile_image"]["name"]);
