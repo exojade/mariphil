@@ -53,7 +53,7 @@
 		}
 
 		else if($_POST["action"] == "updateUSer"){
-			dump($_POST);
+			// dump($_POST);
 
 
 			$fullname = $_POST["fullname"];
