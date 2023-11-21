@@ -248,6 +248,7 @@
 
 					$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
 					$user = $user[0];
+					// dump($user);
 
 
 
@@ -269,7 +270,9 @@
 					Mariphil Foundation Inc.<br>
 					Scholarship Committee<br>
 					";
-					start_mail($_SESSION["mariphil"]["user_id"], "Application Process Status: To be Interviewed", $message, $user["user_id"],"NO");
+					$receipient = [];
+					$receipient[] = $user["user_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "Application Process Status: To be Interviewed", $message,$receipient,"NO");
 
 
 
