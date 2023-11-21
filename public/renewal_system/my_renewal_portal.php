@@ -47,7 +47,11 @@
                   ?>
                     <tr>
                       <td>
+                        <?php if($f["form_status"] == "DONE"): ?>
+                        <a href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-warning">View</a>
+                        <?php else: ?>
                         <a href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-warning">Update</a>
+                        <?php endif; ?>
                       </td>
                       <td>Renewal Portal</td>
                       <td><?php echo($f["current_sy"]); ?></td>
