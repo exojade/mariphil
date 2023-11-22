@@ -68,18 +68,17 @@
 
 
               <div class="row">
-                        <div class="col-12">
-                        <div class="form-group">
-                          <label for="Image" class="form-label">Profile Image</label>
-                          <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview()">
-                          <button onclick="clearImage()" type="button" class="btn btn-primary mt-3">Clear</button>
-                      </div>
-                        </div>
-                        <div class="col-12">
-                        <img id="frame" src="" class="img-fluid" width="200" height="200" />
-
-                        </div>
-                      </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="Image" class="form-label">Profile Image</label>
+                    <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview()">
+                    <button onclick="clearImage()" type="button" class="btn btn-primary mt-3">Clear</button>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <img id="frame" src="" class="img-fluid" width="200" height="200" />
+                </div>
+              </div>
 
              
             </div>
