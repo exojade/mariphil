@@ -63,7 +63,7 @@
 			if($_FILES["profile_image"]["size"] != 0){
 				$path_parts = pathinfo($_FILES["profile_image"]["name"]);
 				$extension = $path_parts['extension'];
-				$target = $target . "fullname" . "." . $extension;
+				$target = $target . $_POST["user_id"] . "." . $extension;
                     if(!move_uploaded_file($_FILES['profile_image']['tmp_name'], $target)){
                         echo("FAMILY Do not have upload files");
                         exit();
