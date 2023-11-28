@@ -231,30 +231,6 @@
   </li>
 
 
-  <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>
-                Forms
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview" style="display: none;">
-              <li class="nav-item">
-                <a href="forms?action=list" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Monitoring</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="forms?action=list" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Renewal</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-
 
   <li class="nav-item">
       <a href="users?action=users_list" class="nav-link">
