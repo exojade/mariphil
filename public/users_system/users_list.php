@@ -141,7 +141,7 @@
                   <option value="SPONSOR">SPONSOR</option>
                   <option value="VALIDATOR">VALIDATOR</option>
                   <option value="FACILITATOR">FACILITATOR</option>
-                  <option value="SCHOLAR">FACILITATOR</option>
+                  <option value="SCHOLAR">SCHOLAR</option>
                   <option value="APPLICANT">APPLICANT</option>
                 </select>
               </div>
