@@ -497,7 +497,7 @@
                         <td>
                           <form class="generic_form_trigger" data-url="forms">
                           <input type="hidden" name="action" value="delete_photo">
-                          <input type="hidden" name="achievement_id" value="<?php echo($row["upload_id"]); ?>">
+                          <input type="hidden" name="upload_id" value="<?php echo($row["upload_id"]); ?>">
                           <?php if($_SESSION["mariphil"]["role"] == "SCHOLAR" && ($form["form_status"] == "FOR SUBMISSION" || $form["form_status"] == "RETURNED")): ?>
                           <button type="submit" class="btn btn-danger btn-block">Delete</button>
                           <?php else: ?>

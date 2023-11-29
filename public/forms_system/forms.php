@@ -233,6 +233,18 @@
 				echo json_encode($res_arr); exit();
 		endif;
 
+		if($_POST["action"] == "delete_photo"):
+			// dump($_POST);
+			query("delete from monthly_monitoring_upload where upload_id = ?", $_POST["upload_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+		endif;
+
 		if($_POST["action"] == "resubmitRenewal"){
 
 			

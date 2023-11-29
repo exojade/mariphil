@@ -186,6 +186,20 @@
 			$monthName = date("F", $timestamp);
 		
 			$allowance = create_uuid("AA");
+
+			$scholars = query("select * from scholars where current_status = 'SCHOLAR'
+				and responsible = ? and school_year_id = ?", $_POST["facilitator"], $_POST["sy"]);
+			if(empty($scholars)):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "No Scholars Enrolled on this School Year",
+					// "link" => "refresh",
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+
+
 			if (query("insert INTO allowance (
 						allowance_id, facilitator, 
 						school_year_id, date_created, time_created, timestamp,
