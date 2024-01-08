@@ -201,15 +201,227 @@
 		endif;
 
 		if($_POST["action"] == "printForm"):
-			// dump($_POST);
-				$base_url = the_base_url();
-				$options = urlencode(serialize($_POST));
-                $webpath = $base_url . "/mariphil_system/forms?action=printForm&options=".$options;
-                $filename = "QForm";
+			
+
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];      
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			// dump($fontData);
+				// $base_url = the_base_url();
+				// $options = urlencode(serialize($_POST));
+                // $webpath = $base_url . "/mariphil_system/forms?action=printForm&options=".$options;
+
+				$mpdf = new \Mpdf\Mpdf([
+					'mode' => 'utf-8',
+					'format' => 'FOLIO-P',
+					'margin_top' => 15,
+					'margin_left' => 5,
+					'margin_right' => 5,
+					'margin_bottom' => 5,
+					'margin_footer' => 1,
+					'fontDir' => array_merge($fontDirs, [
+						$_SERVER['DOCUMENT_ROOT'] . '/mariphil_system/resources/fonts',
+					]),
+					'fontdata' => $fontData + [
+						'barlow' => [
+							'R' => 'Barlow-Regular.ttf',
+							'B' => 'Barlow-Bold.ttf',
+						],
+						
+					],
+					'default_font' => 'barlow' // Use the font name without the file extension
+				]);
+			
+			
+				$mpdf->SetFont('barlow');
+				// $font = __DIR__ . '/../../resources/fonts/Barlow-Regular.ttf';
+				// dump($font);
+				// dump($mpdf->SetFont('Barlow'));
+
+				$html = "";
+				
+				$html.='
+
+				<style>
+
+			
+
+					hr{
+					margin-bottom: 2px;
+					margin-top: 2px;
+					}
+
+					html *
+					{
+						font-family: "Times New Roman";
+					
+					}
+					section{
+					border: 4px solid black;
+					padding:10px;
+					height:1600px;
+					}
+					.tabular, .tabular th, .tabular td {
+					border: 1px solid black !important;
+					}
+					.table td{
+						font-size: 11.3px !important;
+					}
+
+					.table{
+					margin-bottom:1px !important;
+					}
+
+					#fordtr{font-size:20px;}
+					#fordtr td{padding: 1px !important;}
+					#fordtr th{padding: 7px !important;}
+
+					p{
+					
+					font-size: 150%;
+					
+					}
+
+					ul li{
+					font-size: 150%;
+					}
+
+					hr{
+					height:2px;border-width:6;color:#254C0B !important;background-color:#254C0B !important;
+					border-top: 1px solid #254C0B;
+					}
+						</style>
+				
+				';
+
+				$forms = query("select sy.school_year, m.*, f.* from monthly_monitoring m
+				left join forms f
+				on m.form_id = f.form_id
+				left join school_year sy
+				on sy.school_year_id = f.school_year_id
+				where m.tbl_id = ?
+				order by f.timestamp desc", $_POST["tbl_id"]);
+
+				$form = $forms[0];
+				$scholar = query("select * from scholars where scholar_id = ?", $form["scholar_id"]);
+				$scholar = $scholar[0];
+
+				$faci = query("select * from users where user_id = ?", $form["created_by"]);
+				$faci = $faci[0];
+
+				$sponsor = query("select * from users where user_id = ?", $scholar["sponsor_id"]);
+				$sponsor = $sponsor[0];
+				// dump($scholar);
+			
+				$form_achievements = query("select * from monthly_monitoring_achievements where tbl_id = ?", $_POST["tbl_id"]);
+				$form_uploads = query("select * from monthly_monitoring_upload where tbl_id = ?", $_POST["tbl_id"]);
+
+				$html .='
+				<section>
+
+
+				<table width="100%" style="border-collapse: collapse;">
+					<tr>
+						<td width="35%" style="vertical-align: top; text-align:right; padding: 5px;">
+							<img style="float:right;" src="resources/mariphil.png" width="110">
+						</td>
+						<td width="50%" style="vertical-align: top; padding: 5px;">
+							<h3 style="font-size:300%;line-height:0.7; color:#254C0B;padding-top:15px;"><b>MARIPHIL<br>FOUNDATION</b></h3>
+						</td>
+					</tr>
+				</table>
+				<p style="text-align:center;background-color:#254C0B; color:#fff; padding:10px; auto 10px auto;font-weight:700;font-size:180%;"><b>Project MARIPHIL Foundation Inc.</b></p>
+				<br>
+
+				<table width="100%" style="border-collapse: collapse;">
+        <tr>
+            <td width="45%" style="vertical-align: top; padding: 5px;">
+			<p><b>SCHOLAR:</b> '.$scholar["firstname"] . ' ' . $scholar["lastname"].'</p> 
+			<p><b>FACILITATOR:</b> '.$faci["fullname"].'</p> 
+			<p><b>SPONSOR:</b> '.$sponsor["fullname"].'</p> 
+            </td>
+            <td width="55%" style="vertical-align: top; padding: 5px;">
+			<p><b>SCHOOL YEAR:</b> '.$form["school_year"].'</p> 
+			<p><b>FORM TYPE:</b> QUARTERLY MONITORING</p> 
+			<p><b>QUARTER:</b> '.$form["form_kind"].'</p> 
+            </td>
+        </tr>
+    </table>
+			
+<br>
+<br>
+
+				
+<p><b>LATEST GENERAL WEIGHT AVERAGE (GWA):</b> '.$form["grades"].'</p> 
+<p><b>AWARDS AND ACHIEVEMENTS:</b></p> 
+<ul>';
+
+
+  foreach($form_achievements as $row):
+    $html.='<li>'.$row["achievement"].'</li>';
+  endforeach;
+
+  $html.='
+              </ul>
+<br>
+<br>
+              <p><b>FACILITATOR REMARKS:</b></p> 
+              <p style="margin-left: 20px;">'.$form["remarks"].'</p> 
+
+
+      <div style="position:absolute; bottom:0; margin-bottom:30px; width: 100%">
+
+
+	  <table width="100%" style="border-collapse: collapse; position:absolute; bottom:0; margin-bottom:30px; width: 100%">
+        <tr>
+            <td width="10%" style="vertical-align: top; padding: 5px;">
+		
+            </td>
+            <td width="40%" style="vertical-align: top; padding: 5px;">
+			<p style="border-bottom: 4px solid black;text-align:center;">'.$faci["fullname"].'</p>
+			<p>FACILITATOR</p>
+            </td>
+        </tr>
+    </table>
+
+
+
+			
+			</div>
+			</section>
+				';
+
+				// $html = '<p style="font-weight: bold;">This text is in Arial Bold.</p>';
+
+		
+
+
+				$filename = "QForm";
+				// dump($filename);
 				$path = "resources/qforms/".$filename.".pdf";
-				$exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait --image-dpi 300 "'.$webpath.'" '.$path.'';
-				// dump($webpath);
-				exec($exec);
+
+				
+				$mpdf->WriteHTML($html);
+				$mpdf->Output($path, \Mpdf\Output\Destination::FILE);
+				// $filename = "CASKET_REPORT";
+				// $path = "reports/".$filename.".pdf";
+			
+				// $exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait  "'.$webpath.'" '.$path.'';
+				// dump($exec);
+				// exec($exec);
+				// $load[] = array('path'=>$path, 'filename' => $filename, 'result' => 'success');
+				// $json = array('info' => $load);
+				// echo json_encode($json);
+
+
+		
+
+                // $filename = "QForm";
+				// $path = "resources/qforms/".$filename.".pdf";
+				// $exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait --image-dpi 300 "'.$webpath.'" '.$path.'';
+				// // dump($webpath);
+				// exec($exec);
 
 				$res_arr = [
 					"result" => "success",

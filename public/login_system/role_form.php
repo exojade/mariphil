@@ -42,7 +42,7 @@
     <nav class="navbar navbar-static-top" style="margin-left: 0px;">
       <div class="container">
         <div class="navbar-header">
-          <a href="../../index2.html" class="navbar-brand">PROJECT MARIPHIL FOUNDATION INC.</a>
+          <a href="#" class="navbar-brand">PROJEKT MARIPHIL FOUNDATION INC.</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>

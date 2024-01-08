@@ -46,6 +46,8 @@
 					$mail->Body = $message;
 					$mail->AddAddress($users[0]["username"]);
 					$mail->Send();
+					$mail->SMTPDebug = 2; // Enables SMTP debug information
+					$mail->Debugoutput = 'html'; // HTML output for debugging
 	
 					$res_arr = [
 						"result" => "success",
