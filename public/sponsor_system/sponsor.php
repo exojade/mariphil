@@ -104,6 +104,33 @@
 
 
 		}
+
+
+	else if($_POST["action"] == "sponsorFilterSY"){
+		$res_arr = [
+			"result" => "success",
+			"title" => "Success",
+			"message" => "Filter success",
+			"link" => "sponsor?action=my_sponsored&school_year=".$_POST["school_year"],
+			];
+			echo json_encode($res_arr); exit();
+	}
+
+	else if($_POST["action"] == "unsponsor"){
+		query("update scholars set sponsor_id = NULL where scholar_id = ?", $_POST["scholar_id"]);
+		$res_arr = [
+			"result" => "success",
+			"title" => "Success",
+			"message" => "Successfully unsponsored the scholar!",
+			"link" => "refresh",
+			];
+			echo json_encode($res_arr); exit();
+
+
+		dump($_POST);
+	}
+
+
     }
 	else {
 		if($_GET["action"] == "no_sponsor"){
@@ -114,9 +141,65 @@
 		}
 
 		if($_GET["action"] == "my_sponsored"){
-			$users = query("select * from users");
+			// $users = query("select * from users");
+
+
+
+			if(!isset($_GET["school_year"])):
+				$school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+				$school_year = $school_year[0];
+				$list = query("select s.*, u.*, sy.school_year from scholars s
+					left join users u
+					on s.responsible = u.user_id
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where s.current_status = 'SCHOLAR'
+					and sponsor_id = ?
+					and s.school_year_id = ?
+					order by s.school_year_id desc", 
+											$_SESSION["mariphil"]["userid"], $school_year["school_year_id"]);
+			else:
+				if($_GET["school_year"] == ""):
+					$school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					$school_year = $school_year[0];
+					$list = query("select s.*, u.*, sy.school_year from scholars s
+					left join users u
+					on s.responsible = u.user_id
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where s.current_status = 'SCHOLAR'
+					and sponsor_id = ?
+					order by s.school_year_id desc", 
+											$_SESSION["mariphil"]["userid"]);
+				
+				else:
+					$list = query("select s.*, u.*, sy.school_year from scholars s
+					left join users u
+					on s.responsible = u.user_id
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where s.current_status = 'SCHOLAR'
+					and sponsor_id = ?
+					and s.school_year_id = ?
+					order by s.school_year_id desc", 
+											$_SESSION["mariphil"]["userid"], $_GET["school_year"]);
+				endif;
+			endif;
+
+			// render("public/scholars_system/applicants_list.php",[
+			// 	"applicants" => $applicants,
+			// ]);
+
+
+
+			
+
+
+
+
 			render("public/sponsor_system/my_sponsored_list.php",[
-				"users" => $users,
+				// "users" => $users,
+				"list" => $list,
 			]);
 		}
 	}

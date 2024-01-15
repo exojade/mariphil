@@ -10,7 +10,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_allowance">GENERATE ALLOWANCE</button>
+            <!-- <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_allowance">GENERATE ALLOWANCE</button> -->
+            <a href="allowance?action=newAllowance" class="btn btn-primary btn-flat">GENERATE ALLOWANCE</a>
             </ol>
           </div>
         </div>
@@ -98,7 +99,7 @@
                     <tr>
                       <td>
                         <a href="allowance?action=details&id=<?php echo($row["allowance_id"]); ?>" class="btn btn-primary btn-sm">Update</a>
-                        <form class="generic_form_trigger" data-url="allowance" style="display:inline;">
+                        <form class="generic_form_no_trigger" data-url="allowance" style="display:inline;">
                           <input type="hidden" name="action" value="printAllowance">
                           <input type="hidden" value="<?php echo($row["allowance_id"]); ?>" name="allowance_id">
                           <button class="btn btn-warning btn-sm">Print</a>

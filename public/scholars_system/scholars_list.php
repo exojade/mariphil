@@ -24,7 +24,50 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"></h3>
+              <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+            <form class="generic_form_no_trigger_and_result" data-url="scholars">
+            <input type="hidden" name="action" value="scholars_listFilter">
+            <!-- <input type="hidden" name="action" value="filterSY"> -->
+            <div class="row">
+              <div class="col-md-6">
+              <div class="form-group">
+              <?php $school_year = query("select * from school_year order by idd desc"); ?>
+                        <select name="school_year" class="form-control">
+                          <option selected value="">Select School Year</option>
+                          <?php foreach($school_year as $row): ?>
+                            <?php if($row["current_status"] == "active"): ?>
+                              <?php if(isset($_GET["school_year"]) && $_GET["school_year"] == $row["school_year_id"]): ?>
+                                <option selected value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"] . " (current)"); ?></option>
+                              <?php else: ?>
+                                <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"] . " (current)"); ?></option>
+                              <?php endif; ?>
+                            <?php else: ?>
+                              <?php if(isset($_GET["school_year"]) && $_GET["school_year"] == $row["school_year_id"]): ?>
+                                <option selected value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                              <?php else: ?>
+                                <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                              <?php endif; ?>
+                              
+                            <?php endif; ?>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                
+              </div>
+
+            </div>
+            </form>
+              </div>
+
+            </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -37,7 +80,7 @@
                     <th>Gender</th>
                     <th>Sponsor</th>
                     <th>Facilitator</th>
-                    <th>Status</th>
+                    <th>School Year</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -54,7 +97,7 @@
                     <td><?php echo($s["sex"]); ?></td>
                     <td><?php echo($s["fullname"]); ?></td>
                     <td><?php echo($s["responsible"]); ?></td>
-                    <td><?php echo($s["current_status"]); ?></td>
+                    <td><?php echo($s["school_year"]); ?></td>
                 </tr>
                   <?php endforeach; ?>
                  

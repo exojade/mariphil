@@ -64,6 +64,10 @@
 			$year_type = $year_status[0]["type"];
 			// $year_level_id = $year_status[0]["type"];
 
+			$scholar = query("select * from scholars where scholar_id = ?", $prof_id);
+			$scholar = $scholar[0];
+			// dump($scholar);
+
 
 			$string_query = ("
 			update scholars set 
@@ -103,12 +107,24 @@
 				mother_occupation_address = '".strtoupper($_POST["mother_office"])."',
 				mother_income = '".strtoupper($_POST["mother_income"])."',
 				mother_education_attainment = '".strtoupper($_POST["mother_educational"])."',
-				mother_school = '".strtoupper($_POST["mother_school"])."',
-				current_status = 'APPLICANT - IN REVIEW'
+				mother_school = '".strtoupper($_POST["mother_school"])."'
 				where scholar_id = '".$prof_id."'
 			");
 			//dump($string_query);
 			query($string_query);
+
+			$to_be_status = "";
+			
+			if($scholar["current_status"] == "APPLICANT"):
+				query("update scholars set current_status = 'APPLICANT - IN REVIEW' where scholar_id = ?", $prof_id);
+				$to_be_status = "APPLICANT - IN REVIEW";
+			elseif($scholar["current_status"] == "APPLICANT - IN REVIEW (FOR UPDATE)"):
+				query("update scholars set current_status = 'APPLICANT - IN REVIEW' where scholar_id = ?", $prof_id);
+				$to_be_status = "APPLICANT - IN REVIEW";
+			elseif($scholar["current_status"] == "APPLICANT - TO BE INTERVIEWED (FOR UPDATE)"):
+				$to_be_status = "APPLICANT - TO BE INTERVIEWED'";
+				query("update scholars set current_status = 'APPLICANT - TO BE INTERVIEWED' where scholar_id = ?", $prof_id);
+			endif;
 
 			$fullname = strtoupper($_POST["lastname"] . "_" . $_POST["firstname"]);
 			$fullname = str_replace(' ', '_', $fullname);
@@ -203,7 +219,7 @@
 			if (query("insert INTO scholar_tracker (track_id, scholar_id, status, user_id, 
 				date_created,time_created, timestamp) 
                   VALUES(?,?,?,?,?,?,?)", 
-              $track_id, $prof_id, "APPLICANT - IN REVIEW", $prof_id, date("Y-m-d"),
+              $track_id, $prof_id, $to_be_status, $prof_id, date("Y-m-d"),
 			   date("H:i:s"), time()) === false)
               {
                   echo("not_success");
@@ -237,7 +253,7 @@
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
-				"message" => "Success",
+				"message" => "Your registration has been completed",
 				"link" => "index",
 				];
 				echo json_encode($res_arr); exit();

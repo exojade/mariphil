@@ -37,6 +37,51 @@
       <div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
+
+
+
+
+        <div class="modal fade" id="addSY" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add School Year</h4>
+          
+            </div>
+            <div class="modal-body">
+            <form class="generic_form_trigger" data-url="index">
+                <input type="hidden" name="action" value="addSY">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Start Year</label>
+                      <input name="start_year"  type="text" class="form-control"  placeholder="YYYY" required pattern="\d{4}">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>End Year</label>
+                      <input name="end_year"  type="text" class="form-control"  placeholder="YYYY" required pattern="\d{4}">
+                    </div>
+                  </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+
+
+        <a href="#" data-toggle="modal" data-target="#addSY"  class="btn btn-primary">Add School Year</a>
+
+        <br>
+        <br>
+
         <?php $current_sy = query("select * from school_year"); ?>
         <?php $applicant_sy = query("select * from school_year"); ?>
         <form class="generic_form_trigger" data-url="index">

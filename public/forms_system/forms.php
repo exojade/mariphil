@@ -426,13 +426,254 @@
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",
-					"message" => "Success",
+					"message" => "Print form success",
 					"link" => $path,
 					"newlink" => "newlink",
 					];
 					echo json_encode($res_arr); exit();
 			
 		endif;
+
+		if($_POST["action"] == "consolidateForm"):
+
+		// dump($_POST);
+
+
+		$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];      
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			// dump($fontData);
+				// $base_url = the_base_url();
+				// $options = urlencode(serialize($_POST));
+                // $webpath = $base_url . "/mariphil_system/forms?action=printForm&options=".$options;
+
+				$mpdf = new \Mpdf\Mpdf([
+					'mode' => 'utf-8',
+					'format' => 'FOLIO-P',
+					'margin_top' => 15,
+					'margin_left' => 5,
+					'margin_right' => 5,
+					'margin_bottom' => 5,
+					'margin_footer' => 1,
+					'fontDir' => array_merge($fontDirs, [
+						$_SERVER['DOCUMENT_ROOT'] . '/mariphil_system/resources/fonts',
+					]),
+					'fontdata' => $fontData + [
+						'barlow' => [
+							'R' => 'Barlow-Regular.ttf',
+							'B' => 'Barlow-Bold.ttf',
+						],
+						
+					],
+					'default_font' => 'barlow' // Use the font name without the file extension
+				]);
+			
+			
+				$mpdf->SetFont('barlow');
+				// $font = __DIR__ . '/../../resources/fonts/Barlow-Regular.ttf';
+				// dump($font);
+				// dump($mpdf->SetFont('Barlow'));
+
+				$html = "";
+				
+				$html.='
+
+				<style>
+
+			
+
+					hr{
+					margin-bottom: 2px;
+					margin-top: 2px;
+					}
+
+					html *
+					{
+						font-family: "Times New Roman";
+					
+					}
+					section{
+					border: 4px solid black;
+					padding:10px;
+					height:1600px;
+					}
+					.tabular, .tabular th, .tabular td {
+					border: 1px solid black !important;
+					}
+					.table td{
+						border: 1px solid black;
+					}
+
+					.table{
+					margin-bottom:1px !important;
+					border: 1px solid #dee2e6;
+					}
+
+					#fordtr{font-size:20px;}
+					#fordtr td{padding: 1px !important;}
+					#fordtr th{padding: 7px !important;}
+
+					p{
+					
+					font-size: 150%;
+					
+					}
+
+					ul li{
+					font-size: 150%;
+					}
+
+					hr{
+					height:2px;border-width:6;color:#254C0B !important;background-color:#254C0B !important;
+					border-top: 1px solid #254C0B;
+					}
+						</style>
+				
+				';
+
+				$forms = query("
+				SELECT sy.school_year, mm.*,f.*, s.firstname, s.middlename, s.lastname FROM monthly_monitoring mm
+				LEFT JOIN forms f
+				ON mm.form_id = f.form_id
+				LEFT JOIN scholars s
+				ON s.scholar_id = mm.scholar_id
+				left join school_year sy
+				on sy.school_year_id = f.school_year_id
+				WHERE mm.form_id = ?
+				", $_POST["form_id"]);
+
+				$faci = query("select * from users where user_id = ?", $forms[0]["created_by"]);
+				$faci = $faci[0];
+				// dump($scholar);
+
+				$html .='
+
+
+				<table width="100%" style="border-collapse: collapse;">
+					<tr>
+						<td width="35%" style="vertical-align: top; text-align:right; padding: 5px;">
+							<img style="float:right;" src="resources/mariphil.png" width="110">
+						</td>
+						<td width="50%" style="vertical-align: top; padding: 5px;">
+							<h3 style="font-size:300%;line-height:0.7; color:#254C0B;padding-top:15px;"><b>MARIPHIL<br>FOUNDATION</b></h3>
+						</td>
+					</tr>
+				</table>
+				<p style="text-align:center;background-color:#254C0B; color:#fff; padding:10px; auto 10px auto;font-weight:700;font-size:180%;"><b>Project MARIPHIL Foundation Inc.</b></p>
+
+				<table width="100%" style="border-collapse: collapse;">
+					<tr>
+						<td width="35%" style="vertical-align: top; padding: 5px;">
+							<p> '.$forms[0]["form_type"].'</p>
+						</td>
+						<td width="35%" style="vertical-align: top; padding: 5px;">
+						<p>Type: '.$forms[0]["form_kind"].'</p>
+						</td>
+						<td width="35%" style="vertical-align: top; padding: 5px;">
+						<p>SY: '.$forms[0]["school_year"].'</p>
+						</td>
+					</tr>
+				</table>
+				<br>
+
+				<table class="table" width="100%">
+				<thead>
+					<tr>
+						<td><b>SCHOLAR</b></td>
+						<td><b>GRADE</b></td>
+						<td><b>REMARKS</b></td>
+						<td><b>STATUS</b></td>
+					</tr>
+				</thead>
+				<tbody>';
+					foreach($forms as $row):
+						$html.='<tr>';
+							$html.='<td>'.$row["firstname"] . ' ' . $row["lastname"].'</td>';
+							$html.='<td>'.$row["grades"].'</td>';
+							$html.='<td>'.strtoupper($row["remarks"]).'</td>';
+							$html.='<td>'.$row["form_status"].'</td>';
+						$html.='</tr>';
+					endforeach;
+				$html.='
+				</tbody>
+				</table>
+
+			
+<br>
+<br>
+
+				
+
+
+
+      <div style="position:absolute; bottom:0; margin-bottom:30px; width: 100%">
+	  <table width="100%" style="border-collapse: collapse; position:absolute; bottom:0; margin-bottom:30px; width: 100%">
+        <tr>
+      
+            <td width="40%" style="vertical-align: top; padding: 5px;">
+			<p style="border-bottom: 4px solid black;text-align:center;">'.$faci["fullname"].'</p>
+			<p>FACILITATOR</p>
+            </td>
+        </tr>
+    </table>
+</div>
+				';
+
+				// $html = '<p style="font-weight: bold;">This text is in Arial Bold.</p>';
+
+		
+
+
+				$filename = "CONSOLIDATEDQFORM";
+				// dump($filename);
+				$path = "resources/qforms/".$filename.".pdf";
+
+				
+				$mpdf->WriteHTML($html);
+				$mpdf->Output($path, \Mpdf\Output\Destination::FILE);
+				// $filename = "CASKET_REPORT";
+				// $path = "reports/".$filename.".pdf";
+			
+				// $exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait  "'.$webpath.'" '.$path.'';
+				// dump($exec);
+				// exec($exec);
+				// $load[] = array('path'=>$path, 'filename' => $filename, 'result' => 'success');
+				// $json = array('info' => $load);
+				// echo json_encode($json);
+
+
+		
+
+                // $filename = "QForm";
+				// $path = "resources/qforms/".$filename.".pdf";
+				// $exec = '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe" -O portrait --image-dpi 300 "'.$webpath.'" '.$path.'';
+				// // dump($webpath);
+				// exec($exec);
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Print form success",
+					"link" => $path,
+					"newlink" => "newlink",
+					];
+					echo json_encode($res_arr); exit();
+
+		endif;
+
+
+		if($_POST["action"] == "qformFilter"):
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Filter success",
+				"link" => "forms?action=list&school_year=".$_POST["school_year"],
+				];
+				echo json_encode($res_arr); exit();
+		endif;
+
+
 
 		if($_POST["action"] == "delete_achievement"):
 			query("delete from monthly_monitoring_achievements where achievement_id = ?", $_POST["achievement_id"]);
@@ -706,12 +947,47 @@
 
 		if($_GET["action"] == "list"){
 
-			$forms = query("select * from forms f
+
+
+			if(!isset($_GET["school_year"])):
+				$school_year = query("select school_year_id from school_year where current_status = 'active'");
+				$school_year = $school_year[0];
+				$forms = query("select * from forms f
+							left join school_year sy
+							on sy.school_year_id = f.school_year_id where created_by = ?
+							and f.school_year_id = ?", $_SESSION["mariphil"]["userid"], $school_year["school_year_id"]);
+			else:
+				if($_GET["school_year"] == ""):
+					$school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					$school_year = $school_year[0];
+					$forms = query("select * from forms f
 							left join school_year sy
 							on sy.school_year_id = f.school_year_id where created_by = ?", $_SESSION["mariphil"]["userid"]);
+				
+				else:
+					$forms = query("select * from forms f
+					left join school_year sy
+					on sy.school_year_id = f.school_year_id where created_by = ?
+					and f.school_year_id = ?
+					", $_SESSION["mariphil"]["userid"], $_GET["school_year"]);
+				endif;
+			endif;
+
+			// render("public/scholars_system/applicants_list.php",[
+			// 	"applicants" => $applicants,
+			// ]);
+
+
+
+			
 			render("public/forms_system/forms_list.php",[
 				"forms" => $forms,
 			]);
+
+
+
+
+
 
 			
 		}

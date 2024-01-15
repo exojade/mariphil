@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Lockscreen</title>
+  <title>Mariphil Scholarship Information System</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -60,8 +60,21 @@ background-image: url('resources/background.jpg');
 
   </div>
   <div class="help-block text-center" style="color:#fff;">
-    Enter the code sent to you on your email address
+    Enter the code sent to you on your email address<br>
+<?php $user = query("select * from users where user_id = ?", $_GET["id"]); $user = $user[0];?>
+
+  <form class="generic_form_trigger" data-url="otp">
+    <input type="hidden" name="action" value="resend_otp">
+    <input type="hidden" name="user_id" value="<?php echo($_GET["id"]); ?>">
+    <input type="hidden" name="otp" value="<?php echo($user["otp"]); ?>">
+    <input type="hidden" name="fullname" value="<?php echo($user["fullname"]); ?>">
+    <input type="hidden" name="username" value="<?php echo($user["username"]); ?>">
+    <button type="submit" class="btn btn-warning">Resend OTP</button>
+
+  </form>
   </div>
+
+  
 </div>
 </div>
 

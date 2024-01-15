@@ -177,7 +177,7 @@
 
 
 
-				$scholars = query("select aa.*, CONCAT(firstname, ' ', middlename, ' ', lastname) AS fullname from allowance_scholar aa
+				$scholars = query("select aa.*, CONCAT(firstname, ' ', middlename, ' ', lastname) AS fullname, s.year_level, s.year_type from allowance_scholar aa
                   left join scholars s
                   on s.scholar_id = aa.scholar_id
                   where aa.allowance_id = ?", $_POST["allowance_id"]);
@@ -262,6 +262,8 @@
 				<tr>
 					<td></td>
 					<td><b>Scholar\'s Name</b></td>
+					<td><b>Type</b></td>
+					<td><b>Level</b></td>
 					<td><b>Status</b></td>
 					<td><b>Amount</b></td>
 					<td><b>Date CLAIMED / RETURNED</b></td>
@@ -278,6 +280,8 @@
 					<tr>
 						<td>'.$i.'</td>
 						<td>'.$row["fullname"].'</td>
+						<td>'.$row["year_type"].'</td>
+						<td>'.$row["year_level"].'</td>
 						<td>'.$row["status"].'</td>
 						<td>'.to_peso($row["amount"]).'</td>';
 						$date = "";
@@ -401,7 +405,9 @@
 				and responsible = ? and school_year_id = ?", $_POST["facilitator"], $_POST["sy"]);
 				foreach($scholars as $s):
 					// dump($YearLevel[$s["year_level_id"]]);
-					$amount = $YearLevel[$s["year_level_id"]]["allowance"];
+					// $amount = $YearLevel[$s["year_level_id"]]["allowance"];
+					$amount = $_POST[$s["year_level_id"]];
+
 
 					if (query("insert INTO allowance_scholar (
 						allowance_id, scholar_id, amount,
@@ -467,6 +473,135 @@
 					];
 					echo json_encode($res_arr); exit();
 		}
+
+
+
+		// if($_POST["action"] == "addAllowance"){
+		// 	dump($_POST);
+
+
+		// 	$queryFormat_email = '("%s","%s","%s","%s","%s","%s","%s")';
+		// 	$queryFormat_receipients = '("%s","%s","%s","%s")';
+		// 	$queryFormat_thread = '("%s","%s")';
+
+		// 	$inserts_email = [];
+		// 	$inserts_receipients = [];
+		// 	$inserts_thread = [];
+
+		// 	$year_level = query("select * from year_level");
+		// 	$YearLevel = [];
+		// 	foreach($year_level as $row):
+		// 		$YearLevel[$row["level_id"]] = $row;
+		// 	endforeach;
+
+		// 	$school_year = query("select * from school_year where school_year_id = ?", $_POST["sy"]);
+		// 	$school_year = $school_year[0];
+
+		// 	$timestamp = mktime(0, 0, 0, $_POST["month"], 1, date("Y"));
+		// 	$monthName = date("F", $timestamp);
+		
+		// 	$allowance = create_uuid("AA");
+
+		// 	$scholars = query("select * from scholars where current_status = 'SCHOLAR'
+		// 		and responsible = ? and school_year_id = ?", $_POST["facilitator"], $_POST["sy"]);
+		// 	if(empty($scholars)):
+		// 		$res_arr = [
+		// 			"result" => "failed",
+		// 			"title" => "Failed",
+		// 			"message" => "No Scholars Enrolled on this School Year",
+		// 			// "link" => "refresh",
+		// 			];
+		// 			echo json_encode($res_arr); exit();
+		// 	endif;
+
+
+		// 	if (query("insert INTO allowance (
+		// 				allowance_id, facilitator, 
+		// 				school_year_id, date_created, time_created, timestamp,
+		// 				month)
+		// 	  VALUES(?,?,?,?,?,?,?)", 
+		// 		$allowance, $_POST["facilitator"], $_POST["sy"], date("Y-m-d"), date("H:i:s"),
+		// 		time(), $_POST["month"]) === false)
+		// 		{
+		// 			$res_arr = [
+		// 				"result" => "failed",
+		// 				"title" => "Failed",
+		// 				"message" => "Allowance for this month has already been created!",
+		// 				"link" => "refresh",
+		// 				];
+		// 				echo json_encode($res_arr); exit();
+		// 		}
+
+		// 		$scholars = query("select * from scholars where current_status = 'SCHOLAR'
+		// 		and responsible = ? and school_year_id = ?", $_POST["facilitator"], $_POST["sy"]);
+		// 		foreach($scholars as $s):
+		// 			// dump($YearLevel[$s["year_level_id"]]);
+		// 			$amount = $YearLevel[$s["year_level_id"]]["allowance"];
+
+		// 			if (query("insert INTO allowance_scholar (
+		// 				allowance_id, scholar_id, amount,
+		// 				date_claimed, status)
+		// 				VALUES(?,?,?,?,?)", 
+		// 					$allowance, $s["scholar_id"], $amount,"","FOR RELEASE") === false)
+		// 					{
+		// 						$res_arr = [
+		// 							"result" => "failed",
+		// 							"title" => "Failed",
+		// 							"message" => "Form Done",
+		// 							"link" => "refresh",
+		// 							];
+		// 							echo json_encode($res_arr); exit();
+		// 					}
+
+
+
+		// 					$thread_id = create_uuid("THREAD");
+		// 					$email_id = create_uuid("MAIL");
+
+		// 					$message = "
+							
+		// 					Dear ".$s["firstname"] . " " . $s["lastname"] .",
+		// 					<br><br>
+		// 					You may claim your allowance for school year: ".$school_year["school_year"]." and month: ".$monthName.". 
+		// 					<br>Kindly visit the office and sign in order to be released.<br><br> 
+		// 					Amount: ".to_peso($amount).". <br><br>
+		// 					".$_SESSION["mariphil"]["fullname"]."<br>
+		// 					Facilitator
+		// 					";
+							
+		// 					$inserts_mail[] = sprintf( $queryFormat_email, 
+		// 											$email_id, $_SESSION["mariphil"]["userid"],
+		// 											"ALLOWANCE RELEASE",$message, time(), "NO",  $_SESSION["mariphil"]["fullname"]
+		// 										);
+		// 					$inserts_receipients[] = sprintf( $queryFormat_receipients, 
+		// 						$email_id, $s["scholar_id"], "unread", $s["firstname"] . " " . $s["lastname"]
+		// 					);
+
+		// 					$inserts_thread[] = sprintf( $queryFormat_thread, 
+		// 						$thread_id, $email_id
+		// 					);
+
+
+		// 		endforeach;
+
+
+		// 		$query = implode( ",", $inserts_mail );
+		// 		query('insert into email(email_id, sender_id, subject, message, timestamp, threadbool, sender_name) VALUES '.$query);
+
+		// 		$query = implode( ",", $inserts_receipients );
+		// 		query('insert into email_receipients(email_id, receipient_id, isread, receipient_name) VALUES '.$query);
+
+		// 		$query = implode( ",", $inserts_thread );
+		// 		query('insert into email_thread(thread_id, email_id) VALUES '.$query);
+
+		// 		$res_arr = [
+		// 			"result" => "success",
+		// 			"title" => "Success",
+		// 			"message" => "Success",
+		// 			"link" => "refresh",
+		// 			];
+		// 			echo json_encode($res_arr); exit();
+		// }
 		
     }
 	else {
@@ -512,6 +647,24 @@
 
 			
 		}
+
+
+		if($_GET["action"] == "newAllowance"){
+
+			$current_sy = query("select * from school_year where current_status = 'active'");
+			$current_sy = $current_sy[0];
+			$scholars = query("select * from scholars where school_year_id = ?
+								and responsible = ?
+								group by year_level_id
+								", $current_sy["school_year_id"], $_SESSION["mariphil"]["userid"]);
+			// dump($scholars);
+			render("public/allowance_system/new_allowance.php",[
+				// "allowance" => $allowance,
+				"scholars" => $scholars,
+			]);
+
+		}
+
 
 		if($_GET["action"] == "details"){
 			$allowance = query("select u.fullname, a.*, sy.school_year from allowance a

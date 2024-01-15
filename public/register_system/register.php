@@ -109,7 +109,7 @@
                 $res_arr = [
                     "result" => "success",
                     "title" => "Success",
-                    "message" => "Success",
+                    "message" => "Your Registration has been completed!",
                     "link" => "otp?id=".$user_id,
                     ];
                     echo json_encode($res_arr); exit();

@@ -2,7 +2,7 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {	
 		// dump($_POST);
-        if($_POST["action"] == "entered_otp"){
+        if($_POST["action"] == "entered_otp"):
             $user = query("select * from users where user_id = ?", $_POST["user_id"]);
             $user = $user[0];
             if($user["otp"] != $_POST["otp"]){
@@ -28,7 +28,43 @@
 
 
             }
-        }
+
+        elseif($_POST["action"] == "resend_otp"):
+
+            $otp = query("select * from users where user_id = ?", $_POST["user_id"]);
+            // dump($otp);
+            $otp = $otp[0];
+
+
+            $ch = curl_init();
+            $parameters = array(
+                'otp' => $otp["otp"], //Your API KEY
+                'username' => $otp["username"],
+                'fullname' => $otp["fullname"],
+                'user_id' => $_POST["user_id"],
+            );
+            curl_setopt( $ch, CURLOPT_URL,'http://api.panabocity.gov.ph/mail_action' );
+            curl_setopt( $ch, CURLOPT_POST, 1 );
+
+            //Send the parameters set above with the request
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $parameters ) );
+
+            // Receive response from server
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $output = curl_exec( $ch );
+            curl_close ($ch);
+
+            //Show the server response
+            // echo $output;
+            // dump($output);
+            echo $output; exit();
+
+            
+
+
+        endif;
+
+
     }
     else
     {

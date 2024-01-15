@@ -10,6 +10,8 @@
           <div class="col-sm-6">
             <h1>List of Online Applicants</h1>
           </div>
+
+          
         
         </div>
       </div><!-- /.container-fluid -->
@@ -24,7 +26,40 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"></h3>
+                <div class="row">
+                  <div class="col-sm-6">
+
+                  </div>
+                  <div class="col-sm-6">
+            <form class="generic_form_no_trigger_and_result" data-url="scholars">
+            <input type="hidden" name="action" value="filterSY">
+            <div class="row">
+              <div class="col-md-6">
+              <div class="form-group">
+              <?php $school_year = query("select * from school_year order by idd desc"); ?>
+                        <select name="school_year" class="form-control">
+                          <option selected value="">Select School Year</option>
+                          <?php foreach($school_year as $row): ?>
+                            <?php if($row["current_status"] == "active"): ?>
+                              <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"] . " (current)"); ?></option>
+                            <?php else: ?>
+                              <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                            <?php endif; ?>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                
+              </div>
+
+            </div>
+            </form>
+          </div>
+                </div>
+              
               </div>
               <!-- /.card-header -->
               <div class="card-body">

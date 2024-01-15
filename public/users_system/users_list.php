@@ -1,4 +1,7 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -188,6 +191,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th>Update</th>
                     <th>Action</th>
                     <th>Username / Email</th>
                     <th>Role</th>
@@ -199,7 +203,23 @@
                   <?php foreach($users as $u):  ?>
                     <tr>
                       <td>
-                        <a href="#" title="Update User" data-toggle="modal" data-target="#updateUser<?php echo($u["user_id"]); ?>" class="btn btn-warning">Update</a>
+                        <a href="#" title="Update User" data-toggle="modal" data-target="#updateUser<?php echo($u["user_id"]); ?>" class="btn btn-sm btn-block btn-warning">Update</a>
+                      </td>
+                      <td>
+                        <?php if($u["status"] == "active"): ?>
+                          <form class="generic_form_trigger" data-url="users">
+                            <input type="hidden" name="action" value="deactivateUser">
+                            <input type="hidden" name="user_id" value="<?php echo($u["user_id"]); ?>">
+                            <button type="submit" class="btn btn-danger btn-sm btn-block">Deactivate</button>
+                          </form>
+                        <?php elseif($u["status"] == "inactive"): ?>
+                          <form class="generic_form_trigger" data-url="users">
+                            <input type="hidden" name="action" value="activateUser">
+                            <input type="hidden" name="user_id" value="<?php echo($u["user_id"]); ?>">
+                            <button type="submit" class="btn btn-success btn-sm btn-block">Activate</button>
+                          </form>
+                        <?php endif; ?>
+
                       </td>
                       <td><?php echo($u["username"]); ?></td>
                       <td><?php echo(strtoupper($u["role"])); ?></td>
@@ -222,7 +242,19 @@
     <!-- /.content -->
   </div>
 
-  <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="AdminLTE_new/plugins/jszip/jszip.min.js"></script>
+<script src="AdminLTE_new/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="AdminLTE_new/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script>
             function preview2(event) {
     // Get the parent modal of the clicked file input
@@ -241,5 +273,11 @@
                 document.getElementById('formFile').value = null;
                 frame.src = "";
             }
+
+    //   $('#example1').DataTable({
+   
+    // });
+
+
         </script>
   <?php require("layouts/footer.php") ?>

@@ -10,6 +10,12 @@
   <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <link rel="stylesheet" href="AdminLTE_new/plugins/dropzone/min/dropzone.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
+
+  <style>
+.validation-error{
+  border-color: red;
+}
+    </style>
 <div class="content-wrapper">
     <section class="content">
 
@@ -81,7 +87,7 @@
                   <?php $scholar = $scholar[0]; ?>
                   <div class="bs-stepper-content">
                     <!-- your steps content here -->
-                    <div id="personal-profile" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                    <div id="personal-profile" class="content" role="tabpanel" aria-labelledby="logins-part-trigger" data-step="1">
                       <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
@@ -107,19 +113,19 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Street / House Number / Purok</label>
-                              <input name="address_home" required type="text" class="form-control"  placeholder="Street / House Number / Purok">
+                              <input value="<?php echo($scholar["address_home"]); ?>" name="address_home" required type="text" class="form-control"  placeholder="Street / House Number / Purok">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Barangay</label>
-                              <input name="address_barangay" required type="text" class="form-control" placeholder="Barangay">
+                              <input value="<?php echo($scholar["address_barangay"]); ?>" name="address_barangay" required type="text" class="form-control" placeholder="Barangay">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Place / Town / City</label>
-                              <input name="address_city" required type="text" class="form-control" placeholder="Place / Town / City">
+                              <input value="<?php echo($scholar["address_city"]); ?>" name="address_city" required type="text" class="form-control" placeholder="Place / Town / City">
                             </div>
                           </div>
                       </div>
@@ -128,19 +134,19 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>District / Region</label>
-                              <input name="address_region" required type="text" class="form-control"  placeholder="District / Region">
+                              <input name="address_region" value="<?php echo($scholar["address_region"]); ?>" required type="text" class="form-control"  placeholder="District / Region">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Province</label>
-                              <input name="address_province" required type="text" class="form-control" placeholder="Province">
+                              <input name="address_province" value="<?php echo($scholar["address_province"]); ?>" required type="text" class="form-control" placeholder="Province">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Zip Code</label>
-                              <input name="zipcode" required type="number"
+                              <input name="zipcode" value="<?php echo($scholar["address_zipcode"]); ?>" required type="number"
  
  onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" placeholder="Zip Code">
                             </div>
@@ -152,20 +158,25 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Birthdate</label>
-                              <input  value="<?php echo($scholar["birthdate"]); ?>" name="birthdate" required type="date" class="form-control"  placeholder="Birthdate">
+                              <input max="<?php echo date('Y-m-d'); ?>" value="<?php echo($scholar["birthdate"]); ?>" name="birthdate" required type="date" class="form-control"  placeholder="Birthdate">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Birth Place</label>
-                              <input name="birthplace" required type="text" class="form-control"  placeholder="---">
+                              <input value="<?php echo($scholar["birthplace"]); ?>" name="birthplace" required type="text" class="form-control"  placeholder="---">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Sex</label>
                               <select name="gender" class="form-control select2" >
-                                <option selected disabled value="">Please select Sex</option>
+                                <?php if($scholar["sex"] == ""): ?>
+                                  <option disabled selected value="">Please select Sex</option>
+                                <?php else: ?>
+                                  <option selected value="<?php echo($scholar["sex"]); ?>"><?php echo($scholar["sex"]); ?></option>
+                                  <option disabled value="">Please select Sex</option>
+                                <?php endif; ?>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                               </select>
@@ -178,45 +189,21 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Highest Educational Attainment</label>
-                              <input name="educational_attainment" required type="text" class="form-control"  placeholder="Educational Attainment">
+                              <input value="<?php echo($scholar["education_attainment"]); ?>" name="educational_attainment" required type="text" class="form-control"  placeholder="Educational Attainment">
                             </div>
                           </div>
                           <div class="col-md-8">
                             <div class="form-group">
                               <label>Name of School</label>
-                              <input name="name_school" required type="text" class="form-control" placeholder="Name of School">
+                              <input value="<?php echo($scholar["name_school"]); ?>" name="name_school" required type="text" class="form-control" placeholder="Name of School">
                             </div>
                           </div>
                       </div>
-                      <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                      <!-- <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button> -->
+                      <button type="button" class="btn btn-primary" onclick="validateAndProceed(1)">Next</button>
                     </div>
-                    <div id="scholarship-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
-
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Name of School</label>
-                        <input type="text" required name="school_name" class="form-control" id="exampleInputEmail1" placeholder="Enter ...">
-                      </div>
-                     
-                      <div class="form-group">
-                        <label>Year Level</label>
-                        <select id="yearLevelSelect" name="year_level" required class="form-control">
-                        <?php $year_level = query("select * from year_level order by level_id asc"); ?>
-                          <option value="" selected disabled>Please select year level</option>
-                          <?php foreach($year_level as $row): ?>
-                            <option data-type="<?php echo($row["type"]); ?>" value="<?php echo($row["level_id"]); ?>">[<?php echo($row["type"]); ?>] - <?php echo($row["year_level"]); ?></option>
-                          <?php endforeach; ?>
-                        </select>
-                      </div>
-
-                      <div class="form-group" id="courseInput" style="display: none;">
-                          <label for="course">Enter Course</label>
-                          <input type="text" name="course" class="form-control">
-                      </div>
-
-                      <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                      <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
-                    </div>
-                    <div id="parent-part" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger">
+                    
+                    <div id="parent-part" data-step="5" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger">
                     <div class="form-horizontal">
                       <div class="row">
                         <div class="col-md-6">
@@ -227,26 +214,26 @@
                           <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Name *</label>
                             <div class="col-sm-10">
-                              <input name="father_name" type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input value="<?php echo($scholar["father_name"]); ?>" name="father_name" required type="text" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">
                           
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
                             <div class="col-sm-9">
-                              <input name="father_dob" max="<?php echo date("Y-m-d"); ?>" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input value="<?php echo($scholar["father_birthdate"]); ?>" name="father_dob" required max="<?php echo date("Y-m-d"); ?>" type="date" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Home Address *</label>
                             <div class="col-sm-9">
-                              <input name="father_address" type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
+                              <input value="<?php echo($scholar["father_address"]); ?>" name="father_address" required type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="father_contact" type="number"
+                              <input value="<?php echo($scholar["father_contact"]); ?>" name="father_contact" required type="number"
  
  onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
@@ -254,7 +241,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Present Occupation. *</label>
                             <div class="col-sm-8">
-                              <input type="text" name="father_occupation" class="form-control" id="inputPassword3" placeholder="---">
+                              <input type="text" value="<?php echo($scholar["father_occupation"]); ?>" required name="father_occupation" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -267,7 +254,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
                             <div class="col-sm-7">
-                              <input name="father_income" type="number"
+                              <input value="<?php echo($scholar["father_income"]); ?>" required name="father_income" type="number"
  
  onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
@@ -276,8 +263,12 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
                             <div class="col-sm-6">
-                            <select name="father_educational" class="form-control select2" >
+                            <select required name="father_educational" class="form-control select2" >
+                              <?php if($scholar["father_education_attainment"] != ""): ?>
+                                <option selected value="<?php echo($scholar["father_education_attainment"]); ?>"><?php echo($scholar["father_education_attainment"]); ?></option>
+                              <?php else: ?>
                                 <option selected disabled value="">Please select Educational Attainment</option>
+                              <?php endif; ?>
                                 <option value="College Graduate">College Graduate</option>
                                 <option value="College Level">College Level</option>
                                 <option value="Vocational">Vocational</option>
@@ -294,7 +285,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Name of School *</label>
                             <div class="col-sm-8">
-                              <input name="father_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input value="<?php echo($scholar["father_school"]); ?>" name="father_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
 
@@ -308,26 +299,26 @@
                           <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Name *</label>
                             <div class="col-sm-10">
-                              <input name="mother_name" type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input value="<?php echo($scholar["mother_name"]); ?>" required name="mother_name" type="text" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">
                             
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
                             <div class="col-sm-9">
-                              <input max="<?php echo date("Y-m-d"); ?>" name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                              <input value="<?php echo($scholar["mother_birthdate"]); ?>" required max="<?php echo date("Y-m-d"); ?>" name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Home Address *</label>
                             <div class="col-sm-9">
-                              <input name="mother_address" type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
+                              <input value="<?php echo($scholar["mother_address"]); ?>" required name="mother_address" type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
                             <div class="col-sm-9">
-                              <input name="mother_contact" type="number"
+                              <input value="<?php echo($scholar["mother_contact"]); ?>" required name="mother_contact" type="number"
  
  onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
@@ -335,20 +326,20 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Present Occupation. *</label>
                             <div class="col-sm-8">
-                              <input name="mother_occupation" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input value="<?php echo($scholar["mother_occupation"]); ?>" required name="mother_occupation" type="text" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-5 col-form-label">Office Address. (optional)</label>
                             <div class="col-sm-7">
-                              <input name="mother_office" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input name="mother_office" value="<?php echo($scholar["mother_occupation_address"]); ?>" type="text" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
                           
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
                             <div class="col-sm-7">
-                              <input name="mother_income" type="number"
+                              <input required value="<?php echo($scholar["mother_income"]); ?>" name="mother_income" type="number"
  
     onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
@@ -357,8 +348,12 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
                             <div class="col-sm-6">
-                            <select name="mother_educational" class="form-control select2" >
+                            <select required name="mother_educational" class="form-control select2" >
+                              <?php if($scholar["mother_education_attainment"] != ""): ?>
+                                <option selected  value="<?php echo($scholar["mother_education_attainment"]); ?>"><?php echo($scholar["mother_education_attainment"]); ?></option>
+                              <?php else: ?>
                                 <option selected disabled value="">Please select Educational Attainment</option>
+                              <?php endif; ?>
                                 <option value="College Graduate">College Graduate</option>
                                 <option value="College Level">College Level</option>
                                 <option value="Vocational">Vocational</option>
@@ -374,7 +369,7 @@
                           <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Name of School *</label>
                             <div class="col-sm-8">
-                              <input name="mother_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                              <input value="<?php echo($scholar["mother_school"]); ?>" required name="mother_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
 
@@ -389,55 +384,132 @@
                       </div>
 </div>
                       <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                      <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                      <button type="button" class="btn btn-primary" onclick="validateAndProceed(5)">Next</button>
                     </div>
 
 
-                    <div id="children-part" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger">
+                    <div id="scholarship-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger"  data-step="2">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Name of School</label>
+                        <input value="<?php echo($scholar["school_name"]); ?>" type="text" required name="school_name" class="form-control" id="exampleInputEmail1" placeholder="Enter ...">
+                      </div>
+                     
+                      <div class="form-group">
+                        <label>Year Level</label>
+                        <select id="yearLevelSelect" name="year_level" required class="form-control">
+                        <?php $year_level = query("select * from year_level order by level_id asc"); ?>
+                        <?php if($scholar["year_level"] == ""): ?>
+                          <option value="" selected disabled>Please select year level</option>
+                        <?php endif; ?>
+                          <?php foreach($year_level as $row): ?>
+
+                            <?php if($scholar["year_level_id"] == $row["level_id"]): ?>
+                              <option selected data-type="<?php echo($row["type"]); ?>" value="<?php echo($row["level_id"]); ?>">[<?php echo($row["type"]); ?>] - <?php echo($row["year_level"]); ?></option>
+                            <?php else: ?>
+                              <option data-type="<?php echo($row["type"]); ?>" value="<?php echo($row["level_id"]); ?>">[<?php echo($row["type"]); ?>] - <?php echo($row["year_level"]); ?></option>
+                            <?php endif; ?>
+
+                            
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <div id="courseInputDiv" <?php if($scholar["course"] != ""): ?>
+
+<?php else: ?>
+  style="display: none;"
+<?php endif; ?>>
+                      
+                      <div class="form-group">
+                        <label>Courses</label>
+                        <?php $course = query("select * from courses"); ?>
+                        <select name="course" required class="form-control" id="courseInput" style="width: 100%;" >
+                        <option value="" disabled>Please select Course</option>
+                        <?php if($scholar["course"] != ""): ?>
+                            <option selected value="<?php echo($scholar["course"]); ?>"><?php echo($scholar["course"]); ?></option>
+                          <?php endif; ?>
+                        <?php foreach($course as $row): ?>
+                          <option value="<?php echo($row["course_name"]); ?>"><?php echo($row["course_name"]); ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                      </div>
+                        </div>
+
+
+
+
+             
+
+                      <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                      <button type="button" class="btn btn-primary"  onclick="validateAndProceed(2)">Next</button>
+                    </div>
+
+
+                    <div id="children-part" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger" >
                 
                       <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
                       <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
                 </div>
 
-                    <div id="requirements-part" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger">
+                    <div id="requirements-part" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger"  data-step="3">
                     <div class="form-group">
                       <label for="customFile">Family picture and picture of the applicant</label>
+                      <?php if($scholar["family_picture"] != ""): ?>
+                        <br>
+                        <a target="_blank" href="<?php echo($scholar["family_picture"]); ?>">View Document</a>
+                      <?php endif; ?>
                       <div class="custom-file">
                         <input name="family_pic" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="family_pic">
-                        <label class="custom-file-label" for="family_pic">Choose file</label>
+                        <label class="custom-file-label" for="family_pic">Upload / Reupload Document</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Barangay clearance as proof of residence (must be at least 3 years)</label>
+                      <?php if($scholar["barangay_clearance"] != ""): ?>
+                        <br>
+                        <a target="_blank" href="<?php echo($scholar["barangay_clearance"]); ?>">View Document</a>
+                      <?php endif; ?>
                       <div class="custom-file">
                         <input name="barangay_clearance" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="barangay_clearance">
-                        <label class="custom-file-label" for="barangay_clearance">Choose file</label>
+                        <label class="custom-file-label" for="barangay_clearance">Upload / Reupload Document</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Certificate of Low-Income Bracket</label>
+                      <?php if($scholar["low_income"] != ""): ?>
+                        <br>
+                        <a target="_blank" href="<?php echo($scholar["low_income"]); ?>">View Document</a>
+                      <?php endif; ?>
                       <div class="custom-file">
                         <input name="low_income" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="low_income">
-                        <label class="custom-file-label" for="low_income">Choose file</label>
+                        <label class="custom-file-label" for="low_income">Upload / Reupload Document</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Photocopy of Birth Certificate</label>
+                      <?php if($scholar["birth_certificate"] != ""): ?>
+                        <br>
+                        <a target="_blank" href="<?php echo($scholar["birth_certificate"]); ?>">View Document</a>
+                      <?php endif; ?>
                       <div class="custom-file">
                         <input name="birth_certificate" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="birth_certificate">
-                        <label class="custom-file-label" for="birth_certificate">Choose file</label>
+                        <label class="custom-file-label" for="birth_certificate">Upload / Reupload Document</label>
                       </div>
                     </div>  
                     <div class="form-group">
                       <label for="customFile">Photocopy of Grade Card</label>
+                      <?php if($scholar["grade_card"] != ""): ?>
+                        <br>
+                        <a target="_blank" href="<?php echo($scholar["grade_card"]); ?>">View Document</a>
+                      <?php endif; ?>
                       <div class="custom-file">
                         <input name="grade_card" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="grade_card">
-                        <label class="custom-file-label" for="grade_card">Choose file</label>
+                        <label class="custom-file-label" for="grade_card">Upload / Reupload Document</label>
                       </div>
                     </div>  
 
                           <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                          <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                          <button type="button" class="btn btn-primary" onclick="validateAndProceed(3)">Next</button>
                           <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 
                           <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
@@ -451,12 +523,21 @@
                         <div class="form-group">
                           <label for="Image" class="form-label">Profile Image</label>
                           <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview()">
-                          <button onclick="clearImage()" class="btn btn-primary mt-3">Clear</button>
+                          <button onclick="clearImage()" type="button" class="btn btn-primary mt-3">Clear</button>
                       </div>
 
                         </div>
                         <div class="col-6">
-                        <img id="frame" src="" class="img-fluid" width="300" height="300" />
+                        
+                        <img id="frame" 
+                        <?php if($scholar["profile_image"] != ""): ?>
+                          src="<?php echo($scholar["profile_image"]); ?>"
+                        <?php else: ?>
+                          src=""
+                        <?php endif; ?>
+                        
+                        
+                        class="img-fluid" width="300" height="300" />
 
                         </div>
                       </div>
@@ -505,6 +586,74 @@
   $(function () {
   bsCustomFileInput.init();
 });
+
+
+
+
+$('#courseInput').select2({
+        tags: true,
+        placeholder: "Select a course or type a new one",
+        allowClear: true
+    });
+
+
+function validateAndProceed(stepNumber) {
+    var isValid = validateInputs(stepNumber);
+
+    // Remove previous validation styles
+    $(`#bs-stepper-form .content[data-step="${stepNumber}"] [required]`).removeClass('validation-error');
+
+    // Validate each required input
+    $(`#bs-stepper-form .content[data-step="${stepNumber}"] [required]`).each(function () {
+ 
+        // if (!$(this).val()) {
+        //     isValid = false;
+        //     // Add validation-error class to highlight the field
+        //     $(this).addClass('validation-error');
+        // }
+    });
+
+    // Proceed to the next step if all inputs are valid
+    if (isValid) {
+        stepper.next();
+    } else {
+        // Optionally, you can display a message to the user about the validation error.
+        // alert('Please fill out all required fields before proceeding.');
+    }
+}
+
+  // Function to validate inputs for each step
+  function validateInputs(stepNumber) {
+    var boolValid = true;
+    // Get all required fields for the current step
+    var requiredInputs = $('.bs-stepper-content .content[data-step="'+stepNumber+'"] [required]');
+    console.log(requiredInputs);
+    // Validate each required input
+    for (var i = 0; i < requiredInputs.length; i++) {
+      var input = requiredInputs[i];
+      // Check if the input is empty (trimming whitespace)
+      if (input.value.trim() === '') {
+        input.classList.add("validation-error");
+        boolValid = false;
+      }
+      else{
+        input.classList.remove("validation-error");
+      }
+    }
+
+    if(boolValid == true){
+      return true;
+    }
+    else{
+        alert(`Please fill out all required fields for Step ${stepNumber}.`);
+        return false;
+    }
+
+    // If all validations pass, return true
+    // return true;
+  }
+
+
 
   $(function () {
         $("#father_college_grad_check").click(function () {
@@ -570,22 +719,27 @@
 
 <script>
     // Get references to the select and course input elements
-    var yearLevelSelect = document.getElementById("yearLevelSelect");
-    var courseInput = document.getElementById("courseInput");
+    // $('#courseInput').select2();
+
+    // Get references to the select and course input elements
+    var yearLevelSelect = $("#yearLevelSelect");
+    var courseInput = $("#courseInputDiv");
+    // $('#courseInputDiv').select2('close');
 
     // Add an event listener to the select element
-    yearLevelSelect.addEventListener("change", function() {
+    yearLevelSelect.on("change", function() {
         // Get the selected option's data-type attribute
-        var selectedOption = yearLevelSelect.options[yearLevelSelect.selectedIndex];
-        var dataType = selectedOption.getAttribute("data-type");
+        var selectedOption = yearLevelSelect.find(":selected");
+        var dataType = selectedOption.data("type");
+        // alert(dataType);
 
-        // Check if the selected option has data-type "college"
+        // Check if the selected option has data-type "COLLEGE"
         if (dataType === "COLLEGE") {
             // If it's a college, show the course input box
-            courseInput.style.display = "block";
+            courseInput.show();
         } else {
             // If it's not a college, hide the course input box
-            courseInput.style.display = "none";
+            courseInput.hide();
         }
     });
 </script>

@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/dropzone/min/dropzone.min.css">
+<link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 <div class="content-wrapper">
     <section class="content-header">
       <div class="container-fluid">
@@ -31,6 +33,35 @@
             <div class="modal-body">
               <form class="generic_form_trigger" data-url="scholars">
                 <input type="hidden" name="action" value="acceptScholar">
+                <input type="hidden" name="scholar_id" value="<?php echo($_GET["id"]) ?>">
+                <div class="form-group">
+                  <label>Reason / Remarks</label>
+                  <textarea required name="remarks" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="update_modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Request Update Scholar</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-url="scholars">
+                <input type="hidden" name="action" value="forUpdateScholars">
                 <input type="hidden" name="scholar_id" value="<?php echo($_GET["id"]) ?>">
                 <div class="form-group">
                   <label>Reason / Remarks</label>
@@ -243,18 +274,47 @@
                   <button class="btn btn-danger btn-block"><?php echo($applicant["current_status"]); ?></button>
                 <?php elseif($applicant["current_status"] == "SCHOLAR"): ?>
                   <button class="btn btn-success btn-block"><?php echo($applicant["current_status"]); ?></button>
+                  <?php if($applicant["responsible"] != "" && $applicant["responsible"] == $_SESSION["mariphil"]["userid"]): ?>
+                    <br>
+                  <form class="generic_form_trigger" data-url="scholars">
+                    <input type="hidden" name="action" value="revertScholar">
+                    <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]); ?>">
+                    <button class="btn btn-block btn-danger">Revert</button>
+                  </form>
+                  <?php endif; ?>
                 <?php else: ?>
                   <button class="btn btn-primary btn-block"><?php echo($applicant["current_status"]); ?></button>
                 <?php endif; ?>
+
+                
+                <?php if($_SESSION["mariphil"]["userid"] == $applicant["sponsor_id"]): ?>
+                  <br>
+                  <form class="generic_form_trigger" data-url="sponsor">
+                    <input type="hidden" name="action" value="unsponsor">
+                    <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]); ?>">
+                    <button class="btn btn-block btn-danger">Unpsonsor</button>
+                  </form>
+                <?php endif; ?>
+
+
                 
                 <Br> 
                 <?php if($_SESSION["mariphil"]["role"] == "VALIDATOR"): ?>
                   <?php if($applicant["current_status"] == "APPLICANT - IN REVIEW"): ?>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Verify</b></a>
                   </div>
-                  <div class="col-md-6">
+                  <br>
+                  <br>
+                  <br>
+                  <div class="col-md-12">
+                    <a href="#" data-toggle="modal" data-target="#update_modal" class="btn btn-warning btn-block"><b>Request Applicant to Update</b></a>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                  <div class="col-md-12">
                     <a href="#" data-toggle="modal" data-target="#deny_modal" class="btn btn-danger  btn-block"><b>Deny</b></a>
                   </div>
                 </div>
@@ -262,11 +322,20 @@
 
 
                 <?php if($applicant["current_status"] == "APPLICANT - TO BE INTERVIEWED"): ?>
-                <div class="row">
-                  <div class="col-md-6">
-                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Interviewed</b></a>
+                  <div class="row">
+                  <div class="col-md-12">
+                    <a href="#" data-toggle="modal" data-target="#accept_modal" class="btn btn-success btn-block"><b>Verify</b></a>
                   </div>
-                  <div class="col-md-6">
+                  <br>
+                  <br>
+                  <br>
+                  <div class="col-md-12">
+                    <a href="#" data-toggle="modal" data-target="#update_modal" class="btn btn-warning btn-block"><b>Request Applicant to Update</b></a>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                  <div class="col-md-12">
                     <a href="#" data-toggle="modal" data-target="#deny_modal" class="btn btn-danger  btn-block"><b>Deny</b></a>
                   </div>
                 </div>
@@ -323,8 +392,9 @@
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Documents</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Application Status</a></li>
                   <li class="nav-item"><a class="nav-link" href="#scholarship" data-toggle="tab">Scholarship</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#validator" data-toggle="tab">Validator</a></li>
                   <?php if($_SESSION["mariphil"]["role"] != "SCHOLAR" && $_SESSION["mariphil"]["role"] != "APPLICANT" && $_SESSION["mariphil"]["role"] != "VALIDATOR"): ?>
-                  <li class="nav-item"><a class="nav-link" href="#monitoring" data-toggle="tab">Monthly Monitoring</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#monitoring" data-toggle="tab">Quarterly Monitoring</a></li>
                   <li class="nav-item"><a class="nav-link" href="#renewal" data-toggle="tab">Renewal</a></li>
                   <li class="nav-item"><a class="nav-link" href="#allowance" data-toggle="tab">Allowance</a></li>
                   <?php endif; ?>
@@ -332,6 +402,93 @@
               </div>
               <div class="card-body">
                 <div class="tab-content">
+
+                <div class="tab-pane" id="validator">
+
+                <?php if($_SESSION["mariphil"]["role"] == "VALIDATOR"): ?>
+
+        <div class="modal fade" id="upload_modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Request Update Scholar</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-url="scholars">
+                <input type="hidden" name="action" value="validatorUpload">
+                <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]) ?>">
+                <input type="hidden" name="validator_id" value="<?php echo($_SESSION["mariphil"]["userid"]) ?>">
+
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">File Name</label>
+                    <input name="filename" required type="text" class="form-control" id="exampleInputEmail1" placeholder="Ex. House Information">
+                  </div>
+
+                <div class="custom-file">
+                    <input multiple required name="file_document[]" accept="application/msword,image/jpeg,image/gif,image/png,application/pdf,image/x-eps" type="file" class="custom-file-input" id="family_pic">
+                    <label class="custom-file-label" for="family_pic">File Document Upload</label>
+                </div>
+                  <br>
+                  <br>
+                <div class="form-group">
+                  <label>Reason / Remarks</label>
+                  <textarea required name="remarks" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+
+                  <a href="#" data-toggle="modal" data-target="#upload_modal" class="btn btn-primary"><b>Add CI Document</b></a>
+                  <br>
+                  <br>
+                <?php endif; ?>
+
+
+
+                  <table class="table table-bordered">
+                    <thead>
+                      <?php if($_SESSION["mariphil"]["role"] == "VALIDATOR"): ?>
+                        <th>Action</th>
+                      <?php endif; ?>
+                      <th>Document</th>
+                      <th>File</th>
+                      <th>Remarks</th>
+                    </thead>
+                    <tbody>
+                      <?php $documents = query("select * from applicant_survey where scholar_id = ?", $applicant["scholar_id"]); ?>
+                      <?php foreach($documents as $row): ?>
+                        <tr>
+                        <?php if($_SESSION["mariphil"]["role"] == "VALIDATOR"): ?>
+                          <td>
+                            <form class="generic_form_trigger" data-url="scholars">
+                              <input type="hidden" name="action" value="deleteDocument">
+                              <input type="hidden" name="file_id" value="<?php echo($row["file_id"]); ?>">
+                              <button class="btn btn-danger btn-block">Delete</button>
+                            </form>
+                          </td>
+                        <?php endif; ?>
+                          <td><?php echo($row["filename"]); ?></td>
+                          <td><a target="_blank" href="<?php echo($row["file"]); ?>">View Uploaded document</a></td>
+                          <td><?php echo($row["remarks"]); ?></td>
+                        </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+
+                  </table>
+
+                </div>
+                    
                   <div class="active tab-pane" id="activity">
                   <dl class="row">
                   <dt class="col-sm-4">Fullname</dt>
@@ -507,7 +664,11 @@
                     // dump($applicant);
                   foreach($forms as $f):?>
                     <tr>
-                      <td><a target="_blank" href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <?php if($_SESSION["mariphil"]["role"] == "SPONSOR" && $f["form_status"] != "DONE"): ?>
+                        <td><a onclick="alert('Form not yet Done!'); return false;" target="_blank" href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <?php else: ?>
+                        <td><a target="_blank" href="forms?action=scholar_details&id=<?php echo($f["tbl_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <?php endif; ?>
                       <td>QUARTERLY</td>
                       <td><?php echo($f["form_kind"]); ?></td>
                       <td><?php echo($f["grades"]); ?></td>
@@ -631,7 +792,14 @@
                     // dump($applicant);
                   foreach($forms as $f):?>
                     <tr>
-                      <td><a target="_blank" href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-primary btn-block">Details</a></td>
+                      <td>
+                      <?php if($_SESSION["mariphil"]["role"] == "SPONSOR" && $f["form_status"] != "DONE"): ?>
+                        <a onclick="alert('Form not yet Done!'); return false;" target="_blank" href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-primary btn-block">Details</a>
+                        <?php else: ?>
+                        <a target="_blank" href="renewal?action=scholar_details&id=<?php echo($f["renewal_id"]); ?>" class="btn btn-primary btn-block">Details</a>
+                      <?php endif; ?>
+                        
+                      </td>
                       <td>RENEW</td>
                       <td><?php echo($f["current_sy"]); ?></td>
                       <td><?php echo($f["for_sy"]); ?></td>
@@ -675,6 +843,12 @@
 <script src="AdminLTE_new/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
 <script>
+  $(function () {
+  bsCustomFileInput.init();
+});
+
+
+
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,

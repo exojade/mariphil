@@ -64,12 +64,16 @@
 
 
   <?php $scholar = query("select * from scholars where scholar_id = ?", $_SESSION["mariphil"]["userid"]); ?>
-  <?php if($scholar[0]["current_status"] == "APPLICANT"): ?>
+  <?php if($scholar[0]["current_status"] == "APPLICANT" || 
+          $scholar[0]["current_status"] == "APPLICANT - IN REVIEW (FOR UPDATE)" ||
+          $scholar[0]["current_status"] == "APPLICANT - TO BE INTERVIEWED (FOR UPDATE)"
+          
+          ): ?>
     <li class="nav-item">
       <a href="profile?action=fill" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-          Profile
+          Update Profile
           <span class="right badge badge-danger"></span>
         </p>
       </a>

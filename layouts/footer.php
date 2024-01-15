@@ -107,6 +107,144 @@ $('.generic_form_trigger').submit(function(e) {
      
     });
 
+
+
+$('.generic_form_no_trigger').submit(function(e) {
+var form = $(this)[0];
+var formData = new FormData(form);
+var url = $(this).data('url');
+e.preventDefault();
+
+
+Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
+$.ajax({
+              type: 'post',
+              url: url,
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (results) {
+              var o = jQuery.parseJSON(results);
+              console.log(o);
+              if(o.result === "success") {
+                  Swal.close();
+                  Swal.fire({title: "Submit success",
+                  text: o.message,
+                  type:"success"})
+                  .then(function () {
+
+
+
+                    if(typeof(o.newlink) != "undefined" && o.newlink !== null) {
+                        if(o.newlink == "newlink"){
+                          console.log(o);
+                          if(o.link == "refresh")
+                          window.location.reload();
+                          else if(o.link == "not_refresh")
+                            console.log("");
+                          else
+                            window.open(o.link, '_blank');
+                            // window.location.replace(o.link, "_blank");
+                        }
+                    }
+                    else{
+                      if(o.link == "refresh")
+                      window.location.reload();
+                      else if(o.link == "not_refresh")
+                        console.log("");
+                      else
+                        window.location.replace(o.link);
+
+                    }
+
+
+
+
+                    // // alert(o.link);
+                    // if(o.link == "refresh"){
+                    //   location.reload();
+                    // }
+                    // else{
+                    //   window.location.replace(o.link);
+                    // }
+                  });
+              }
+              else {
+                  Swal.fire({
+                  title: "Error!",
+                  text: o.message,
+                  type:"error"
+                  });
+                  console.log(results);
+              }
+              },
+              error: function(results) {
+              console.log(results);
+              swal("Error!", "Unexpected error occur!", "error");
+              }
+          });
+  });
+
+
+
+
+  $('.generic_form_no_trigger_and_result').submit(function(e) {
+var form = $(this)[0];
+var formData = new FormData(form);
+var url = $(this).data('url');
+e.preventDefault();
+
+
+Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
+$.ajax({
+              type: 'post',
+              url: url,
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (results) {
+              var o = jQuery.parseJSON(results);
+              console.log(o);
+              if(o.result === "success") {
+                  Swal.close();
+                  if(typeof(o.newlink) != "undefined" && o.newlink !== null) {
+                        if(o.newlink == "newlink"){
+                          console.log(o);
+                          if(o.link == "refresh")
+                          window.location.reload();
+                          else if(o.link == "not_refresh")
+                            console.log("");
+                          else
+                            window.open(o.link, '_blank');
+                            // window.location.replace(o.link, "_blank");
+                        }
+                    }
+                    else{
+                      if(o.link == "refresh")
+                      window.location.reload();
+                      else if(o.link == "not_refresh")
+                        console.log("");
+                      else
+                        window.location.replace(o.link);
+
+                    }
+              }
+              else {
+                  Swal.fire({
+                  title: "Error!",
+                  text: o.message,
+                  type:"error"
+                  });
+                  console.log(results);
+              }
+              },
+              error: function(results) {
+              console.log(results);
+              swal("Error!", "Unexpected error occur!", "error");
+              }
+          });
+  });
+
     $('.generic_form_pdf').submit(function(e) {
       e.preventDefault();
       var url = $(this).data('url');

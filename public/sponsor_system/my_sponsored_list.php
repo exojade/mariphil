@@ -24,6 +24,54 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+
+
+              <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+            <form class="generic_form_no_trigger_and_result" data-url="sponsor">
+            <input type="hidden" name="action" value="sponsorFilterSY">
+            <!-- <input type="hidden" name="action" value="filterSY"> -->
+            <div class="row">
+              <div class="col-md-6">
+              <div class="form-group">
+              <?php $school_year = query("select * from school_year order by idd desc"); ?>
+                        <select name="school_year" class="form-control">
+                          <option selected value="">Select School Year</option>
+                          <?php foreach($school_year as $row): ?>
+                            <?php if($row["current_status"] == "active"): ?>
+                              <?php if(isset($_GET["school_year"]) && $_GET["school_year"] == $row["school_year_id"]): ?>
+                                <option selected value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"] . " (current)"); ?></option>
+                              <?php else: ?>
+                                <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"] . " (current)"); ?></option>
+                              <?php endif; ?>
+                            <?php else: ?>
+                              <?php if(isset($_GET["school_year"]) && $_GET["school_year"] == $row["school_year_id"]): ?>
+                                <option selected value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                              <?php else: ?>
+                                <option value="<?php echo($row["school_year_id"]); ?>"><?php echo($row["school_year"]); ?></option>
+                              <?php endif; ?>
+                              
+                            <?php endif; ?>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                
+              </div>
+
+            </div>
+            </form>
+              </div>
+
+            </div>
+
+
+
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -42,15 +90,7 @@
                   </thead>
                   <tbody>
                   <?php
-                  $list = query("select s.*, u.*, sy.school_year from scholars s
-                  left join users u
-                  on s.responsible = u.user_id
-                  left join school_year sy
-                  on sy.school_year_id = s.school_year_id
-                  where s.current_status = 'SCHOLAR'
-                  and sponsor_id = ?
-                  order by s.school_year_id desc", 
-				                          $_SESSION["mariphil"]["userid"]);
+         
                   foreach($list as $l):  ?>
                     <tr>
                       <td>

@@ -122,15 +122,271 @@
 			
 		}
 
+		if($_POST["action"] == "deleteDocument"){
+			// dump($_POST);
+			query("delete from applicant_survey where file_id = ?", $_POST["file_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Delete Document Successfully",
+				"link" => "refresh",
+				];
+				echo json_encode($res_arr); exit();
+		}
+
+		if($_POST["action"] == "validatorUpload"){
+			// dump($_POST);
+
+
+
+			// Check if files were uploaded
+if(isset($_FILES["file_document"])) {
+	$target_pdf = "uploads/" . $_POST["scholar_id"]."/";
+			if (!file_exists($target_pdf )) {
+				mkdir($target_pdf , 0777, true);
+			}
+    $file_documents = $_FILES["file_document"];
+
+    // Loop through each file
+    for($i = 0; $i < count($file_documents['name']); $i++) {
+        // Check if there was no error during the upload for this file
+        if($file_documents['error'][$i] == 0) {
+            $path_parts = pathinfo($file_documents['name'][$i]);
+            $extension = $path_parts['extension'];
+			$file_name = str_replace(' ', '', $_POST["filename"]);
+
+            $target = $target_pdf . $file_name . ($i+1) . "." . $extension;
+
+            // Move the uploaded file to the desired location
+            if(move_uploaded_file($file_documents['tmp_name'][$i], $target)) {
+                // Update your database or perform any other actions as needed
+                // For example, you can store the file path in the database
+                // query("INSERT INTO your_table (file_path) VALUES ('".$target."')");
+
+				query("insert into applicant_survey (filename, file, validator_id, scholar_id, remarks)
+						values (?,?,?,?,?)
+				", $_POST["filename"], $target,$_POST["validator_id"], $_POST["scholar_id"], $_POST["remarks"]);
+
+
+            } else {
+                // Handle the case where the file couldn't be moved
+                // echo("Error moving file ".$file_documents['name'][$i]);
+            }
+        } else {
+            // Handle the case where there was an error during the upload
+            // echo("Error uploading file ".$file_documents['name'][$i]);
+        }
+    }
+}
+
+$res_arr = [
+	"result" => "success",
+	"title" => "Success",
+	"message" => "Upload documents successfully",
+	"link" => "scholars?action=details&id=".$_POST["scholar_id"],
+	// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+	];
+	echo json_encode($res_arr); exit();
+
+
+
+
+		}
+
+
+		if($_POST["action"] == "revertScholar"){
+			// dump($_POST);
+			
+			$current_sy = query("select * from school_year where current_status = 'active'");
+			$current_sy = $current_sy[0];
+
+			$scholar = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
+			$scholar = $scholar[0];
+
+			// dump($scholar);
+			if($scholar["school_year_id"] != $current_sy["school_year_id"]):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "You cannot revert Scholar if not this current school year!",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+
+
+			$forms = query("select * from forms f
+							left join monthly_monitoring mm
+							on mm.form_id = f.form_id
+							where scholar_id = ?
+							and f.school_year_id = ?
+							and mm.form_status != 'DONE'
+							", $_POST["scholar_id"], $current_sy["school_year_id"]);
+			// dump($forms);
+			if(!empty($forms)):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "This student still has a pending form to be accomplished! Error in Unassigning the Scholar! Contact Admin for information!",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+			// dump($forms);
+
+
+			query("update scholars set responsible = NULL where scholar_id = ?", $_POST["scholar_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Reverted to Unassigned Scholars",
+				"link" => "refresh",
+				// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+				];
+				echo json_encode($res_arr); exit();
+
+		}
+
+
+
+		if($_POST["action"] == "forUpdateScholars"){
+			// dump($_POST);
+
+			$status = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
+			$current_status = $status[0]["current_status"];
+			if($current_status == 'APPLICANT - IN REVIEW'){
+				$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+				$user = $user[0];
+				query("update scholars set current_status = 'APPLICANT - IN REVIEW (FOR UPDATE)'
+						where scholar_id = ?", $_POST["scholar_id"]);
+				$track_id = create_uuid("TR");
+				if (query("insert INTO scholar_tracker (
+							track_id, scholar_id, status, user_id, 
+							date_created,time_created,timestamp,remarks) 
+					VALUES(?,?,?,?,?,?,?,?)",
+					$track_id, $_POST["scholar_id"], 'APPLICANT - IN REVIEW (FOR UPDATE)', $_SESSION["mariphil"]["userid"], 
+					date("Y-m-d"), date("H:i:s"),time(), $_POST["remarks"]) === false)
+					{
+						$res_arr = [
+							"result" => "failed",
+							"title" => "Failed",
+							"message" => "User already Registered",
+							// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
+							];
+							echo json_encode($res_arr); exit();
+					}
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					I hope this email finds you well. This is an automated message to inform you about the current status of your scholarship application.
+					<br><br>
+					Application Process Status: FOR REVIEW (FOR UPDATE INFORMATION)
+					<br><br>
+					Validator asked you to review and update your information
+					<br><br>
+					Remarks:
+					<br><br>".$_POST['remarks']."<br><br>
+					Thank you,<br>
+					Mariphil Foundation Inc.<br>
+					Scholarship Committee<br>
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "Application Process Status: For Review (FOR UPDATE)", $message, $receipient ,"NO");
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Success",
+					"link" => "scholars?action=details&id=".$_POST["scholar_id"],
+					];
+					echo json_encode($res_arr); exit();
+			}
+			else if($current_status == "APPLICANT - TO BE INTERVIEWED"){
+				query("update scholars set current_status = 'APPLICANT - TO BE INTERVIEWED (FOR UPDATE)'
+						where scholar_id = ?", $_POST["scholar_id"]);
+				$track_id = create_uuid("TR");
+				if (query("insert INTO scholar_tracker (
+							track_id, scholar_id, status, user_id, 
+							date_created,time_created,timestamp,remarks) 
+					VALUES(?,?,?,?,?,?,?,?)",
+					$track_id, $_POST["scholar_id"], 'APPLICANT - TO BE INTERVIEWED (FOR UPDATE)', $_SESSION["mariphil"]["userid"], 
+					date("Y-m-d"), date("H:i:s"),time(), $_POST["remarks"]) === false)
+					{
+						$res_arr = [
+							"result" => "failed",
+							"title" => "Failed",
+							"message" => "User already Registered",
+							// "link" => "scholars?action=details&id=".$_POST["scholar_id"],
+							];
+							echo json_encode($res_arr); exit();
+					}
+
+					$user = query("select * from users where user_id = ?", $_POST["scholar_id"]);
+					$user = $user[0];
+
+
+					$message = "
+					Dear ".$user["fullname"].",
+					<br><br>
+					I hope this email finds you well. This is an automated message to inform you about the current status of your scholarship application.
+					<br><br>
+					Application Process Status: TO BE INTERVIEWED (FOR UPDATE INFORMATION)
+					<br><br>
+					Validator asked you to review and update your information
+					<br><br>
+					Remarks:
+					<br><br>".$_POST['remarks']."<br><br>
+					Thank you,<br>
+					Mariphil Foundation Inc.<br>
+					Scholarship Committee<br>
+					";
+					$receipient = [];
+					$receipient[] = $_POST["scholar_id"];
+					start_mail($_SESSION["mariphil"]["userid"], "Application Process Status: To be Interviewed (For Update)", $message, $receipient ,"NO");
+					$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Success",
+					"link" => "refresh",
+					];
+					echo json_encode($res_arr); exit();
+			}
+		}
+
 		if($_POST["action"] == "addResponsible"){
 			// dump($_POST);
+
+			$current_sy = query("select * from school_year where current_status = 'active'");
+			$current_sy = $current_sy[0];
+
+			$scholar = query("select * from scholars where scholar_id = ?", $_POST["scholar_id"]);
+			$scholar = $scholar[0];
+
+			// dump($scholar);
+			if($scholar["school_year_id"] != $current_sy["school_year_id"]):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "You cannot add Scholar to this school year!",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+
+
 
 			$scholar = query("select s.*, sy.school_year from scholars s
 								left join school_year sy
 								on sy.school_year_id = s.school_year_id
 								 where scholar_id = ?", $_POST["scholar_id"]);
-			// dump($scholar);
 			$scholar = $scholar[0];
+
+			// dump($scholar);
+
 
 
 			if (query("insert INTO scholar_status (
@@ -288,6 +544,56 @@
 					echo json_encode($res_arr); exit();
 			
 		}
+
+		if($_POST["action"] == "filterSY"){
+			// dump($_POST);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Filter success",
+				"link" => "scholars?action=applicants_list&school_year=".$_POST["school_year"],
+				];
+				echo json_encode($res_arr); exit();
+
+		}
+
+
+		if($_POST["action"] == "vacantSYFilter"){
+			// dump($_POST);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Filter success",
+				"link" => "scholars?action=vacant_applicants&school_year=".$_POST["school_year"],
+				];
+				echo json_encode($res_arr); exit();
+
+		}
+
+
+		if($_POST["action"] == "my_scholars_listFilter"){
+			// dump($_POST);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Filter success",
+				"link" => "scholars?action=my_scholars_list&school_year=".$_POST["school_year"],
+				];
+				echo json_encode($res_arr); exit();
+
+		}
+
+		if($_POST["action"] == "scholars_listFilter"){
+			// dump($_POST);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Filter success",
+				"link" => "scholars?action=scholars_list&school_year=".$_POST["school_year"],
+				];
+				echo json_encode($res_arr); exit();
+
+		}
 		
     }
 	else {
@@ -296,10 +602,29 @@
 
 
 		if($_GET["action"] == "applicants_list"){
-			$applicants = query("select * from scholars where current_status not in ('SCHOLAR', 'APPLICANT - DENIED')");
+
+			if(!isset($_GET["school_year"])):
+				$school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+				$school_year = $school_year[0];
+				$applicants = query("select * from scholars where current_status not in ('SCHOLAR', 'APPLICANT - DENIED')
+										and school_year_id = ?", $school_year["school_year_id"]);
+			else:
+				if($_GET["school_year"] == ""):
+					$school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					$school_year = $school_year[0];
+					$applicants = query("select * from scholars where current_status not in ('SCHOLAR', 'APPLICANT - DENIED')
+											and school_year_id = ?", $school_year["school_year_id"]);
+				
+				else:
+				$applicants = query("select * from scholars where current_status not in ('SCHOLAR', 'APPLICANT - DENIED')
+				 					and school_year_id = ?", $_GET["school_year"]);
+				endif;
+			endif;
+
 			render("public/scholars_system/applicants_list.php",[
 				"applicants" => $applicants,
 			]);
+			
 		}
 
 		if($_GET["action"] == "denied_list"){
@@ -310,35 +635,168 @@
 		}
 
 		if($_GET["action"] == "scholars_list"){
-			$scholars = query("select s.*, u.fullname, uu.fullname as responsible from scholars s
-			left join users u
-			on u.user_id = s.sponsor_id
-			left join users uu
-			on uu.user_id = s.responsible
-			where s.current_status = 'SCHOLAR'");
+
+
+			if(!isset($_GET["school_year"])):
+
+				$school_year = query("select school_year_id from school_year where current_status = 'active'");
+				$school_year = $school_year[0];
+				$scholars = query("select s.*,sy.school_year, u.fullname, uu.fullname as responsible from scholars s
+				left join users u
+				on u.user_id = s.sponsor_id
+				left join users uu
+				on uu.user_id = s.responsible
+				left join school_year sy
+				on sy.school_year_id = s.school_year_id
+				where s.current_status = 'SCHOLAR'
+				and s.school_year_id = ?
+				", $school_year["school_year_id"]);
+				// dump($scholars);
+					
+			else:
+				if($_GET["school_year"] == ""):
+					// $school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					// $school_year = $school_year[0];
+					$scholars = query("select s.*,sy.school_year, u.fullname, uu.fullname as responsible from scholars s
+					left join users u
+					on u.user_id = s.sponsor_id
+					left join users uu
+					on uu.user_id = s.responsible
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where s.current_status = 'SCHOLAR'");
+				
+				else:
+					$scholars = query("select s.*,sy.school_year, u.fullname, uu.fullname as responsible from scholars s
+					left join users u
+					on u.user_id = s.sponsor_id
+					left join users uu
+					on uu.user_id = s.responsible
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where s.current_status = 'SCHOLAR'
+					and s.school_year_id = ?
+					", $_GET["school_year"]);
+				endif;
+			endif;
+
 			render("public/scholars_system/scholars_list.php",[
 				"scholars" => $scholars,
 			]);
+
+
+
+
+
+
+
+			// $scholars = query("select s.*,sy.school_year, u.fullname, uu.fullname as responsible from scholars s
+			// left join users u
+			// on u.user_id = s.sponsor_id
+			// left join users uu
+			// on uu.user_id = s.responsible
+			// left join school_year sy
+			// on sy.school_year_id = s.school_year_id
+			// where s.current_status = 'SCHOLAR'");
+			// // dump($scholars);
+			// render("public/scholars_system/scholars_list.php",[
+			// 	"scholars" => $scholars,
+			// ]);
 		}
 
 
 		if($_GET["action"] == "my_scholars_list"){
-			$scholars = query("select s.*, u.fullname,sy.school_year from scholars s
-			left join users u
-			on u.user_id = s.sponsor_id
-			left join school_year sy
-			on sy.school_year_id = s.school_year_id
-			where responsible = ?
-			order by s.school_year_id desc, lastname ASC, firstname ASC", $_SESSION["mariphil"]["userid"]);
+
+
+			if(!isset($_GET["school_year"])):
+
+				$school_year = query("select school_year_id from school_year where current_status = 'active'");
+				$school_year = $school_year[0];
+				$scholars = query("select s.*, u.fullname,sy.school_year from scholars s
+					left join users u
+					on u.user_id = s.sponsor_id
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where responsible = ?
+					and s.school_year_id = ?
+					order by s.school_year_id desc, lastname ASC, firstname ASC", $_SESSION["mariphil"]["userid"], $school_year["school_year_id"]);
+				// dump($scholars);
+					
+			else:
+				if($_GET["school_year"] == ""):
+					// $school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					// $school_year = $school_year[0];
+					$scholars = query("select s.*, u.fullname,sy.school_year from scholars s
+							left join users u
+							on u.user_id = s.sponsor_id
+							left join school_year sy
+							on sy.school_year_id = s.school_year_id
+							where responsible = ?
+							order by s.school_year_id desc, lastname ASC, firstname ASC", $_SESSION["mariphil"]["userid"]);
+				
+				else:
+					$scholars = query("select s.*, u.fullname,sy.school_year from scholars s
+							left join users u
+							on u.user_id = s.sponsor_id
+							left join school_year sy
+							on sy.school_year_id = s.school_year_id
+							where responsible = ?
+							and s.school_year_id = ?
+							order by s.school_year_id desc, lastname ASC, firstname ASC", $_SESSION["mariphil"]["userid"], $_GET["school_year"]);
+				endif;
+			endif;
+
 			render("public/scholars_system/my_scholars_list.php",[
 				"scholars" => $scholars,
 			]);
+
+
+
 		}
 
 		if($_GET["action"] == "vacant_applicants"){
-			$scholars = query("select * from scholars s
-			where responsible is null
-			and current_status='APPLICANT - INTERVIEWED'");
+
+
+
+			if(!isset($_GET["school_year"])):
+
+				$school_year = query("select school_year_id from school_year where current_status = 'active'");
+				$school_year = $school_year[0];
+		
+
+				$scholars = query("select s.*,sy.school_year from scholars s left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where (responsible is null
+					and s.current_status in ('APPLICANT - INTERVIEWED', 'SCHOLAR'))
+					and s.school_year_id = ?", $school_year["school_year_id"]);
+				// dump($scholars);
+					
+			else:
+				if($_GET["school_year"] == ""):
+					// $school_year = query("select school_year_id from school_year where applicant_status = 'active'");
+					// $school_year = $school_year[0];
+					$scholars = query("select s.*,sy.school_year from scholars s
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where (responsible is null
+					and s.current_status in ('APPLICANT - INTERVIEWED', 'SCHOLAR'))");
+				
+				else:
+					$scholars = query("select s.*,sy.school_year from scholars s
+					left join school_year sy
+					on sy.school_year_id = s.school_year_id
+					where (responsible is null
+					and s.current_status in ('APPLICANT - INTERVIEWED', 'SCHOLAR'))
+					and s.school_year_id = ?", $_GET["school_year"]);
+				endif;
+			endif;
+
+			// render("public/scholars_system/my_scholars_list.php",[
+			// 	"scholars" => $scholars,
+			// ]);
+
+
+			
 			// dump($scholars);
 			render("public/scholars_system/vacant_applicants.php",[
 				"scholars" => $scholars,

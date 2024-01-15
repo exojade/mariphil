@@ -82,13 +82,47 @@
 			];
 			echo json_encode($res_arr); exit();
 		}
+
+
+
+		else if($_POST["action"] == "deactivateUser"){
+			
+			$user = query("select * from users where user_id = ?", $_POST["user_id"]);
+			$user = $user[0];
+			if($user["role"] == "FACILITATOR"):
+				$current_sy = query("select * from school_year where current_status = 'active'");
+				$current_sy = $current_sy[0];
+				$forms = query("select * from forms f
+							left join monthly_monitoring mm
+							on mm.form_id = f.form_id
+							where f.created_by = ?
+							and mm.form_status != 'DONE'
+							", $_POST["user_id"]);
+				// dump($forms);
+				if(!empty($forms)):
+					$res_arr = [
+						"result" => "failed",
+						"title" => "Failed",
+						"message" => "Cannot deactivate User! Incomplete Quarterly or Renewal Forms for his/her scholars!",
+						"link" => "refresh",
+						// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+						];
+						echo json_encode($res_arr); exit();
+				else:
+
+				endif;
+			endif;
+			dump($user);
+		}
+
+
 		
     }
 	else {
 
 
 		if($_GET["action"] == "users_list"){
-			$users = query("select * from users");
+			$users = query("select * from users order by role ASC");
 			render("public/users_system/users_list.php",[
 				"users" => $users,
 			]);
