@@ -77,6 +77,7 @@ background-image: url('resources/background.jpg');
 
     <form id="login_form" autocomplete="off">
       <input type="hidden" name="action" value="login">
+      <input type="hidden" name="login_type" value="not_admin">
       <div class="form-group has-feedback">
       <!-- <?php $users = query("select * from users where role = ?", $_GET["role"]); ?>  
       <select name="username" class="form-control">

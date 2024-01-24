@@ -8,82 +8,48 @@
 			$users = query("select * from users where username = ?", $_POST["username"]);
 			if(!empty($users)):
 
-				$password = generate_otp();
-				query("update users set password = ?, temp_password = 'YES' where username = ?", crypt($password, ''),$_POST["username"]);
-				$site_options = query("select * from site_options");
-				$google_user = $site_options[0]["google_user"];
-				$google_password = $site_options[0]["google_password"];
-				$mail = new PHPMailer();
-	
-				$the_message = "Dear Mr./Ms. " . $users[0]["fullname"] . ",<br><br>";
-				$the_message = "
-				You are receiving this email as part of the Mariphil Scholarship Information System. <br>
-				This is your username: ".$users[0]["username"]." <br>
-				This is your temporary password: ".$password."
-			
-				<br><br>
-				Best regards,
-				admin@mariphil.com (no-reply) System Generated
-				";
-				$message = "<html>
-					<body>
-						".$the_message."
-					</body>
-				</html>";
-				// dump($message);
-	
-				try {
-					$mail->isSMTP();
-					$mail->SMTPAuth = true;
-					$mail->SMTPSecure = "ssl";
-					$mail->Host = "smtp.gmail.com";
-					$mail->Port = "465";
-					$mail->isHTML();
-					$mail->Username = $google_user;
-					$mail->Password = $google_password;
-					$mail->SetFrom("no-reply@mariphil.com");
-					$mail->Subject = "Forgot Password";
-					$mail->Body = $message;
-					$mail->AddAddress($users[0]["username"]);
-					$mail->Send();
-					$mail->SMTPDebug = 2; // Enables SMTP debug information
-					$mail->Debugoutput = 'html'; // HTML output for debugging
-	
-					$res_arr = [
-						"result" => "success",
-						"title" => "Success",
-						"message" => "The temporary password is sent to your email! Kindly view and enter to the login box",
-						"link" => "logout",
-						];
-						echo json_encode($res_arr); exit();
-				  } catch (phpmailerException $e) {
-					
-					$res_arr = [
-						"result" => "failed",
-						"title" => "Failed Mail",
-						"message" => $e->errorMessage(),
-						"link" => "refresh",
-						];
-						echo json_encode($res_arr); exit();	
-					
-				  } catch (Exception $e) {
-					$res_arr = [
-						"result" => "failed",
-						"title" => "Failed Mail",
-						"message" => $e->getMessage(),
-						"link" => "refresh",
-						];
-						echo json_encode($res_arr); exit();	
-				  }
-				else:
-					$res_arr = [
-						"result" => "success",
-						"title" => "Success",
-						"message" => "The temporary password is sent to your email! Kindly view and enter to the login box",
-						"link" => "logout",
-						];
-						echo json_encode($res_arr); exit();
+			$site_options = query("select * from site_options");
+			$google_user = $site_options[0]["google_user"];
+			$google_password = $site_options[0]["google_password"];
 
+			$password = generate_otp();
+			query("update users set password = ?, temp_password = 'YES' where username = ?", crypt($password, ''),$_POST["username"]);
+			
+			$the_message = "Dear Mr./Ms. " . $users[0]["fullname"] . ",<br><br>";
+			$the_message = "
+			You are receiving this email as part of the Mariphil Scholarship Information System. <br>
+			This is your username: ".$users[0]["username"]." <br>
+			This is your temporary password: ".$password."
+		
+			<br><br>
+			Best regards,
+			admin@mariphil.com (no-reply) System Generated
+			";
+
+            $ch = curl_init();
+            $parameters = array(
+                'google_user' => $google_user, //Your API KEY
+                'google_password' => $google_password,
+                'message' => $the_message,
+                'subject' => "FORGOT PASSWORD",
+                'SetFrom' => "no-reply@mariphil.com",
+                'AddAddress' => $users[0]["username"],
+            );
+            curl_setopt( $ch, CURLOPT_URL,'http://api.panabocity.gov.ph/avail_schedules' );
+            curl_setopt( $ch, CURLOPT_POST, 1 );
+
+            //Send the parameters set above with the request
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $parameters ) );
+
+            // Receive response from server
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $output = curl_exec( $ch );
+            curl_close ($ch);
+
+            //Show the server response
+            // echo $output;
+            // dump($output);
+            echo $output; exit();
 			endif;
 
            
@@ -95,6 +61,12 @@
 
 		else:
 		// dump($_POST);
+		if($_POST["login_type"] == "not_admin" && ($_POST["role"] == "admin" || $_POST["role"] == "ADMIN")):
+			echo("wrong_password");
+			exit();
+		endif;
+
+
         $rows = query("select * FROM users WHERE username = ? and status = 'active' and role = ?", $_POST["username"], $_POST["role"]);
         // dump($rows);
 		if (count($rows) == 1)

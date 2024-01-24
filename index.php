@@ -15,7 +15,7 @@
 		$request = explode('/',$request);
 		$request = $request[1];
 		
-		$countering = array("login", "register", "print", "otp", "role", "forms", "allowance");
+		$countering = array("login", "login_admin", "register", "print", "otp", "role", "forms", "allowance");
 		if (!in_array($request, $countering)){
 			if(empty($_SESSION["mariphil"]["userid"]) && empty($_SESSION["mariphil"]["application"])){
 				require 'public/login_system/role.php';
@@ -61,6 +61,9 @@
 			
 			if ($request == 'login')
 				require 'public/login_system/login.php';
+
+			if ($request == 'login_admin')
+				require 'public/login_system/login_administrator.php';
 			
 			else if ($request == 'register')
 				require 'public/register_system/register.php';

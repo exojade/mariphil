@@ -75,14 +75,16 @@ background-image: url('resources/background.jpg');
           </div>
         </div>
         <div class="input-group mb-3">
-          <input max="<?php echo date("Y-m-d"); ?>" type="text" placeholder="Birthdate"
-                    onfocus="(this.type='date')" required type="text" name="birthdate" class="form-control" placeholder="Birthdate">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-calendar"></span>
-            </div>
-          </div>
+    <input type="text" placeholder="Birthdate"
+           onfocus="(this.type='date')" required
+           name="birthdate" class="form-control" placeholder="Birthdate"
+           max="<?php echo date('Y-m-d', strtotime('-4 years')); ?>">
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <span class="fas fa-calendar"></span>
         </div>
+    </div>
+</div>
         <div class="row">
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Register</button>

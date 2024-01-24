@@ -272,15 +272,34 @@
                 <h6 class="text-center"><?php echo($applicant["year_type"]); ?></h6>
                 <?php if($applicant["current_status"] == "APPLICANT - DENIED"): ?>
                   <button class="btn btn-danger btn-block"><?php echo($applicant["current_status"]); ?></button>
-                <?php elseif($applicant["current_status"] == "SCHOLAR"): ?>
+                <?php elseif($applicant["current_status"] == "SCHOLAR" || $applicant["current_status"] == "GRADUATE"): ?>
                   <button class="btn btn-success btn-block"><?php echo($applicant["current_status"]); ?></button>
                   <?php if($applicant["responsible"] != "" && $applicant["responsible"] == $_SESSION["mariphil"]["userid"]): ?>
+                    <br>
+
+                  <?php if($applicant["current_status"] == "SCHOLAR"): ?>
+                  <form class="generic_form_trigger" data-url="scholars">
+                    <input type="hidden" name="action" value="changeGraduate">
+                    <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]); ?>">
+                    <button class="btn btn-block btn-warning">CHANGE TO GRADUATE</button>
+                  </form>
+                  <?php else: ?>
+                    <form class="generic_form_trigger" data-url="scholars">
+                    <input type="hidden" name="action" value="changeScholar">
+                    <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]); ?>">
+                    <button class="btn btn-block btn-warning">CHANGE TO SCHOLAR</button>
+                  </form>
+                  <?php endif; ?>
                     <br>
                   <form class="generic_form_trigger" data-url="scholars">
                     <input type="hidden" name="action" value="revertScholar">
                     <input type="hidden" name="scholar_id" value="<?php echo($applicant["scholar_id"]); ?>">
                     <button class="btn btn-block btn-danger">Revert</button>
                   </form>
+                    <br>
+              
+                  
+
                   <?php endif; ?>
                 <?php else: ?>
                   <button class="btn btn-primary btn-block"><?php echo($applicant["current_status"]); ?></button>

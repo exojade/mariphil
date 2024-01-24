@@ -17,13 +17,13 @@
 <?php endif; ?>
 
 
-$('.generic_form_trigger').submit(function(e) {
-
+$('body').on('submit', '.generic_form_trigger', function(e) {
+  e.preventDefault();
 
   var form = $(this)[0];
   var formData = new FormData(form);
   var url = $(this).data('url');
-  e.preventDefault();
+
 
   Swal.fire({
   title: 'Do you want to submit the changes?',

@@ -89,54 +89,41 @@
 			</html>";
 			// dump($message);
 
-			try {
-				$mail->isSMTP();
-				$mail->SMTPAuth = true;
-				$mail->SMTPSecure = "ssl";
-				$mail->Host = "smtp.gmail.com";
-				$mail->Port = "465";
-				$mail->isHTML();
-				$mail->Username = $google_user;
-				$mail->Password = $google_password;
-				$mail->SetFrom("no-reply@mariphil.com");
-				$mail->Subject = "OTP Request";
-				$mail->Body = $message;
-				$mail->AddAddress($_POST["email_address"]);
-				$mail->Send();
 
 
+            $ch = curl_init();
+            $parameters = array(
+                'google_user' => $google_user, //Your API KEY
+                'google_password' => $google_password,
+                'message' => $the_message,
+                'subject' => "OTP Request",
+                'SetFrom' => "no-reply@mariphil.com",
+                'AddAddress' => $_POST["email_address"],
+                'AddAddress' => $_POST["email_address"],
+            );
+            curl_setopt( $ch, CURLOPT_URL,'http://api.panabocity.gov.ph/avail_schedules' );
+            curl_setopt( $ch, CURLOPT_POST, 1 );
 
-                $res_arr = [
-                    "result" => "success",
-                    "title" => "Success",
-                    "message" => "Your Registration has been completed!",
-                    "link" => "otp?id=".$user_id,
-                    ];
-                    echo json_encode($res_arr); exit();
-			  } catch (phpmailerException $e) {
-				
-				$res_arr = [
-					"result" => "failed",
-					"title" => "Failed Mail",
-					"message" => $e->errorMessage(),
-					"link" => "refresh",
-					];
-					echo json_encode($res_arr); exit();	
-				
-			  } catch (Exception $e) {
-				$res_arr = [
-					"result" => "failed",
-					"title" => "Failed Mail",
-					"message" => $e->getMessage(),
-					"link" => "refresh",
-					];
-					echo json_encode($res_arr); exit();	
-			  }
+            //Send the parameters set above with the request
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $parameters ) );
 
+            // Receive response from server
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $output = curl_exec( $ch );
+            curl_close ($ch);
 
-
-
-
+            //Show the server response
+            // echo $output;
+            // dump($output);
+            // echo $output; 
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Your Registration has been completed!",
+				"link" => "otp?id=".$user_id,
+				];
+				echo json_encode($res_arr); exit();
+			exit();
 		}  
     }
     else

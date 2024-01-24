@@ -23,9 +23,11 @@
           <div class="col-12">
             <!-- Default box -->
             <div class="card">
-  <br>
+  <br>  
 
-            <div class="row">
+          <div class="card-header">
+            
+          <div class="row">
               <div class="col-md-6">
 
               </div>
@@ -69,7 +71,7 @@
               </div>
 
             </div>
-            
+          </div>    
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -77,13 +79,14 @@
                   <tr>
                     <th>Action</th>
                     <th>Fullname</th>
-                    <th>Year Level</th>
+                    <th>Level</th>
                     <th>Type</th>
                     <th>Course</th>
                     <th>School</th>
                     <th>Gender</th>
                     <th>Sponsor</th>
-                    <th>Current School Year</th>
+                    <th>Status</th>
+                    <th>Current SY</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -98,6 +101,7 @@
                     <td><?php echo($s["school_name"]); ?></td>
                     <td><?php echo($s["sex"]); ?></td>
                     <td><?php echo($s["fullname"]); ?></td>
+                    <td><?php echo($s["current_status"]); ?></td>
                     <td><?php echo($s["school_year"]); ?></td>
                 </tr>
                   <?php endforeach; ?>

@@ -80,6 +80,7 @@
                     <th>Gender</th>
                     <th>Sponsor</th>
                     <th>Facilitator</th>
+                    <th>Status</th>
                     <th>School Year</th>
                   </tr>
                   </thead>
@@ -97,6 +98,7 @@
                     <td><?php echo($s["sex"]); ?></td>
                     <td><?php echo($s["fullname"]); ?></td>
                     <td><?php echo($s["responsible"]); ?></td>
+                    <td><?php echo($s["current_status"]); ?></td>
                     <td><?php echo($s["school_year"]); ?></td>
                 </tr>
                   <?php endforeach; ?>

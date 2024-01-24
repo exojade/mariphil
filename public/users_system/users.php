@@ -1,7 +1,95 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 
-		if($_POST["action"] == "addUser"){
+		if($_POST["action"] == "datatable"){
+		
+
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+            $offset = $_POST["start"];
+            $limit = $_POST["length"];
+            $search = $_POST["search"]["value"];
+
+			$where = " where 1=1";
+
+            if(isset($_REQUEST["role"])):
+				if($_REQUEST["role"] != ""):
+					$where = $where . " and role = '".$_REQUEST["role"]."'";
+				endif;
+            endif;
+
+				if($search == ""){
+					$query_string = "select * from users
+									".$where."
+									limit ".$limit." offset ".$offset." ";
+					// dump($query_string);
+					$data = query($query_string);
+					$query_string = "select * from users
+									".$where."";
+					$allData = query($query_string);
+				}
+				else{
+	
+				  $where = $where . "
+				  and (fullname like '%".$search."%' or
+				  username like '%".$search."%')
+				  ";
+	
+	
+					$query_string = "
+						select * from users
+						".$where."
+						limit ".$limit." offset ".$offset."
+					";
+					// dump($query_string);
+					$data = query($query_string);
+					$query_string = "
+							select * from users
+							".$where."
+					";
+					$allData = query($query_string);
+				}
+
+				$i=0;
+				foreach($data as $row):
+
+					if($row["status"] == 'active'):
+					$data[$i]["action"] = '
+						  <form class="generic_form_trigger" data-url="users">
+                            <input type="hidden" name="action" value="deactivateUser">
+                            <input type="hidden" name="user_id" value="'.$row["user_id"].'">
+                            <button type="submit" class="btn btn-danger btn-sm btn-block">Deactivate</button>
+                          </form>
+					';
+					else:
+						$data[$i]["action"] = '
+						  <form class="generic_form_trigger" data-url="users">
+                            <input type="hidden" name="action" value="activateUser">
+                            <input type="hidden" name="user_id" value="'.$row["user_id"].'">
+                            <button type="submit" class="btn btn-success btn-sm btn-block">Activate</button>
+                          </form>
+					';
+					endif;
+
+					$data[$i]["update"] = '
+					<a href="#" title="Update User" data-toggle="modal" data-target="#updateUser'.$row["user_id"].'" class="btn btn-sm btn-block btn-warning">Update</a>
+					';
+					$i++;
+				endforeach;
+	   
+				$json_data = array(
+					"draw" => $draw + 1,
+					"iTotalRecords" => count($allData),
+					"iTotalDisplayRecords" => count($allData),
+					"aaData" => $data
+				);
+				echo json_encode($json_data);
+
+
+
+		}
+
+
+		else if($_POST["action"] == "addUser"){
 
 			// dump($_FILES);
 			$fullname = $_POST["username"];
@@ -86,7 +174,6 @@
 
 
 		else if($_POST["action"] == "deactivateUser"){
-			
 			$user = query("select * from users where user_id = ?", $_POST["user_id"]);
 			$user = $user[0];
 			if($user["role"] == "FACILITATOR"):
@@ -110,14 +197,71 @@
 						echo json_encode($res_arr); exit();
 				else:
 
+					query("update scholars set responsible = NULL where
+								responsible = ? and school_year_id = ?", $_POST["user_id"], $current_sy["school_year_id"]);
+
+					query("update users set status = 'inactive' where user_id = ?", $_POST["user_id"]);
+
+					// $scholars = query("select * from scholars where responsible = ? and school_year_id = ?", $_POST["user_id"],
+					// 					$current_sy["school_year_id"]);
+					// dump($scholars);
+
+					$res_arr = [
+						"result" => "success",
+						"title" => "Success",
+						"message" => "Deactivating User Success",
+						"link" => "refresh",
+						// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+						];
+						echo json_encode($res_arr); exit();
+
+
 				endif;
+			elseif($user["role"] == "SPONSOR"):
+				query("update scholars set sponsor_id = NULL where
+						sponsor_id = ? and school_year_id = ?", $_POST["user_id"], $current_sy["school_year_id"]);
+				query("update users set status = 'inactive' where user_id = ?", $_POST["user_id"]);
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Deactivating User Success",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
+			else:
+				query("update users set status = 'inactive' where user_id = ?", $_POST["user_id"]);
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Deactivating User Success",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
 			endif;
-			dump($user);
+			// dump($user);
 		}
 
+		else if($_POST["action"] == "activateUser"){
+			// dump($_POST);
 
-		
+			query("update users set status = 'active' where user_id = ?", $_POST["user_id"]);
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Activating User Success",
+					"link" => "refresh",
+					// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+					];
+					echo json_encode($res_arr); exit();
+	
+		}
     }
+
+
+	
 	else {
 
 

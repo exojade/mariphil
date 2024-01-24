@@ -250,6 +250,35 @@ $res_arr = [
 		}
 
 
+		if($_POST["action"] == "changeGraduate"){
+			// dump($_POST);
+
+			query("update scholars set current_status = 'GRADUATE' where scholar_id = ?", $_POST["scholar_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Changed Status to Graduate",
+				"link" => "refresh",
+				// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+				];
+				echo json_encode($res_arr); exit();
+		}
+
+		if($_POST["action"] == "changeScholar"){
+			// dump($_POST);
+
+			query("update scholars set current_status = 'SCHOLAR' where scholar_id = ?", $_POST["scholar_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Changed Status to SCHOLAR",
+				"link" => "refresh",
+				// "link" => "scholars?action=details&id=USR-372f4fceece53-240112",
+				];
+				echo json_encode($res_arr); exit();
+		}
+
+
 
 		if($_POST["action"] == "forUpdateScholars"){
 			// dump($_POST);
@@ -648,7 +677,7 @@ $res_arr = [
 				on uu.user_id = s.responsible
 				left join school_year sy
 				on sy.school_year_id = s.school_year_id
-				where s.current_status = 'SCHOLAR'
+				where s.current_status in ('SCHOLAR', 'GRADUATE')
 				and s.school_year_id = ?
 				", $school_year["school_year_id"]);
 				// dump($scholars);
@@ -664,7 +693,7 @@ $res_arr = [
 					on uu.user_id = s.responsible
 					left join school_year sy
 					on sy.school_year_id = s.school_year_id
-					where s.current_status = 'SCHOLAR'");
+					where s.current_status in ('SCHOLAR', 'GRADUATE')");
 				
 				else:
 					$scholars = query("select s.*,sy.school_year, u.fullname, uu.fullname as responsible from scholars s
@@ -674,7 +703,7 @@ $res_arr = [
 					on uu.user_id = s.responsible
 					left join school_year sy
 					on sy.school_year_id = s.school_year_id
-					where s.current_status = 'SCHOLAR'
+					where s.current_status in ('SCHOLAR', 'GRADUATE')
 					and s.school_year_id = ?
 					", $_GET["school_year"]);
 				endif;

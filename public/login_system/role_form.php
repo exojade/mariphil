@@ -79,7 +79,6 @@ background-image: url('resources/background.jpg');
       <div class="form-group has-feedback">
         <select required class="form-control" name="role">
           <option value="" selected disabled>Please select role</option>
-          <option value="admin">ADMIN</option>
           <option value="APPLICANT">APPLICANT</option>
           <option value="SCHOLAR">SCHOLAR</option>
           <option value="VALIDATOR">VALIDATOR</option>

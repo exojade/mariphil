@@ -185,10 +185,38 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+
+                <div class="row">
+                  <div class="col-7">
+
+                  </div>
+                  <div class="col-5">
+                    <div class="row">
+                      <div class="col-12">
+                        <select onchange="filter();" class="form-control" id="roleSelect">
+                        <option selected value="">Please Select Role</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="SPONSOR">SPONSOR</option>
+                        <option value="VALIDATOR">VALIDATOR</option>
+                        <option value="FACILITATOR">FACILITATOR</option>
+                        <option value="SCHOLAR">SCHOLAR</option>
+                        <option value="APPLICANT">APPLICANT</option>
+                        <option value="GRADUATE">GRADUATE</option>
+                        </select>
+
+                      </div>
+                     
+                    </div>
+
+
+                  </div>
+                </div>
+
+
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="datatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Update</th>
@@ -199,36 +227,6 @@
                     <th>Status</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <?php foreach($users as $u):  ?>
-                    <tr>
-                      <td>
-                        <a href="#" title="Update User" data-toggle="modal" data-target="#updateUser<?php echo($u["user_id"]); ?>" class="btn btn-sm btn-block btn-warning">Update</a>
-                      </td>
-                      <td>
-                        <?php if($u["status"] == "active"): ?>
-                          <form class="generic_form_trigger" data-url="users">
-                            <input type="hidden" name="action" value="deactivateUser">
-                            <input type="hidden" name="user_id" value="<?php echo($u["user_id"]); ?>">
-                            <button type="submit" class="btn btn-danger btn-sm btn-block">Deactivate</button>
-                          </form>
-                        <?php elseif($u["status"] == "inactive"): ?>
-                          <form class="generic_form_trigger" data-url="users">
-                            <input type="hidden" name="action" value="activateUser">
-                            <input type="hidden" name="user_id" value="<?php echo($u["user_id"]); ?>">
-                            <button type="submit" class="btn btn-success btn-sm btn-block">Activate</button>
-                          </form>
-                        <?php endif; ?>
-
-                      </td>
-                      <td><?php echo($u["username"]); ?></td>
-                      <td><?php echo(strtoupper($u["role"])); ?></td>
-                      <td><?php echo(strtoupper($u["fullname"])); ?></td>
-                      <td><?php echo(strtoupper($u["status"])); ?></td>
-
-                    </tr>
-                  <?php endforeach; ?>
-                  </tbody>
              
                 </table>
               </div>
@@ -247,14 +245,68 @@
 <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="AdminLTE_new/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="AdminLTE_new/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
 <script src="AdminLTE_new/plugins/jszip/jszip.min.js"></script>
 <script src="AdminLTE_new/plugins/pdfmake/pdfmake.min.js"></script>
 <script src="AdminLTE_new/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+
+<script>
+
+
+var datatable = $('#datatable').DataTable({
+    // "searching": false,
+    "pageLength": 10,
+    language: {
+        searchPlaceholder: "Enter Filter"
+    },
+    "ordering": false,
+    'processing': true,
+    'serverSide': true,
+    'serverMethod': 'post',
+    'ajax': {
+        'url': 'users',
+        'type': "POST",
+        "data": function (data) {
+            data.action = "datatable";
+        }
+    },
+    'columns': [
+        {
+            data: 'update',
+            orderable: false,
+            render: function (data, type, row) {
+                // Return the HTML content for the 'update' column
+                return data;
+            }
+        },
+        {
+            data: 'action',
+            orderable: false,
+            render: function (data, type, row) {
+                // Return the HTML content for the 'action' column
+                return data;
+            }
+        },
+        { data: 'username', orderable: false },
+        { data: 'role', orderable: false },
+        { data: 'fullname', orderable: false },
+        { data: 'status', orderable: false },
+    ],
+
+    "footerCallback": function (row, data, start, end, display) {
+        // Your footer callback logic, if any
+    }
+});
+
+            function filter() {
+            var role = $('#roleSelect').val();
+            datatable.ajax.url('users?action=datatable&role=' + role).load();
+        }
+
+</script>
+
+
   <script>
             function preview2(event) {
     // Get the parent modal of the clicked file input
