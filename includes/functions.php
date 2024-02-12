@@ -107,7 +107,7 @@
     }
     
 
-    function generate_otp($length = 10) {
+    function generate_otp($length = 6) {
         $characters = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding O, 0, 1, l, I
         $charLength = strlen($characters);
         $randomString = '';

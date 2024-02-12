@@ -518,7 +518,7 @@
 
                       $applicant["address_home"] . ", " . $applicant["address_barangay"] . ", " .
                       $applicant["address_city"] . ", " . $applicant["address_province"] . ", " . 
-                      $applicant["address_region"] . ", " . $applicant["address_zipcode"]
+                      $applicant["address_region"]
                       ); ?>
                   </dd>
                   <dt class="col-sm-4">Date of Birth</dt>
@@ -546,7 +546,14 @@
                   <dd class="col-sm-8"><?php echo($applicant["father_birthdate"]); ?></dd>
 
                   <dt class="col-sm-4">Father's Address</dt>
-                  <dd class="col-sm-8"><?php echo($applicant["father_address"]); ?></dd>
+                  <dd class="col-sm-8">
+                  <?php echo(
+
+                    $applicant["father_address"] . ", " . $applicant["father_barangay"] . ", " .
+                    $applicant["father_city"] . ", " . $applicant["father_province"] . ", " . 
+                    $applicant["father_region"]
+                    ); ?>
+                  </dd>
 
                   <dt class="col-sm-4">Father's Contact No.</dt>
                   <dd class="col-sm-8"><?php echo($applicant["father_contact"]); ?></dd>
@@ -573,7 +580,15 @@
                   <dd class="col-sm-8"><?php echo($applicant["mother_birthdate"]); ?></dd>
 
                   <dt class="col-sm-4">Mother's Address</dt>
-                  <dd class="col-sm-8"><?php echo($applicant["mother_address"]); ?></dd>
+                  <dd class="col-sm-8">
+                  <?php echo(
+
+                    $applicant["mother_address"] . ", " . $applicant["mother_barangay"] . ", " .
+                    $applicant["mother_city"] . ", " . $applicant["mother_province"] . ", " . 
+                    $applicant["mother_region"]
+                    ); ?>
+
+                  </dd>
 
                   <dt class="col-sm-4">Mother's Contact No.</dt>
                   <dd class="col-sm-8"><?php echo($applicant["mother_contact"]); ?></dd>

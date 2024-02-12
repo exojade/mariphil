@@ -90,7 +90,7 @@ background-image: url('resources/background.jpg');
 
       <input type="hidden" name="role" value="<?php echo($_GET["role"]); ?>">
       <div class="form-group has-feedback">
-        <input type="username" class="form-control" placeholder="Username" name="username" required="required">
+        <input type="username" class="form-control" placeholder="Username / Email" name="username" required="required">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
 

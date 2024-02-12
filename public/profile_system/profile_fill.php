@@ -15,6 +15,10 @@
 .validation-error{
   border-color: red;
 }
+
+.color-red{
+  color:red;
+}
     </style>
 <div class="content-wrapper">
     <section class="content">
@@ -23,11 +27,12 @@
       <div class="row">
           <div class="col-md-12">
             <br>
-
+            <?php $scholar = $scholar[0]; ?>
           <div class="alert alert-info alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                   <h5><i class="icon fas fa-info"></i> Fill Profile Data</h5>
-                  In order to apply for a scholarship you need to fill this assessment form!
+                  In order to apply for a scholarship you need to fill this assessment form!<br>
+                  Put N/A if the field is not applicable.
                 </div>
             <div class="card card-default">
               <div class="card-header">
@@ -36,7 +41,26 @@
               <div class="card-body p-0">
                 <div class="bs-stepper">
                   <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="profile">
+                  
                   <input type="hidden" name="action" value="saveProfile">
+
+
+                  <input type="hidden" name="address_region" id="true_region" value="<?php echo($scholar["address_region"]); ?>">
+                  <input type="hidden" name="address_province" id="true_province" value="<?php echo($scholar["address_province"]); ?>">
+                  <input type="hidden" name="address_city" id="true_city_mun" value="<?php echo($scholar["address_city"]); ?>">
+                  <input type="hidden" name="address_barangay" id="true_barangay" value="<?php echo($scholar["address_barangay"]); ?>">
+
+                  <input type="hidden" name="father_region" id="father_true_region" value="<?php echo($scholar["father_region"]); ?>">
+                  <input type="hidden" name="father_province" id="father_true_province" value="<?php echo($scholar["father_province"]); ?>">
+                  <input type="hidden" name="father_city" id="father_true_city_mun" value="<?php echo($scholar["father_city"]); ?>">
+                  <input type="hidden" name="father_barangay" id="father_true_barangay" value="<?php echo($scholar["father_barangay"]); ?>">
+
+                  <input type="hidden" name="mother_region" id="mother_true_region" value="<?php echo($scholar["mother_region"]); ?>">
+                  <input type="hidden" name="mother_province" id="mother_true_province" value="<?php echo($scholar["mother_province"]); ?>">
+                  <input type="hidden" name="mother_city" id="mother_true_city_mun" value="<?php echo($scholar["mother_city"]); ?>">
+                  <input type="hidden" name="mother_barangay" id="mother_true_barangay" value="<?php echo($scholar["mother_barangay"]); ?>">
+
+
                   <div class="bs-stepper-header" role="tablist">
                     <!-- your steps here -->
                     <div class="step" data-target="#personal-profile">
@@ -84,74 +108,86 @@
                     </div>
                     
                   </div>
-                  <?php $scholar = $scholar[0]; ?>
+           
                   <div class="bs-stepper-content">
                     <!-- your steps content here -->
                     <div id="personal-profile" class="content" role="tabpanel" aria-labelledby="logins-part-trigger" data-step="1">
                       <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label>First Name</label>
+                              <label>First Name <span class="color-red">*</span></label>
                               <input value="<?php echo($scholar["firstname"]); ?>" name="firstname" required type="text" class="form-control"  placeholder="First Name">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label>Middle Name</label>
+                              <label>Middle Name <span class="color-red">*</span></label>
                               <input value="<?php echo($scholar["middlename"]); ?>" name="middlename" required type="text" class="form-control" placeholder="Middle Name">
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label>Last Name</label>
+                              <label>Last Name <span class="color-red">*</span></label>
                               <input value="<?php echo($scholar["lastname"]); ?>" name="lastname" required type="text" class="form-control" placeholder="Last Name">
                             </div>
                           </div>
                       </div>
 
                       <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Region <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="region_select">
+                                <?php if($scholar["address_region"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["address_region"]); ?>"><?php echo($scholar["address_region"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Province <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="province_select">
+                                <?php if($scholar["address_barangay"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["address_province"]); ?>"><?php echo($scholar["address_province"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">City | Municipality <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="city_mun_select">
+                                <?php if($scholar["address_city"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["address_city"]); ?>"><?php echo($scholar["address_city"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Barangay <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="barangay_select">
+                                <?php if($scholar["address_barangay"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["address_barangay"]); ?>"><?php echo($scholar["address_barangay"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                      </div>
+
+
+
+                      <div class="row">
+                          <div class="col-md-12">
                             <div class="form-group">
                               <label>Street / House Number / Purok</label>
                               <input value="<?php echo($scholar["address_home"]); ?>" name="address_home" required type="text" class="form-control"  placeholder="Street / House Number / Purok">
                             </div>
                           </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label>Barangay</label>
-                              <input value="<?php echo($scholar["address_barangay"]); ?>" name="address_barangay" required type="text" class="form-control" placeholder="Barangay">
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label>Place / Town / City</label>
-                              <input value="<?php echo($scholar["address_city"]); ?>" name="address_city" required type="text" class="form-control" placeholder="Place / Town / City">
-                            </div>
-                          </div>
                       </div>
 
-                      <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label>District / Region</label>
-                              <input name="address_region" value="<?php echo($scholar["address_region"]); ?>" required type="text" class="form-control"  placeholder="District / Region">
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label>Province</label>
-                              <input name="address_province" value="<?php echo($scholar["address_province"]); ?>" required type="text" class="form-control" placeholder="Province">
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label>Zip Code</label>
-                              <input name="zipcode" value="<?php echo($scholar["address_zipcode"]); ?>" required type="number"
- 
- onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" placeholder="Zip Code">
-                            </div>
-                          </div>
-                      </div>
+         
 
 
                       <div class="row">
@@ -204,65 +240,114 @@
                     </div>
                     
                     <div id="parent-part" data-step="5" class="content" role="tabpanel" aria-labelledby="another_information-part-trigger">
-                    <div class="form-horizontal">
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                         <div class="card-header">
-                          <h3 class="card-title">FATHER</h3>
+                          <h3 class="card-title">FATHER INFORMATION</h3>
                         </div>
                         <div class="card-body">
-                          <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Name *</label>
-                            <div class="col-sm-10">
-                              <input value="<?php echo($scholar["father_name"]); ?>" name="father_name" required type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                          <div class="row">
+                            <div class="col-6">
+                            <div class="form-group">
+                                <label for="inputEmail3">Father's Name <span class="color_red">*</span></label>
+                                <input value="<?php echo($scholar["father_name"]); ?>" name="father_name" required type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                            </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-group">
+                                  <label for="inputEmail3">Date of Birth <span class="color_red">*</span></label>
+                                  <input value="<?php echo($scholar["father_birthdate"]); ?>" name="father_dob" required max="<?php echo date("Y-m-d"); ?>" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-group">
+                                <label for="inputPassword3">Contact No. *</label>
+                                  <input value="<?php echo($scholar["father_contact"]); ?>" name="father_contact" required type="number"
+                                  onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
+                              </div>
                             </div>
                           </div>
-                          <div class="form-group row">
-                          
-                            <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
-                            <div class="col-sm-9">
-                              <input value="<?php echo($scholar["father_birthdate"]); ?>" name="father_dob" required max="<?php echo date("Y-m-d"); ?>" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+
+
+                        
+
+
+
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Region <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="father_region_select">
+                                <?php if($scholar["father_region"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["father_region"]); ?>"><?php echo($scholar["father_region"]); ?></option>
+                                <?php endif; ?>
+                              </select>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-3 col-form-label">Home Address *</label>
-                            <div class="col-sm-9">
-                              <input value="<?php echo($scholar["father_address"]); ?>" name="father_address" required type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Province <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="father_province_select">
+                                <?php if($scholar["father_province"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["father_province"]); ?>"><?php echo($scholar["father_province"]); ?></option>
+                                <?php endif; ?>
+                              </select>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
-                            <div class="col-sm-9">
-                              <input value="<?php echo($scholar["father_contact"]); ?>" name="father_contact" required type="number"
- 
- onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">City | Municipality <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="father_city_select">
+                                <?php if($scholar["father_city"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["father_city"]); ?>"><?php echo($scholar["father_city"]); ?></option>
+                                <?php endif; ?>
+                              </select>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Present Occupation. *</label>
-                            <div class="col-sm-8">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Barangay <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="father_barangay_select">
+                                <?php if($scholar["father_barangay"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["father_barangay"]); ?>"><?php echo($scholar["father_barangay"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                          <div class="form-group">
+                            <label for="inputPassword3">Home Address</label>
+                              <input type="text" value="<?php echo($scholar["father_address"]); ?>" required name="father_address" class="form-control" id="inputPassword3" 
+                              placeholder="Building/House Number, Street Name, Purok/Subdivision/Village">
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="inputPassword3">Present Occupation. *</label>
                               <input type="text" value="<?php echo($scholar["father_occupation"]); ?>" required name="father_occupation" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Office Address. (optional)</label>
-                            <div class="col-sm-7">
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="inputPassword3">Office Address. (optional)</label>
                               <input name="father_office" type="text" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
                           </div>
-
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
-                            <div class="col-sm-7">
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="inputPassword3">Estimated Annual Income. *</label>
                               <input value="<?php echo($scholar["father_income"]); ?>" required name="father_income" type="number"
- 
- onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
+                                 onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                           </div>
+                        </div>
 
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
-                            <div class="col-sm-6">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="inputPassword3">Highest Educational Attainment. *</label>
                             <select required name="father_educational" class="form-control select2" >
                               <?php if($scholar["father_education_attainment"] != ""): ?>
                                 <option selected value="<?php echo($scholar["father_education_attainment"]); ?>"><?php echo($scholar["father_education_attainment"]); ?></option>
@@ -279,75 +364,132 @@
                          
                               </select>
                               <!-- <input name="father_income" type="number" class="form-control" id="inputPassword3" placeholder="---"> -->
-                            </div>
                           </div>
-
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Name of School *</label>
-                            <div class="col-sm-8">
+                        </div>
+                        <div class="col-6">
+                         <div class="form-group">
+                            <label for="inputPassword3">Name of School *</label>
                               <input value="<?php echo($scholar["father_school"]); ?>" name="father_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
                           </div>
+                        </div>
+                      </div>
+
+
 
                         </div>
                         </div>
-                        <div class="col-md-6" style="border-left: 2px solid black;">
+                        <br>
+                        <br>
+                        <br>
+                        <div class="col-md-12" >
                         <div class="card-header">
-                          <h3 class="card-title">MOTHER</h3>
+                          <h3 class="card-title">MOTHER'S INFORMATION</h3>
                         </div>
                         <div class="card-body">
-                          <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Name *</label>
-                            <div class="col-sm-10">
-                              <input value="<?php echo($scholar["mother_name"]); ?>" required name="mother_name" type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="inputEmail3">Name *</label>
+                                  <input value="<?php echo($scholar["mother_name"]); ?>" required name="mother_name" type="text" class="form-control" id="inputEmail3" placeholder="Name">
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-group row">
-                            
-                            <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Birth *</label>
-                            <div class="col-sm-9">
-                              <input value="<?php echo($scholar["mother_birthdate"]); ?>" required max="<?php echo date("Y-m-d"); ?>" name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
+                            <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="inputEmail3" >Date of Birth *</label>
+                                <input value="<?php echo($scholar["mother_birthdate"]); ?>" required max="<?php echo date("Y-m-d"); ?>" name="mother_dob" type="date" class="form-control" id="inputEmail3" placeholder="Name">
                             </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-3 col-form-label">Home Address *</label>
-                            <div class="col-sm-9">
-                              <input value="<?php echo($scholar["mother_address"]); ?>" required name="mother_address" type="text" class="form-control" id="inputEmail3" placeholder="Prk/Brgy/City/Prov">
                             </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-3 col-form-label">Contact No. *</label>
-                            <div class="col-sm-9">
+                            <div class="col-md-3">
+                            <div class="form-group">
+                            <label for="inputPassword3" >Contact No. *</label>
                               <input value="<?php echo($scholar["mother_contact"]); ?>" required name="mother_contact" type="number"
- 
- onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
+                                onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Present Occupation. *</label>
-                            <div class="col-sm-8">
-                              <input value="<?php echo($scholar["mother_occupation"]); ?>" required name="mother_occupation" type="text" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Office Address. (optional)</label>
-                            <div class="col-sm-7">
-                              <input name="mother_office" value="<?php echo($scholar["mother_occupation_address"]); ?>" type="text" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
-                          </div>
-                          
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-5 col-form-label">Estimated Annual Income. *</label>
-                            <div class="col-sm-7">
-                              <input required value="<?php echo($scholar["mother_income"]); ?>" name="mother_income" type="number"
- 
-    onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
                             </div>
                           </div>
 
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-6 col-form-label">Highest Educational Attainment. *</label>
-                            <div class="col-sm-6">
+                          <div class="form-group">
+                              <label for="exampleInputEmail1">Same Residence with the Father?</label>
+                              <input name="same_residence" type="checkbox" id="sameResidence" onclick="toggleAddressFields()">
+                          </div>
+
+
+                          <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Region <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="mother_region_select">
+                                <?php if($scholar["mother_region"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["mother_region"]); ?>"><?php echo($scholar["mother_region"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Province <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="mother_province_select">
+                                <?php if($scholar["mother_province"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["mother_province"]); ?>"><?php echo($scholar["mother_province"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">City | Municipality <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="mother_city_select">
+                                <?php if($scholar["mother_city"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["mother_city"]); ?>"><?php echo($scholar["mother_city"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Barangay <span class="color_red">*</span></label>
+                              <select required class="form-control select2" id="mother_barangay_select">
+                                <?php if($scholar["mother_barangay"] != ""): ?>
+                                  <option selected value="<?php echo($scholar["mother_barangay"]); ?>"><?php echo($scholar["mother_barangay"]); ?></option>
+                                <?php endif; ?>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                          <div class="form-group">
+                            <label for="inputPassword3">Home Address</label>
+                              <input type="text" id="mother_address" value="<?php echo($scholar["mother_address"]); ?>" required name="mother_address" class="form-control" id="inputPassword3" 
+                              placeholder="Building/House Number, Street Name, Purok/Subdivision/Village">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="inputPassword3" >Present Occupation. *</label>
+                              <input value="<?php echo($scholar["mother_occupation"]); ?>" required name="mother_occupation" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="inputPassword3" >Office Address. (optional)</label>
+                              <input name="mother_office" value="<?php echo($scholar["mother_occupation_address"]); ?>" type="text" class="form-control" id="inputPassword3" placeholder="---">
+                          </div>
+                        </div>
+                        <div class="col-4">
+                        <div class="form-group">
+                            <label for="inputPassword3" >Estimated Annual Income. *</label>
+                              <input required value="<?php echo($scholar["mother_income"]); ?>" name="mother_income" type="number"
+                              onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57" class="form-control" id="inputPassword3" placeholder="---">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="inputPassword3">Highest Educational Attainment. *</label>
                             <select required name="mother_educational" class="form-control select2" >
                               <?php if($scholar["mother_education_attainment"] != ""): ?>
                                 <option selected  value="<?php echo($scholar["mother_education_attainment"]); ?>"><?php echo($scholar["mother_education_attainment"]); ?></option>
@@ -363,15 +505,28 @@
                                 <option value="Elementary Level">Elementary Level</option>
                               </select>
                               <!-- <input name="father_income" type="number" class="form-control" id="inputPassword3" placeholder="---"> -->
-                            </div>
                           </div>
 
-                          <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">Name of School *</label>
-                            <div class="col-sm-8">
+                        </div>
+                        <div class="col-6">
+                        <div class="form-group">
+                            <label for="inputPassword3">Name of School *</label>
                               <input value="<?php echo($scholar["mother_school"]); ?>" required name="mother_school" type="text" class="form-control" id="inputPassword3" placeholder="---">
-                            </div>
                           </div>
+                          
+                        </div>
+                      </div>
+                          
+              
+                          
+                          
+                          
+                          
+                          
+
+                          
+
+                          
 
                           
                          
@@ -382,7 +537,7 @@
                         </div>
                         </div>
                       </div>
-</div>
+
                       <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
                       <button type="button" class="btn btn-primary" onclick="validateAndProceed(5)">Next</button>
                     </div>
@@ -579,6 +734,7 @@
 <script src="AdminLTE_new/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="AdminLTE_new/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script type="text/javascript" src="node_modules/philippine-location-json-for-geer/build/phil.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
@@ -586,6 +742,217 @@
   $(function () {
   bsCustomFileInput.init();
 });
+
+ 
+
+
+
+
+
+
+    $('#region_select, #father_region_select, #mother_region_select').select2({
+      placeholder: 'Please select Region'
+    });
+    $('#province_select, #father_province_select, #mother_province_select').select2({
+      placeholder: 'Please select Province'
+    });
+
+    $('#city_mun_select, #father_city_select, #mother_city_select').select2({
+      placeholder: 'Please select City / Municipality'
+    });
+
+    $('#barangay_select, #father_barangay_select, #mother_barangay_select').select2({
+      placeholder: 'Please select Barangay'
+    });
+
+    var selectedRegion = '';
+    var selectedCity = '';
+  
+    var all_region = Philippines.sort(Philippines.regions,"A");
+    <?php if($scholar["address_region"] != ""): ?>
+      html = "<option value='<?php echo($scholar["address_region"]); ?>' selected><?php echo($scholar["address_region"]); ?></option>";
+    <?php else: ?>
+      html = "<option value='' disabled selected></option>";
+    <?php endif; ?>
+    for(var key in all_region) {
+      // console.log(all_province[key].name);
+        html += "<option value=" + all_region[key].reg_code  + ">" +all_region[key].name + "</option>"
+    }
+    document.getElementById("region_select").innerHTML = html;
+
+
+    var all_region = Philippines.sort(Philippines.regions,"A");
+    <?php if($scholar["father_region"] != ""): ?>
+      html = "<option value='<?php echo($scholar["father_region"]); ?>' selected><?php echo($scholar["father_region"]); ?></option>";
+    <?php else: ?>
+      html = "<option value='' disabled selected></option>";
+    <?php endif; ?>
+    for(var key in all_region) {
+      // console.log(all_province[key].name);
+        html += "<option value=" + all_region[key].reg_code  + ">" +all_region[key].name + "</option>"
+    }
+    document.getElementById("father_region_select").innerHTML = html;
+
+    var all_region = Philippines.sort(Philippines.regions,"A");
+    <?php if($scholar["mother_region"] != ""): ?>
+      html = "<option value='<?php echo($scholar["mother_region"]); ?>' selected><?php echo($scholar["mother_region"]); ?></option>";
+    <?php else: ?>
+      html = "<option value='' disabled selected></option>";
+    <?php endif; ?>
+    for(var key in all_region) {
+      // console.log(all_province[key].name);
+        html += "<option value=" + all_region[key].reg_code  + ">" +all_region[key].name + "</option>"
+    }
+
+    document.getElementById("mother_region_select").innerHTML = html;
+
+
+
+
+  $('#region_select').change(function(){
+    $('#true_region').val($( "#region_select option:selected" ).text());
+    province = Philippines.getProvincesByRegion($(this).val(), 'A');
+    selectedRegion = $(this).val();
+ 
+    html = "<option value='' disabled selected></option>";
+    for(var key in province) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + province[key].prov_code  + ">" +province[key].name + "</option>"
+    }
+    document.getElementById("province_select").innerHTML = html;
+});
+
+
+
+
+$('#province_select').change(function(){
+    $('#true_province').val($( "#province_select option:selected" ).text());
+    city_mun = Philippines.getCityMunByProvince($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in city_mun) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + city_mun[key].mun_code  + ">" +city_mun[key].name + "</option>"
+    }
+    document.getElementById("city_mun_select").innerHTML = html;
+});
+
+
+$('#city_mun_select').change(function(){
+    $('#true_city_mun').val($( "#city_mun_select option:selected" ).text());
+    barangay = Philippines.getBarangayByMun($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in barangay) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + barangay[key].mun_code  + ">" +barangay[key].name + "</option>"
+    }
+    document.getElementById("barangay_select").innerHTML = html;
+  
+
+    // console.log(Philippines.getZipCode(selectedRegion, selectedProvince));
+});
+
+$('#barangay_select').change(function(){
+    $('#true_barangay').val($( "#barangay_select option:selected" ).text());
+
+});
+
+
+$('#father_region_select').change(function(){
+    $('#father_true_region').val($( "#father_region_select option:selected" ).text());
+    province = Philippines.getProvincesByRegion($(this).val(), 'A');
+    selectedRegion = $(this).val();
+    console.log(province);
+    html = "<option value='' disabled selected></option>";
+    for(var key in province) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + province[key].prov_code  + ">" +province[key].name + "</option>"
+    }
+    document.getElementById("father_province_select").innerHTML = html;
+});
+
+
+
+
+$('#father_province_select').change(function(){
+    $('#father_true_province').val($( "#father_province_select option:selected" ).text());
+    city_mun = Philippines.getCityMunByProvince($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in city_mun) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + city_mun[key].mun_code  + ">" +city_mun[key].name + "</option>"
+    }
+    document.getElementById("father_city_select").innerHTML = html;
+});
+
+
+$('#father_city_select').change(function(){
+    $('#father_true_city_mun').val($( "#father_city_select option:selected" ).text());
+    barangay = Philippines.getBarangayByMun($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in barangay) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + barangay[key].mun_code  + ">" +barangay[key].name + "</option>"
+    }
+    document.getElementById("father_barangay_select").innerHTML = html;
+  
+
+    // console.log(Philippines.getZipCode(selectedRegion, selectedProvince));
+});
+
+$('#father_barangay_select').change(function(){
+    $('#father_true_barangay').val($( "#father_barangay_select option:selected" ).text());
+
+});
+
+
+$('#mother_region_select').change(function(){
+    $('#mother_true_region').val($( "#mother_region_select option:selected" ).text());
+    province = Philippines.getProvincesByRegion($(this).val(), 'A');
+    selectedRegion = $(this).val();
+    // console.log(province);
+    html = "<option value='' disabled selected></option>";
+    for(var key in province) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + province[key].prov_code  + ">" +province[key].name + "</option>"
+    }
+    document.getElementById("mother_province_select").innerHTML = html;
+});
+
+
+
+
+$('#mother_province_select').change(function(){
+    $('#mother_true_province').val($( "#mother_province_select option:selected" ).text());
+    city_mun = Philippines.getCityMunByProvince($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in city_mun) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + city_mun[key].mun_code  + ">" +city_mun[key].name + "</option>"
+    }
+    document.getElementById("mother_city_select").innerHTML = html;
+});
+
+
+$('#mother_city_select').change(function(){
+    $('#mother_true_city_mun').val($( "#mother_city_select option:selected" ).text());
+    barangay = Philippines.getBarangayByMun($(this).val(), 'A');
+    html = "<option value='' disabled selected></option>";
+    for(var key in barangay) {
+      // console.log(city_mun[key].name);
+        html += "<option value=" + barangay[key].mun_code  + ">" +barangay[key].name + "</option>"
+    }
+    document.getElementById("mother_barangay_select").innerHTML = html;
+  
+
+    // console.log(Philippines.getZipCode(selectedRegion, selectedProvince));
+});
+
+$('#mother_barangay_select').change(function(){
+    $('#mother_true_barangay').val($( "#mother_barangay_select option:selected" ).text());
+
+});
+
+
 
 
 
@@ -709,6 +1076,32 @@ function validateAndProceed(stepNumber) {
             }
         });
     });
+
+
+    function toggleAddressFields() {
+        var checkbox = document.getElementById("sameResidence");
+        var fieldsToToggle = ["mother_region_select", "mother_province_select", "mother_city_select", "mother_barangay_select", "mother_address"];
+        // var deceasedAddressInput = document.getElementById("deceased_address");
+        for (var i = 0; i < fieldsToToggle.length; i++) {
+            var field = document.getElementById(fieldsToToggle[i]);
+            field.disabled  = checkbox.checked;
+
+            if (!checkbox.checked && field.dataset.required === "true") {
+            field.setAttribute("required", "true");
+            } else {
+                field.removeAttribute("required");
+            }
+
+            // var deceasedAddressInput = document.getElementById("deceased_address");
+        // deceasedAddressInput.readOnly = checkbox.checked;
+        }
+
+        // var deceasedAddressInput = document.getElementById("deceased_address");
+        // deceasedAddressInput.readOnly = checkbox.checked;
+
+        // var deceasedAddressInput = document.getElementById("deceased_address");
+        // deceasedAddressInput.readOnly;
+    }
 
 
     

@@ -2,6 +2,18 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {	
 		// dump($_POST);
+
+        if($_POST["password"] != $_POST["confirm_password"]):
+            $res_arr = [
+                "result" => "failed",
+                "title" => "Failed",
+                "message" => "Password and Confirm Password not the same!",
+                // "link" => "otp?id=".$row["user_id"],
+                ];
+                echo json_encode($res_arr); exit();
+        endif;
+
+
         $rows = query("SELECT * FROM users WHERE username = ?", $_POST["email_address"]);
         if (count($rows) == 1)
         {
@@ -32,7 +44,7 @@
 			if (query("insert INTO users 
             (user_id, username, password, role, fullname, status, otp) 
             VALUES(?,?,?,?,?,?,?)", 
-            $user_id, $_POST["email_address"], crypt('!1234#', '') , 'APPLICANT',
+            $user_id, $_POST["email_address"], crypt($_POST["password"], '') , 'APPLICANT',
             $_POST["firstname"] . " " . $_POST["lastname"],
             "fill_otp", $this_otp) === false)
             {

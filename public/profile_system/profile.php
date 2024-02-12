@@ -68,6 +68,16 @@
 			$scholar = $scholar[0];
 			// dump($scholar);
 
+			if(isset($_POST["same_residence"])):
+				if($_POST["same_residence"] == "on"):
+					$_POST["mother_region"] = $_POST["father_region"];
+					$_POST["mother_province"] = $_POST["father_province"];
+					$_POST["mother_city"] = $_POST["father_city"];
+					$_POST["mother_barangay"] = $_POST["mother_barangay"];
+					$_POST["mother_address"] = $_POST["father_address"];
+				endif;
+			endif;
+
 
 			$string_query = ("
 			update scholars set 
@@ -79,7 +89,6 @@
 				address_city = '".strtoupper($_POST["address_city"])."',
 				address_region = '".strtoupper($_POST["address_region"])."',
 				address_province = '".strtoupper($_POST["address_province"])."',
-				address_zipcode = '".strtoupper($_POST["zipcode"])."',
 				birthdate = '".strtoupper($_POST["birthdate"])."',
 				birthplace = '".strtoupper($_POST["birthplace"])."',
 				sex = '".strtoupper($_POST["gender"])."',
@@ -87,6 +96,10 @@
 				name_school = '".strtoupper($_POST["name_school"])."',
 				father_name = '".strtoupper($_POST["father_name"])."',
 				father_birthdate = '".strtoupper($_POST["father_dob"])."',
+				father_region = '".strtoupper($_POST["father_region"])."',
+				father_province = '".strtoupper($_POST["father_province"])."',
+				father_city = '".strtoupper($_POST["father_city"])."',
+				father_barangay = '".strtoupper($_POST["father_barangay"])."',
 				father_address = '".strtoupper($_POST["father_address"])."',
 				father_contact = '".strtoupper($_POST["father_contact"])."',
 				father_occupation = '".strtoupper($_POST["father_occupation"])."',
@@ -101,6 +114,10 @@
 				course = '".strtoupper($_POST["course"])."',
 				mother_name = '".strtoupper($_POST["mother_name"])."',
 				mother_birthdate = '".strtoupper($_POST["mother_dob"])."',
+				mother_region = '".strtoupper($_POST["mother_region"])."',
+				mother_province = '".strtoupper($_POST["mother_province"])."',
+				mother_city = '".strtoupper($_POST["mother_city"])."',
+				mother_barangay = '".strtoupper($_POST["mother_barangay"])."',
 				mother_address = '".strtoupper($_POST["mother_address"])."',
 				mother_contact = '".strtoupper($_POST["mother_contact"])."',
 				mother_occupation = '".strtoupper($_POST["mother_occupation"])."',
